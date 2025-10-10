@@ -1,0 +1,14 @@
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.sln.docstates
+*.sln.ide
+*.sln.ide.*
+*.sln.suo
+*.sln.suo.*
+*.sln.vs
+*.sln.vs.*
+*.vs/
+.vscode/

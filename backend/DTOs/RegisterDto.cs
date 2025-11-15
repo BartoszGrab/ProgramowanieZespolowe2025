@@ -12,8 +12,6 @@ namespace backend.DTOs
 
         [Required(ErrorMessage = "Password is required")]
         [MinLength(12, ErrorMessage = "Password must be at least 12 characters long")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?])(?!.*(.)\1{2,})[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]{12,}$",
-            ErrorMessage = "Password must contain: uppercase letter, lowercase letter, number, special character, and no more than 2 repeating characters")]
         public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Confirm password is required")]

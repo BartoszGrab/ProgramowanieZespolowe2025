@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.DTOs;
 using backend.Models;
 using backend.Services;
+using System.Text.RegularExpressions;
 
 namespace backend.Controllers
 {
@@ -13,6 +14,12 @@ namespace backend.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JwtService _jwtService;
+
+        // Silny regex dla email - zgodny z RFC 5322 (uproszczona wersja)
+        private static readonly Regex EmailRegex = new(
+            @"^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase,
+            TimeSpan.FromMilliseconds(250));
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
@@ -29,7 +36,17 @@ namespace backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    message = "Validation failed",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage))
+                });
+            }
+
+            // Dodatkowa walidacja email
+            if (!IsValidEmail(loginDto.Email))
+            {
+                return BadRequest(new { message = "Invalid email format" });
             }
 
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -38,16 +55,25 @@ namespace backend.Controllers
                 return Unauthorized(new { message = "Invalid email or password" });
             }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, lockoutOnFailure: true);
+
             if (result.Succeeded)
             {
                 var token = _jwtService.GenerateToken(user);
                 return Ok(new
                 {
                     message = "Login successful",
-                    token = token,
+                    token,
                     userId = user.Id,
                     email = user.Email
+                });
+            }
+
+            if (result.IsLockedOut)
+            {
+                return Unauthorized(new
+                {
+                    message = "Account locked due to multiple failed login attempts. Try again in 15 minutes."
                 });
             }
 
@@ -59,9 +85,20 @@ namespace backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new
+                {
+                    message = "Validation failed",
+                    errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage))
+                });
             }
 
+            // Dodatkowa walidacja email
+            if (!IsValidEmail(registerDto.Email))
+            {
+                return BadRequest(new { message = "Invalid email format. Please use a valid email address." });
+            }
+
+            // Sprawdź czy email już istnieje
             var existingUser = await _userManager.FindByEmailAsync(registerDto.Email);
             if (existingUser != null)
             {
@@ -71,7 +108,8 @@ namespace backend.Controllers
             var user = new ApplicationUser
             {
                 UserName = registerDto.Email,
-                Email = registerDto.Email
+                Email = registerDto.Email,
+                EmailConfirmed = true
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -81,13 +119,17 @@ namespace backend.Controllers
                 return Ok(new
                 {
                     message = "Registration successful",
-                    token = token,
+                    token,
                     userId = user.Id,
                     email = user.Email
                 });
             }
 
-            return BadRequest(new { message = "Registration failed", errors = result.Errors });
+            return BadRequest(new
+            {
+                message = "Registration failed",
+                errors = result.Errors.Select(e => e.Description)
+            });
         }
 
         [HttpPost("logout")]
@@ -95,6 +137,21 @@ namespace backend.Controllers
         {
             await _signInManager.SignOutAsync();
             return Ok(new { message = "Logout successful" });
+        }
+
+        private static bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email) || email.Length > 254) // RFC 5321
+                return false;
+
+            try
+            {
+                return EmailRegex.IsMatch(email);
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false; // Ochrona przed ReDoS
+            }
         }
     }
 }

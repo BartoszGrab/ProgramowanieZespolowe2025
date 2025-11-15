@@ -38,4 +38,5 @@ pnpm-debug.log*
 Thumbs.db
 Desktop.ini
 
+.idea/
 appsettings.Development.json

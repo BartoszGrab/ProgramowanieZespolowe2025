@@ -39,4 +39,5 @@ Thumbs.db
 Desktop.ini
 
 .idea/
-appsettings.Development.json
+**/appsettings.Development.json
+**/secrets.json

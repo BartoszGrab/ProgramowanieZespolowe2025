@@ -4,6 +4,7 @@ using backend.DTOs;
 using backend.Models;
 using backend.Services;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {

@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Register from './components/Register'
+import Login from './components/Login'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,6 +14,7 @@ function App() {
     <>
      <Routes>
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     <div>
         <a href="https://vite.dev" target="_blank">

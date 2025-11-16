@@ -92,6 +92,12 @@ namespace backend.Controllers
                 });
             }
 
+            var existingUserByDisplayName = await _userManager.Users.FirstOrDefaultAsync(u => u.DisplayName == registerDto.DisplayName);
+            if (existingUserByDisplayName != null)
+            {
+                return BadRequest(new { message = "Display name is already taken" });
+            }
+
             // Dodatkowa walidacja email
             if (!IsValidEmail(registerDto.Email))
             {
@@ -109,7 +115,8 @@ namespace backend.Controllers
             {
                 UserName = registerDto.Email,
                 Email = registerDto.Email,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                DisplayName = registerDto.DisplayName
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);

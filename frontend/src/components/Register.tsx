@@ -1,7 +1,7 @@
 // register
 import * as React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Form, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import type { RegisterRequest } from '../types/auth';
 //MUI imports:
@@ -19,18 +19,66 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
-import AppTheme from '../shared-theme/AppTheme';
-import ColorModeSelect from '../shared-theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
+import ColorModeSelect from '../customs/ColorModeSelect';
+import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
+import { AlignVerticalCenter } from '@mui/icons-material';
 
-const Register: React.FC = () => {
-// <-- form state hook -->
-const [formData, setFormData] = useState<RegisterRequest>({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    displayName: ''
-});
+const Card = styled(MuiCard)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignSelf: 'center',
+    width: '100%',
+    padding: theme.spacing(4),
+    gap: theme.spacing(2),
+    margin: 'auto',
+    boxShadow:
+        'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+    [theme.breakpoints.up('sm')]: {
+        width: '450px',
+    },
+    ...theme.applyStyles('dark', {
+        boxShadow:
+        'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
+  }),
+    }));
+
+const SignUpContainer = styled(Stack)(({ theme }) => ({
+    height: 'calc((1 - var(--template-frame-height, 0)) * 100vh)',
+    minHeight: '100%',
+    padding: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(4),
+    },
+    '&::before': {
+        content: '""',
+        display: 'block',
+        position: 'absolute',
+        zIndex: -1,
+        inset: 0,
+        backgroundColor: theme.palette.background.default,
+        backgroundRepeat: 'no-repeat',
+        ...theme.applyStyles('dark', {
+            backgroundImage:
+            'radial-gradient(ellipse at 50% 50%, hsl(210, 30%, 10%), hsl(210, 20%, 5%))',
+        }),
+    },
+}));
+    
+
+export default function Register(props: {disableCustomTheme?: boolean}) {
+// // <-- form state hook -->
+// const [formData, setFormData] = useState<RegisterRequest>({
+//     email: '',
+//     password: '',
+//     confirmPassword: '',
+//     displayName: ''
+// });
+const [emailError, setEmailError] = React.useState(false);
+const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
+const [passwordError, setPasswordError] = React.useState(false);
+const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+const [displayNameError, setDisplayNameError] = React.useState(false);
+const [displayNameErrorMessage, setDisplayNameErrorMessage] = React.useState('');
 
 // <-- navigation hook -->
 const navigate = useNavigate();
@@ -39,144 +87,245 @@ const navigate = useNavigate();
 const [errors, setErrors] = useState<{[key: string]: string}>({});
 const [isLoading, setisLoading] = useState(false);
 
-// <-- handle change in form inputs -->
-const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
-    });
-};
+// // <-- handle change in form inputs -->
+// const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setFormData({
+//         ...formData,
+//         [e.target.name]: e.target.value
+//     });
+// };
 
 // <-- email regex -->
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 //<-- validate form data -->
 const validate = () => {
-    const newErrors: {[key: string]: string} = {};
+    // const newErrors: {[key: string]: string} = {};
     const email = document.getElementById('email') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
     const confirmPassword = document.getElementById('confirmPassword') as HTMLInputElement;
     const displayName = document.getElementById('displayName') as HTMLInputElement;
     
+    let isValid = true;
+
     // check if register request fields are not empty
     if (!email.value) {
-        newErrors.email = 'Email cannot be null';
+        setEmailError(true);
+        setEmailErrorMessage('Email cannot be null');
+        isValid = false;
     }
 
     if(!password.value) {
-        newErrors.password = 'Password cannot be null';
+        setPasswordError(true);
+        setPasswordErrorMessage('Password cannot be null');
+        isValid = false;
     }
 
     if(confirmPassword.value != password.value) {
-        newErrors.confirmPassword = 'Passwords do not match';
+        setPasswordError(true);
+        setPasswordErrorMessage('Passwords do not match');
+        isValid = false;
     }
     
     if(displayName.value.length === 0) {
-        newErrors.displayName = 'Display Name cannot be null';
+        setDisplayNameError(true);
+        setDisplayNameErrorMessage('Display Name cannot be null');
+        isValid = false;
     }
 
     // check email format with regex
     if (email.value && !emailRegex.test(email.value)) {
-        newErrors.email = 'Invalid email format';
+        setEmailError(true);
+        setEmailErrorMessage('Invalid email format');
+        isValid = false;
     }
 
     // check password length
     if (password.value && password.value.length < 8) {
-        newErrors.password = 'Password must be at least 8 characters long';
+        setPasswordError(true);
+        setPasswordErrorMessage('Password must be at least 8 characters long');
+        isValid = false;
     }
 
     // check if password contains at least four unique characters
     if (password.value) {
         const uniqueChars = new Set(password.value);
         if (uniqueChars.size < 4) {
-            newErrors.password = 'Password must contain at least four unique characters';
+            setPasswordError(true);
+            setPasswordErrorMessage('Password must contain at least four unique characters');
+            isValid = false;
         }
     }
 
     // check display name length
-    if (displayName.value && (formData.displayName.length < 3 || formData.displayName.length > 30)) {
-        newErrors.displayName = 'Display Name must be between 3 and 30 characters long';
+    if (displayName.value && (displayName.value.length < 3 || displayName.value.length > 30)) {
+        setDisplayNameError(true);
+        setDisplayNameErrorMessage('Display Name must be between 3 and 30 characters long');
+        isValid = false;
     }
 
-    return newErrors;
-}
+    return isValid;
+};
 
-const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    const validationErrors = validate(); // validation
-    if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
+    if(!validate()) {
+        e.preventDefault();
         return;
     }
-    setisLoading(true); // set loading state - turn the buttons off
-    try { const response = await axios.post('/api/auth/register', formData);
+
+    const data = new FormData(e.currentTarget);
+    const formData = {
+        displayName: data.get('displayName') as string,
+        email: data.get('email') as string,
+        password: data.get('password') as string,
+        confirmPassword: data.get('confirmPassword') as string,
+    }
+    setisLoading(true);
+    try {
+        const response = await axios.post('/api/auth/register', formData);
         console.log('Registration successful:', response.data);
-        navigate('/login'); // redirect to login page after successful registration
+        // Navigate to another page after successful registration
+        navigate('/login');
     } catch (error: any) {
-        setErrors({ general: error.response?.data?.message || 'Registration failed' });
+        console.error('Registration failed:', error);
+        setErrors({general: error.response?.data?.message || 'Registration failed'});
     } finally {
         setisLoading(false);
     }
 
-}
+    console.log({
+        email: data.get('email'),
+        password: data.get('password'),
+        confirmPassword: data.get('confirmPassword'),
+        displayName: data.get('displayName'),
+    });
+
+
+};
 
 
 
 
 return (
-        <div>
-            <div>
-                <h1>Register Page</h1>
-                <p>To jest strona rejestracji</p>
-            </div>
-            <form className="max-w-md mxauto mt-10 p-6 bg-gray-100 rounded-lg shadow-md" onSubmit={handleSubmit}>
-                <label htmlFor="email">Email:</label>
-                <input className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                />
-                {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
-                <label htmlFor="password">Password:</label>
-                <input className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                />
-                {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
-                <label htmlFor="confirmPassword">Confirm Password:</label>
-                <input className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    required
-                />
-                {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>}
-                <label htmlFor="displayName">Display Name:</label>
-                <input className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="text"
-                    id="displayName"
-                    name="displayName"
-                    value={formData.displayName}
-                    onChange={handleChange}
-                    required
-                />
-                {errors.displayName && <p style={{ color: 'red' }}>{errors.displayName}</p>}
-                <button type="submit" disabled={isLoading}> Register </button>
-                {errors.general && <p style={{ color: 'red' }}>{errors.general}</p>}      
-            </form>
-        </div>
+    <Box className="Register" sx={{ backgroundColor: 'background.default', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <CssBaseline enableColorScheme />
+        <ColorModeSelect sx = {{ position: 'fixed', top: '1rem', right: '1rem' }} />
+        <SignUpContainer direction="column" justifyContent="space-between">
+            <Card variant="outlined">
+                <Typography
+                    component="h1"
+                    variant="h4"
+                    sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+                    >
+                    Sign Up
+                </Typography>
+                <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 2}}
+                    >
+                    <FormControl>
+                        <FormLabel htmlFor="displayName">Your nickname</FormLabel>
+                        <TextField
+                            autoComplete="displayName"
+                            name="displayName"
+                            required
+                            fullWidth
+                            id="displayName"
+                            placeholder="CoolNickname123"
+                            error={displayNameError}
+                            helperText={displayNameErrorMessage}
+                            color={displayNameError ? 'error' : 'primary'}
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel htmlFor="email">Email address</FormLabel>
+                        <TextField
+                            variant="outlined"
+                            autoComplete="email"
+                            name="email"
+                            required
+                            fullWidth
+                            id="email"
+                            placeholder="your@email.com"
+                            error={emailError}
+                            helperText={emailErrorMessage}
+                            color={emailError ? 'error' : 'primary'}
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            name="password"
+                            type="password"
+                            id="password"
+                            auto-complete="new-password"
+                            placeholder="********"
+                            error={passwordError}
+                            helperText={passwordErrorMessage}
+                            color={passwordError ? 'error' : 'primary'}
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            name="confirmPassword"
+                            type="password"
+                            id="confirmPassword"
+                            auto-complete="new-password"
+                            placeholder="********"
+                            error={passwordError}
+                            helperText={passwordErrorMessage}
+                            color={passwordError ? 'error' : 'primary'}
+                        />
+                    </FormControl>
+                    <FormControlLabel
+                        control={<Checkbox value="agreeTerms" color="primary" />}
+                        label="I want to sell my soul for marketing purposes."
+                    />
+                    <Button
+                        disabled={isLoading}
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        onClick={validate}
+                    >
+                        Sign Up
+                    </Button>
+                </Box>
+                <Divider>
+                    <Typography sx={{ color: 'text.secondary' }}>or</Typography>
+                </Divider>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Button
+                disabled={isLoading}
+                fullWidth
+                variant="outlined"
+                onClick={() => alert('Sign up with Google')}
+                startIcon={<GoogleIcon />}
+                >
+                Sign up with Google
+                </Button>
+                <Button
+                disabled={isLoading}
+                fullWidth
+                variant="outlined"
+                onClick={() => alert('Sign up with Facebook')}
+                startIcon={<FacebookIcon />}
+                >
+                Sign up with Facebook
+                </Button>
+                </Box>
+            </Card>
+        </SignUpContainer>
+        </Box>
     );
 };
 
-
-export default Register;

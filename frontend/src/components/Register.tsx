@@ -22,6 +22,8 @@ import { styled, ThemeProvider } from '@mui/material/styles';
 import ColorModeSelect from '../customs/ColorModeSelect';
 import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
 import mainTheme from '../themes/mainTheme';
+import { Navigation } from '../customs/Navigation';
+
 
 const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
@@ -39,7 +41,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
     }));
 
 const SignUpContainer = styled(Stack)(({ theme }) => ({
-    height: 'calc((1 - var(--template-frame-height, 0)) * 100vh)',
+    height: '100vh - 64px',
     minHeight: '100%',
     padding: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
@@ -51,7 +53,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
         position: 'absolute',
         zIndex: -1,
         inset: 0,
-        backgroundColor: theme.palette.background.default,
+        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #BE6904 0%, #DD980A 100%)', // Pastelowy jesienny gradient
         backgroundRepeat: 'no-repeat',
     },
 }));
@@ -299,6 +301,7 @@ return (
                 <Button
                 disabled={isLoading}
                 fullWidth
+                sx ={{color: mainTheme.palette.secondary.dark}}
                 variant="outlined"
                 onClick={() => alert('Sign up with Google')}
                 startIcon={<GoogleIcon />}
@@ -308,6 +311,7 @@ return (
                 <Button
                 disabled={isLoading}
                 fullWidth
+                sx ={{color: mainTheme.palette.secondary.dark}}
                 variant="outlined"
                 onClick={() => alert('Sign up with Facebook')}
                 startIcon={<FacebookIcon />}

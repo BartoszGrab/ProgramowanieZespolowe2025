@@ -1,30 +1,30 @@
 import { createTheme } from '@mui/material/styles';
 
 const mainTheme = createTheme({
-  palette: {
+   palette: {
     primary: {
-      main: '#FFB74D', // primary palette orange
-      light: '#FFCC80',
-      dark: '#FB8C00',
+      main: '#DD980A', // Gamboge - główny pomarańcz
+      light: '#E4C19C', // Crayola's Gold - jaśniejszy wariant
+      dark: '#BE6904', // Alloy Orange - ciemniejszy wariant
     },
     secondary: {
-      main: '#A1887F', // secondary palette brown
-      light: '#D7CCC8',
-      dark: '#8D6E63',
+      main: '#84301B', // Kobe - główny brąz
+      light: '#A1887F', // Olive Drab Camouflage - jaśniejszy brąz (z listy)
+      dark: '#432816', // Bistre - ciemniejszy wariant
     },
     background: {
-      default: '#FFF8E1', // background color
-      paper: '#FFF3E0', // paper color
+      default: '#E4C19C', // Crayola's Gold - jasny beż dla tła
+      paper: '#E4C19C', // Olive Drab Camouflage 
     },
     text: {
-      primary: '#5D4037', // dark brown for primary text
-      secondary: '#8D6E63',
+      primary: '#432816', // Bistre - ciemny brąz dla głównego tekstu
+      secondary: '#84301B', // Kobe - dla drugorzędnego tekstu
     },
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h4: {
-      color: '#E65100', // dark orange for headings
+      color: '#BE6904', // Alloy Orange - dla nagłówków (ciemny pomarańcz)
     },
   },
   

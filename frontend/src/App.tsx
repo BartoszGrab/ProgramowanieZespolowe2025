@@ -8,6 +8,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import mainTheme from './themes/mainTheme';
+import {Navigation} from './customs/Navigation';
 
 
 
@@ -16,16 +17,7 @@ function App() {
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
       <BrowserRouter>
-        <AppBar position="static" color="primary">
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Your Virtual Library
-            </Typography>
-            <Button color="inherit" href="/">Home</Button>
-            <Button color="inherit" href="/login">Login</Button>
-            <Button color="inherit" href="/register">Register</Button>
-          </Toolbar>
-        </AppBar>
+        <Navigation />
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />

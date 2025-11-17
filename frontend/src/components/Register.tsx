@@ -40,8 +40,9 @@ const Card = styled(MuiCard)(({ theme }) => ({
     },
     }));
 
+// TODO: OGARNAC SKALOWANIE TLA NA MOBILCE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 const SignUpContainer = styled(Stack)(({ theme }) => ({
-    height: '100vh - 64px',
+    paddingTop: '64px',
     minHeight: '100%',
     padding: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
@@ -53,7 +54,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
         position: 'absolute',
         zIndex: -1,
         inset: 0,
-        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #BE6904 0%, #DD980A 100%)', // Pastelowy jesienny gradient
+        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #BE6904 0%, #DD980A 100%)',
         backgroundRepeat: 'no-repeat',
     },
 }));

@@ -18,10 +18,10 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
+import { styled, ThemeProvider } from '@mui/material/styles';
 import ColorModeSelect from '../customs/ColorModeSelect';
 import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
-import { AlignVerticalCenter } from '@mui/icons-material';
+import mainTheme from '../themes/mainTheme';
 
 const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
@@ -36,10 +36,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
     [theme.breakpoints.up('sm')]: {
         width: '450px',
     },
-    ...theme.applyStyles('dark', {
-        boxShadow:
-        'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
     }));
 
 const SignUpContainer = styled(Stack)(({ theme }) => ({
@@ -57,10 +53,6 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
         inset: 0,
         backgroundColor: theme.palette.background.default,
         backgroundRepeat: 'no-repeat',
-        ...theme.applyStyles('dark', {
-            backgroundImage:
-            'radial-gradient(ellipse at 50% 50%, hsl(210, 30%, 10%), hsl(210, 20%, 5%))',
-        }),
     },
 }));
     
@@ -208,7 +200,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
 
 return (
-    <Box className="Register" sx={{ backgroundColor: 'background.default', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <ThemeProvider theme={mainTheme}>
         <CssBaseline enableColorScheme />
         <ColorModeSelect sx = {{ position: 'fixed', top: '1rem', right: '1rem' }} />
         <SignUpContainer direction="column" justifyContent="space-between">
@@ -325,7 +317,7 @@ return (
                 </Box>
             </Card>
         </SignUpContainer>
-        </Box>
+    </ThemeProvider>
     );
 };
 

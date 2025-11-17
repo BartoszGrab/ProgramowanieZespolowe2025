@@ -1,9 +1,27 @@
 // register
-import React, { use } from 'react';
+import * as React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import type { RegisterRequest } from '../types/auth';
+//MUI imports:
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import Link from '@mui/material/Link';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import MuiCard from '@mui/material/Card';
+import { styled } from '@mui/material/styles';
+import AppTheme from '../shared-theme/AppTheme';
+import ColorModeSelect from '../shared-theme/ColorModeSelect';
+import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
 
 const Register: React.FC = () => {
 // <-- form state hook -->
@@ -35,44 +53,48 @@ const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+")
 //<-- validate form data -->
 const validate = () => {
     const newErrors: {[key: string]: string} = {};
+    const email = document.getElementById('email') as HTMLInputElement;
+    const password = document.getElementById('password') as HTMLInputElement;
+    const confirmPassword = document.getElementById('confirmPassword') as HTMLInputElement;
+    const displayName = document.getElementById('displayName') as HTMLInputElement;
     
     // check if register request fields are not empty
-    if (!formData.email) {
+    if (!email.value) {
         newErrors.email = 'Email cannot be null';
     }
 
-    if(!formData.password) {
+    if(!password.value) {
         newErrors.password = 'Password cannot be null';
     }
 
-    if(formData.password !== formData.confirmPassword) {
+    if(confirmPassword.value != password.value) {
         newErrors.confirmPassword = 'Passwords do not match';
     }
     
-    if(!formData.displayName) {
+    if(displayName.value.length === 0) {
         newErrors.displayName = 'Display Name cannot be null';
     }
 
     // check email format with regex
-    if (formData.email && !emailRegex.test(formData.email)) {
+    if (email.value && !emailRegex.test(email.value)) {
         newErrors.email = 'Invalid email format';
     }
 
     // check password length
-    if (formData.password && formData.password.length < 8) {
+    if (password.value && password.value.length < 8) {
         newErrors.password = 'Password must be at least 8 characters long';
     }
 
     // check if password contains at least four unique characters
-    if (formData.password) {
-        const uniqueChars = new Set(formData.password);
+    if (password.value) {
+        const uniqueChars = new Set(password.value);
         if (uniqueChars.size < 4) {
             newErrors.password = 'Password must contain at least four unique characters';
         }
     }
 
     // check display name length
-    if (formData.displayName && (formData.displayName.length < 3 || formData.displayName.length > 30)) {
+    if (displayName.value && (formData.displayName.length < 3 || formData.displayName.length > 30)) {
         newErrors.displayName = 'Display Name must be between 3 and 30 characters long';
     }
 

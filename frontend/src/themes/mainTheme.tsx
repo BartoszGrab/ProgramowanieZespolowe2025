@@ -13,8 +13,8 @@ const mainTheme = createTheme({
       dark: '#432816', // Bistre - ciemniejszy wariant
     },
     background: {
-      default: '#E4C19C', // Crayola's Gold - jasny beż dla tła
-      paper: '#E4C19C', // Olive Drab Camouflage 
+      default: '#E4C19C', // here gradient background can't be made - we have to put it directly into container
+      paper: 'rgba(255, 247, 238, 1)'
     },
     text: {
       primary: '#432816', // Bistre - ciemny brąz dla głównego tekstu

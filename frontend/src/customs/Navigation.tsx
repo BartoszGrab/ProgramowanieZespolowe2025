@@ -15,7 +15,7 @@ export const Navigation: React.FC = () => {
             }}>
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
-                        📚 Your Virtual Library 
+                        📚 Your Virtual Book Collection 
                     </Typography>
                     {/* Przyciski widoczne na md+ */}
                     <Button color="inherit" href="/" sx={{ display: { xs: 'none', md: 'block' } }}>Home</Button>

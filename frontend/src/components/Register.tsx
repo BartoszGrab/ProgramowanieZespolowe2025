@@ -54,7 +54,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
         position: 'absolute',
         zIndex: -1,
         inset: 0,
-        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #BE6904 0%, #DD980A 100%)',
+        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
         backgroundRepeat: 'no-repeat',
     },
 }));

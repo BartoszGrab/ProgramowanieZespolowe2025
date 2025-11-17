@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Register from './components/Register'
 import Login from './components/Login'
 
+// <<Route path="/dashboard" element={<Dashboard />} /> will be added after implementing dashboard component
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -13,8 +15,8 @@ function App() {
   <BrowserRouter>
     <>
      <Routes>
+        {<Route path="/login" element={<Login />} /> }
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
       </Routes>
     <div>
         <a href="https://vite.dev" target="_blank">

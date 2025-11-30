@@ -54,6 +54,53 @@ namespace backend.Models
         /// </summary>
         public int PostsCount { get; set; } = 0;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+
+        // --- Social ---
         
+        /// <summary>
+        /// Collection of posts created by the user
+        /// </summary>
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
+
+        /// <summary>
+        /// Collection of comments made by the user
+        /// </summary>
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+        /// <summary>
+        /// Collection of likes given by the user
+        /// </summary>
+        public ICollection<Like> Likes { get; set; } = new List<Like>();
+
+        /// <summary>
+        /// Collection of notifications received by the user
+        /// </summary>
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
+        /// <summary>
+        /// Collection of users that this user is following
+        /// </summary>
+        public ICollection<UserFollow> Following { get; set; } = new List<UserFollow>();
+
+        /// <summary>
+        /// Collection of users who are following this user
+        /// </summary>
+        public ICollection<UserFollow> Followers { get; set; } = new List<UserFollow>();
+
+        // --- Library ---
+        
+        /// <summary>
+        /// Collection of shelves created by the user
+        /// </summary>
+        public ICollection<Shelf> Shelves { get; set; } = new List<Shelf>();
+
+        /// <summary>
+        /// Collection of reviews written by the user
+        /// </summary>
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

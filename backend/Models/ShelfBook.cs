@@ -1,3 +1,4 @@
+namespace backend.Models;
 public class ShelfBook
 {
     /// <summary>

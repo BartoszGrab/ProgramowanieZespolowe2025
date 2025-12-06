@@ -97,7 +97,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// temporary disabled HTTPS redirection for development convenience
+//app.UseHttpsRedirection();
 
 // Apply the CORS policy
 app.UseCors("AllowFrontend");

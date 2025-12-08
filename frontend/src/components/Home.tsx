@@ -67,7 +67,7 @@ export default function Home() {
 
     useEffect(() => {
         // Check if user is logged in based on auth token
-        // setIsLoggedIn(true); Tymczasowo symuluj stan zalogowania
+        //setIsLoggedIn(true); //Tymczasowo symuluj stan zalogowania
         setIsLoggedIn(!!localStorage.getItem('authToken'));
     }, []);
 
@@ -111,19 +111,6 @@ export default function Home() {
                                             </Typography>
                                             <Typography variant="body2" sx={{ opacity: 0.9 }}>
                                                 Manage your shelves and books
-                                            </Typography>
-                                        </CardContent>
-                                    </ActionCard>
-                                </Grid>
-                                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                    <ActionCard onClick={() => handleCardClick('/dashboard')}>
-                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                                            <LibraryBooksIcon sx={{ fontSize: 60, color: 'primary.main' }} />
-                                            <Typography variant="h6" color="textPrimary" sx={{ fontWeight: 'bold' }}>
-                                                View Shelves
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                                                Explore your book collections
                                             </Typography>
                                         </CardContent>
                                     </ActionCard>

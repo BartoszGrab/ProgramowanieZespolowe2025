@@ -67,8 +67,8 @@ export default function Home() {
 
     useEffect(() => {
         // Check if user is logged in based on auth token
-        //setIsLoggedIn(true); //Tymczasowo symuluj stan zalogowania
-        setIsLoggedIn(!!localStorage.getItem('authToken'));
+        setIsLoggedIn(true); //Tymczasowo symuluj stan zalogowania
+        // setIsLoggedIn(!!localStorage.getItem('authToken'));
     }, []);
 
     const handleCardClick = (path: string) => {

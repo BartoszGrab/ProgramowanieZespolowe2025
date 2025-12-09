@@ -17,10 +17,18 @@ import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled, ThemeProvider } from '@mui/material/styles';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import AddIcon from '@mui/icons-material/Add';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
 
 // Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
 import mainTheme from '../themes/mainTheme';
+import { Book } from '@mui/icons-material';
 
 interface Book {
     id: string | number;
@@ -73,12 +81,31 @@ const BookCard = styled(MuiCard)(({ theme }) => ({
     },
 }));
 
+const AddBookCard = styled(BookCard)(({ theme }) => ({
+      backgroundColor: 'transparent',
+    borderStyle: 'dashed',
+    borderWidth: '2px',
+    borderColor: theme.palette.primary.dark,
+    color: theme.palette.primary.main,
+    '&:hover': {
+        transform: 'translateY(-5px)',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        borderColor: theme.palette.primary.main,
+    },
+}));
+
 export default function Shelves() {
     const { id } = useParams<{ id: string }>(); // Pobierz ID półki z URL
     const [shelfData, setShelfData] = useState<ShelfData | null>(null);
+    const [books, setBooks] = useState<Book[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+
+    // -- STANY DO MODALA --
+    const [openModal, setOpenModal] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
+    const [createError, setCreateError] = useState<string>('');
 
     useEffect(() => {
         const fetchShelfBooks = async () => {
@@ -105,6 +132,42 @@ export default function Shelves() {
     const handleBackToDashboard = () => {
         navigate('/dashboard');
     };
+
+    // Otwieranie/zamykanie modala
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setCreateError(''); // Czyścimy błędy przy zamknięciu
+    };
+
+    // -- LOGIKA TWORZENIA Ksiazki --
+        const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault(); // Zapobiega przeładowaniu strony
+            setIsCreating(true);
+            setCreateError('');
+    
+            const formData = new FormData(event.currentTarget);
+            const newBookData = {
+                title: formData.get('name') as string,
+                author: formData.get('author') as string,
+                description: formData.get('description') as string,
+            };
+    
+            try {
+                const response = await axios.post('/api/shelves/books', newBookData); // TO DO!!! ENDPOINT
+                
+                const createdBook = response.data; 
+                
+                setBooks((prevBooks) => [...prevBooks, createdBook]);
+    
+                handleCloseModal();
+            } catch (err: any) {
+                console.error('Failed to create book:', err);
+                setCreateError(err.response?.data?.message || 'Failed to create book. Try again.');
+            } finally {
+                setIsCreating(false);
+            }
+        };
 
     return (
         <ThemeProvider theme={mainTheme}>
@@ -146,8 +209,18 @@ export default function Shelves() {
                     {error && <Alert severity="error" sx={{ mb: 4 }}>{error}</Alert>}
 
                     {!isLoading && !error && shelfData && (
-                        shelfData.books.length > 0 ? (
                             <Grid container spacing={3}>
+                                
+                                <Grid size={{xs: 12, sm: 6, md: 4, lg: 3 }}>
+                                    <AddBookCard onClick={handleOpenModal}>
+                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                                            <AddIcon sx={{ fontSize: 60, opacity: 0.7 }} />
+                                            <Typography variant="h6" color="textPrimary" sx={{ opacity: 0.6 }} fontWeight="bold">Create New Book</Typography>
+                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>Add your new favourite</Typography>
+                                        </CardContent>
+                                    </AddBookCard>
+                                </Grid>
+
                                 {shelfData.books.map((book) => (
                                     <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={book.id}>
                                         <BookCard>
@@ -170,15 +243,78 @@ export default function Shelves() {
                                     </Grid>
                                 ))}
                             </Grid>
-                        ) : (
-                            <Box sx={{ textAlign: 'center', mt: 8 }}>
-                                <Typography variant="h6" color="text.secondary">
-                                    No books in this shelf yet.
-                                </Typography>
-                            </Box>
-                        )
-                    )}
+                        ) 
+                    }
                 </Box>
+
+                {/* --- MODAL (DIALOG) TWORZENIA Ksiazki --- */}
+                <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
+                    <Box component="form" onSubmit={handleCreateSubmit}>
+                        <DialogTitle>Create New Book</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText sx={{ mb: 2 }}>
+                                Fill in the details below to create a new book in this shelf.
+                            </DialogContentText>
+                            
+                            {createError && (
+                                <Alert severity="error" sx={{ mb: 2 }}>
+                                    {createError}
+                                </Alert>
+                            )}
+
+                            <TextField
+                                autoFocus
+                                required
+                                margin="dense"
+                                id="name"
+                                name="name"
+                                label="Book Name"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                placeholder="Hary Pota i twoj stary"
+                            />
+                             <TextField
+                                margin="dense"
+                                id="author"
+                                name="author"
+                                label="Author"
+                                type="text"
+                                fullWidth
+                                multiline
+                                variant="outlined"
+                                placeholder="J.K. Rowling"
+                            />
+                            <TextField
+                                margin="dense"
+                                id="description"
+                                name="description"
+                                label="Description"
+                                type="text"
+                                fullWidth
+                                multiline
+                                rows={3}
+                                variant="outlined"
+                                placeholder="A young wizard's journey begins..."
+                            />
+                        </DialogContent>
+                        <DialogActions sx={{ px: 3, pb: 3 }}>
+                            <Button onClick={handleCloseModal} color="inherit">
+                                Cancel
+                            </Button>
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                disabled={isCreating}
+                            >
+                                {isCreating ? 'Creating...' : 'Create Book'}
+                            </Button>
+                        </DialogActions>
+                    </Box>
+                </Dialog>
+
+
+
             </ShelvesContainer>
         </ThemeProvider>
     );

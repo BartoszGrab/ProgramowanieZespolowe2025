@@ -28,6 +28,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
            <Route path="/shelves/:id" element={<Shelves />} />
+           {/* <Route path="/books/:id" element={<Books />} /> TO DO LATER*/}
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

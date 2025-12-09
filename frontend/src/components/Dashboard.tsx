@@ -36,7 +36,6 @@ interface Shelf {
     bookCount?: number;
 }
 
-// ... (Style DashboardContainer, ShelfCard, AddShelfCard pozostają bez zmian)
 const DashboardContainer = styled(Stack)(({ theme }) => ({
     minHeight: '100vh',
     padding: theme.spacing(4),
@@ -105,15 +104,21 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchShelves = async () => {
             try {
-                const response = await axios.get('/api/shelves');
-                const data = response.data;
-                if (Array.isArray(data)) {
+                // const response = await axios.get('/api/shelves');
+                // Mocked response data
+                
+                const data = [
+                    { id: 1, name: 'Fantasy Favorites', description: 'A collection of my favorite fantasy novels.', bookCount: 12 },
+                    { id: 2, name: 'Sci-Fi Collection', description: 'Exploring the universe through science fiction.', bookCount: 8 },
+                    { id: 3, name: 'Mystery Must-Reads', description: 'Thrilling mystery books that keep me guessing.', bookCount: 5 },
+                ];
+                // if (Array.isArray(data)) {
+                //     setShelves(data);
+                // } else if (data && Array.isArray(data.shelves)) {
+                //     setShelves(data.shelves);
+                // } else {
                     setShelves(data);
-                } else if (data && Array.isArray(data.shelves)) {
-                    setShelves(data.shelves);
-                } else {
-                    setShelves([]);
-                }
+                // }
             } catch (err: any) {
                 console.error('Error fetching shelves:', err);
                 setError('Could not load your library shelves.');

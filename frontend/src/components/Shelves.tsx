@@ -26,6 +26,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import FormControl from '@mui/material/FormControl';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 // Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
@@ -101,6 +103,11 @@ export default function Shelves() {
     // State for Autocomplete: can be an Author object or a string (if typing new)
     const [authorInput, setAuthorInput] = useState<string | { id: string; firstName: string; lastName: string } | null>(null);
 
+    // -- ADD BOOK MODAL STATE --
+    const [tabValue, setTabValue] = useState(0);
+    const [searchBookOptions, setSearchBookOptions] = useState<any[]>([]);
+    const [selectedExistingBook, setSelectedExistingBook] = useState<any | null>(null);
+
     // -- DETAILS MODAL --
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedBook, setSelectedBook] = useState<ShelfBook | null>(null);
@@ -153,10 +160,60 @@ export default function Shelves() {
     };
 
     // Otwieranie/zamykanie modala
-    const handleOpenModal = () => setOpenModal(true);
+    const handleOpenModal = () => {
+        setOpenModal(true);
+        setTabValue(0); // Reset to first tab
+    };
     const handleCloseModal = () => {
         setOpenModal(false);
         setCreateError(''); // Czyścimy błędy przy zamknięciu
+        setSelectedExistingBook(null); // Reset selection
+    };
+
+    const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+        setTabValue(newValue);
+        setCreateError('');
+    };
+
+    // -- LOGIKA SZUKANIA ISTNIEJACEJ KSIAZKI --
+    const handleSearchBooks = async (query: string) => {
+        if (!query) {
+            setSearchBookOptions([]);
+            return;
+        }
+        try {
+            const res = await axios.get(`/api/books?search=${query}`);
+            setSearchBookOptions(res.data);
+        } catch (err) {
+            console.error("Failed to search books", err);
+        }
+    };
+
+    const handleAddExistingBook = async () => {
+        if (!selectedExistingBook || !id) return;
+        setIsCreating(true);
+        try {
+            await axios.post(`/api/shelves/${id}/books`, { bookId: selectedExistingBook.id });
+            setShelfData((prevData) => {
+                if (!prevData) return null;
+                // Add the selected book to the list (mapping to ShelfBook format roughly)
+                const newBook: ShelfBook = {
+                    ...selectedExistingBook,
+                    currentPage: 0,
+                    addedAt: new Date().toISOString()
+                };
+                return {
+                    ...prevData,
+                    books: [...prevData.books, newBook]
+                };
+            });
+            handleCloseModal();
+        } catch (err: any) {
+            console.error('Failed to add existing book:', err);
+            setCreateError(err.response?.data?.message || 'Failed to add book.');
+        } finally {
+            setIsCreating(false);
+        }
     };
 
     // -- LOGIKA TWORZENIA Ksiazki --
@@ -307,144 +364,196 @@ export default function Shelves() {
 
                 {/* --- MODAL (DIALOG) TWORZENIA Ksiazki --- */}
                 <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
-                    <Box component="form" onSubmit={handleCreateSubmit}>
-                        <DialogTitle>Create New Book</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText sx={{ mb: 2 }}>
-                                Fill in the details below to create a new book in this shelf.
-                            </DialogContentText>
+                    <Box>
+                        <DialogTitle>Add Book to Shelf</DialogTitle>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 3 }}>
+                            <Tabs value={tabValue} onChange={handleTabChange}>
+                                <Tab label="Search Library" />
+                                <Tab label="Create New" />
+                            </Tabs>
+                        </Box>
 
-                            {createError && (
-                                <Alert severity="error" sx={{ mb: 2 }}>
-                                    {createError}
-                                </Alert>
-                            )}
+                        {/* TAB 0: SEARCH EXISTING */}
+                        <div role="tabpanel" hidden={tabValue !== 0}>
+                            {tabValue === 0 && (
+                                <>
+                                    <DialogContent>
+                                        <DialogContentText sx={{ mb: 2 }}>
+                                            Search for an existing book in the library and add it to your shelf.
+                                        </DialogContentText>
+                                        {createError && <Alert severity="error" sx={{ mb: 2 }}>{createError}</Alert>}
 
-                            <TextField
-                                autoFocus
-                                required
-                                margin="dense"
-                                id="title"
-                                name="title"
-                                label="Book Title"
-                                type="text"
-                                fullWidth
-                                variant="outlined"
-                                placeholder="Harry Potter..."
-                            />
-
-                            <TextField
-                                required
-                                margin="dense"
-                                id="isbn"
-                                name="isbn"
-                                label="ISBN"
-                                type="text"
-                                fullWidth
-                                variant="outlined"
-                                placeholder="978-3-16-148410-0"
-                            />
-
-                            <FormControl fullWidth margin="dense">
-                                {/* <InputLabel id="author-select-label">Author</InputLabel> */}
-                                <Autocomplete
-                                    freeSolo
-                                    id="author-autocomplete"
-                                    options={authors}
-                                    getOptionLabel={(option) => {
-                                        // option can be string (user typed) or object (selected)
-                                        if (typeof option === 'string') return option;
-                                        return `${option.firstName} ${option.lastName}`;
-                                    }}
-                                    value={authorInput}
-                                    onChange={(_event: any, newValue: string | { id: string; firstName: string; lastName: string } | null) => {
-                                        setAuthorInput(newValue);
-                                    }}
-                                    onInputChange={(event: any, newInputValue: string) => {
-                                        // This handles typing; usually onChange handles selection/creation if freeSolo
-                                        // We'll rely on onChange's newValue for final submission, 
-                                        // but if newValue is null (cleared), we might track typing here if needed.
-                                        // For freeSolo, onChange usually captures the string on 'Enter' or blur.
-
-                                        // However, if user just types and doesn't hit enter, 'value' might lag.
-                                        // Simple approach: trust onChange for explicit actions, 
-                                        // but for free text, we need to ensure we capture it.
-                                        if (event?.type === 'change') {
-                                            setAuthorInput(newInputValue);
-                                        }
-                                    }}
-                                    renderInput={(params: any) => (
-                                        <TextField
-                                            {...params}
-                                            label="Author (Select or Type New)"
-                                            placeholder="J.K. Rowling"
-                                            required={!authorInput} // simplistic validation
+                                        <Autocomplete
+                                            id="search-books"
+                                            options={searchBookOptions}
+                                            getOptionLabel={(option) => `${option.title} (${option.isbn})`}
+                                            filterOptions={(x) => x} // Disable built-in filtering, rely on server
+                                            onInputChange={(_e, newUrl) => handleSearchBooks(newUrl)}
+                                            onChange={(_e, newValue) => setSelectedExistingBook(newValue)}
+                                            renderOption={(props, option) => (
+                                                <li {...props}>
+                                                    <Box>
+                                                        <Typography variant="body1" fontWeight="bold">{option.title}</Typography>
+                                                        <Typography variant="caption" color="text.secondary">
+                                                            ISBN: {option.isbn} | By {option.authors.join(', ')}
+                                                        </Typography>
+                                                    </Box>
+                                                </li>
+                                            )}
+                                            renderInput={(params) => (
+                                                <TextField {...params} label="Search by Title or ISBN" fullWidth />
+                                            )}
                                         />
-                                    )}
-                                />
-                            </FormControl>
+                                    </DialogContent>
+                                    <DialogActions sx={{ px: 3, pb: 3 }}>
+                                        <Button onClick={handleCloseModal} color="inherit">Cancel</Button>
+                                        <Button
+                                            variant="contained"
+                                            onClick={handleAddExistingBook}
+                                            disabled={!selectedExistingBook || isCreating}
+                                        >
+                                            {isCreating ? 'Adding...' : 'Add to Shelf'}
+                                        </Button>
+                                    </DialogActions>
+                                </>
+                            )}
+                        </div>
 
-                            <Grid container spacing={2}>
-                                <Grid size={{ xs: 6 }}>
-                                    <TextField
-                                        margin="dense"
-                                        id="pageCount"
-                                        name="pageCount"
-                                        label="Pages"
-                                        type="number"
-                                        fullWidth
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid size={{ xs: 6 }}>
-                                    <TextField
-                                        margin="dense"
-                                        id="publishedDate"
-                                        name="publishedDate"
-                                        label="Published Date"
-                                        type="date"
-                                        fullWidth
-                                        variant="outlined"
-                                        InputLabelProps={{ shrink: true }}
-                                    />
-                                </Grid>
-                            </Grid>
+                        {/* TAB 1: CREATE NEW */}
+                        <div role="tabpanel" hidden={tabValue !== 1}>
+                            {tabValue === 1 && (
+                                <Box component="form" onSubmit={handleCreateSubmit}>
+                                    <DialogContent>
+                                        <DialogContentText sx={{ mb: 2 }}>
+                                            Can't find it? Create a new book entry.
+                                        </DialogContentText>
 
-                            <TextField
-                                margin="dense"
-                                id="coverUrl"
-                                name="coverUrl"
-                                label="Cover URL"
-                                type="url"
-                                fullWidth
-                                variant="outlined"
-                                placeholder="https://..."
-                            />
-                            <TextField
-                                margin="dense"
-                                id="description"
-                                name="description"
-                                label="Description"
-                                type="text"
-                                fullWidth
-                                multiline
-                                rows={3}
-                                variant="outlined"
-                                placeholder="A young wizard's journey begins..."
-                            />
-                        </DialogContent>
-                        <DialogActions sx={{ px: 3, pb: 3 }}>
-                            <Button onClick={handleCloseModal} color="inherit">
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                disabled={isCreating}
-                            >
-                                {isCreating ? 'Creating...' : 'Create Book'}
-                            </Button>
-                        </DialogActions>
+                                        {createError && (
+                                            <Alert severity="error" sx={{ mb: 2 }}>
+                                                {createError}
+                                            </Alert>
+                                        )}
+
+                                        <TextField
+                                            autoFocus
+                                            required
+                                            margin="dense"
+                                            id="title"
+                                            name="title"
+                                            label="Book Title"
+                                            type="text"
+                                            fullWidth
+                                            variant="outlined"
+                                            placeholder="Harry Potter..."
+                                        />
+
+                                        <TextField
+                                            required
+                                            margin="dense"
+                                            id="isbn"
+                                            name="isbn"
+                                            label="ISBN"
+                                            type="text"
+                                            fullWidth
+                                            variant="outlined"
+                                            placeholder="978-3-16-148410-0"
+                                        />
+
+                                        <FormControl fullWidth margin="dense">
+                                            {/* <InputLabel id="author-select-label">Author</InputLabel> */}
+                                            <Autocomplete
+                                                freeSolo
+                                                id="author-autocomplete"
+                                                options={authors}
+                                                getOptionLabel={(option) => {
+                                                    // option can be string (user typed) or object (selected)
+                                                    if (typeof option === 'string') return option;
+                                                    return `${option.firstName} ${option.lastName}`;
+                                                }}
+                                                value={authorInput}
+                                                onChange={(_event: any, newValue: string | { id: string; firstName: string; lastName: string } | null) => {
+                                                    setAuthorInput(newValue);
+                                                }}
+                                                onInputChange={(event: any, newInputValue: string) => {
+                                                    if (event?.type === 'change') {
+                                                        setAuthorInput(newInputValue);
+                                                    }
+                                                }}
+                                                renderInput={(params: any) => (
+                                                    <TextField
+                                                        {...params}
+                                                        label="Author (Select or Type New)"
+                                                        placeholder="J.K. Rowling"
+                                                        required={!authorInput} // simplistic validation
+                                                    />
+                                                )}
+                                            />
+                                        </FormControl>
+
+                                        <Grid container spacing={2}>
+                                            <Grid size={{ xs: 6 }}>
+                                                <TextField
+                                                    margin="dense"
+                                                    id="pageCount"
+                                                    name="pageCount"
+                                                    label="Pages"
+                                                    type="number"
+                                                    fullWidth
+                                                    variant="outlined"
+                                                />
+                                            </Grid>
+                                            <Grid size={{ xs: 6 }}>
+                                                <TextField
+                                                    margin="dense"
+                                                    id="publishedDate"
+                                                    name="publishedDate"
+                                                    label="Published Date"
+                                                    type="date"
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    InputLabelProps={{ shrink: true }}
+                                                />
+                                            </Grid>
+                                        </Grid>
+
+                                        <TextField
+                                            margin="dense"
+                                            id="coverUrl"
+                                            name="coverUrl"
+                                            label="Cover URL"
+                                            type="url"
+                                            fullWidth
+                                            variant="outlined"
+                                            placeholder="https://..."
+                                        />
+                                        <TextField
+                                            margin="dense"
+                                            id="description"
+                                            name="description"
+                                            label="Description"
+                                            type="text"
+                                            fullWidth
+                                            multiline
+                                            rows={3}
+                                            variant="outlined"
+                                            placeholder="A young wizard's journey begins..."
+                                        />
+                                    </DialogContent>
+                                    <DialogActions sx={{ px: 3, pb: 3 }}>
+                                        <Button onClick={handleCloseModal} color="inherit">
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            disabled={isCreating}
+                                        >
+                                            {isCreating ? 'Creating...' : 'Create Book'}
+                                        </Button>
+                                    </DialogActions>
+                                </Box>
+                            )}
+                        </div>
                     </Box>
                 </Dialog>
 

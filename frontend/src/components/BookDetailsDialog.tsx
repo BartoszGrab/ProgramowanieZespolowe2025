@@ -102,9 +102,9 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
             });
             fetchReviews(); // Refresh review list
             fetchMyReview(); // Refresh my review
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            setError("Failed to submit review");
+            setError(err.response?.data?.message || err.response?.data || "Failed to submit review");
         } finally {
             setSubmittingReview(false);
         }

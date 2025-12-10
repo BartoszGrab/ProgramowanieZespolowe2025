@@ -28,33 +28,46 @@ namespace backend.Controllers
         public async Task<ActionResult> AddOrUpdateReview([FromBody] CreateReviewDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var existingReview = await _context.Reviews
-                .FirstOrDefaultAsync(r => r.BookId == dto.BookId && r.UserId == userId);
-
-            if (existingReview != null)
+            if (string.IsNullOrEmpty(userId))
             {
-                // Update existing
-                existingReview.Rating = dto.Rating;
-                existingReview.Comment = dto.Comment;
-                existingReview.CreatedAt = DateTime.UtcNow; 
+                return Unauthorized("User ID not found in token.");
             }
-            else
+
+            try 
             {
-                // Create new
-                var review = new Review
+                var existingReview = await _context.Reviews
+                    .FirstOrDefaultAsync(r => r.BookId == dto.BookId && r.UserId == userId);
+
+                if (existingReview != null)
                 {
-                    UserId = userId,
-                    BookId = dto.BookId,
-                    Rating = dto.Rating,
-                    Comment = dto.Comment,
-                    CreatedAt = DateTime.UtcNow
-                };
-                _context.Reviews.Add(review);
-            }
+                    // Update existing
+                    existingReview.Rating = dto.Rating;
+                    existingReview.Comment = dto.Comment;
+                    existingReview.CreatedAt = DateTime.UtcNow; 
+                }
+                else
+                {
+                    // Create new
+                    var review = new Review
+                    {
+                        UserId = userId,
+                        BookId = dto.BookId,
+                        Rating = dto.Rating,
+                        Comment = dto.Comment,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    _context.Reviews.Add(review);
+                }
 
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Recenzja zapisana." });
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Recenzja zapisana." });
+            }
+            catch (Exception ex)
+            {
+                // Log exception (console for now)
+                Console.Error.WriteLine($"Error saving review: {ex.Message}");
+                return StatusCode(500, "Internal server error while saving review.");
+            }
         }
 
         // GET: api/reviews/my/{bookId}

@@ -114,8 +114,6 @@ namespace backend.Controllers
                 Id = shelf.Id,
                 Name = shelf.Name,
                 BookCount = 0,
-                Name = shelf.Name,
-                BookCount = 0,
                 Books = new List<ShelfBookDto>() 
             };
 

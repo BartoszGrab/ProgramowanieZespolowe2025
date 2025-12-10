@@ -8,9 +8,11 @@ import Box from '@mui/material/Box';
 import mainTheme from './themes/mainTheme';
 import {Navigation} from './customs/Navigation';
 
+import Home from './components/Home';
 import Register from './components/Register'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
+import Shelves from './components/Shelves'
 
 
 
@@ -21,9 +23,12 @@ function App() {
       <BrowserRouter>
         <Navigation />
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
+           <Route path="/shelves/:id" element={<Shelves />} />
+           {/* <Route path="/books/:id" element={<Books />} /> TO DO LATER*/}
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

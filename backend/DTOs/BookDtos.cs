@@ -11,6 +11,7 @@ namespace backend.DTOs
         public string? CoverUrl { get; set; }
         public List<string> Authors { get; set; } = new List<string>(); // Only first and last names
         public List<string> Genres { get; set; } = new List<string>();
+        public string? Description { get; set; } 
         public double AverageRating { get; set; } // Calculated in the controller
     }
 

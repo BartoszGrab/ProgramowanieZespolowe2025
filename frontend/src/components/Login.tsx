@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Form, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/axios';
 import type { LoginRequest } from '../types/auth';
 
 // MUI imports:

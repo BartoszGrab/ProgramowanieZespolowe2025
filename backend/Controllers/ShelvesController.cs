@@ -42,8 +42,54 @@ namespace backend.Controllers
             return Ok(shelves);
         }
 
+        // GET: api/shelves/{id}/books
+        [HttpGet("{id}/books")]
+        public async Task<ActionResult<ShelfDto>> GetShelfBooks(Guid id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var shelf = await _context.Shelves
+                .Include(s => s.ShelfBooks)
+                    .ThenInclude(sb => sb.Book)
+                        .ThenInclude(b => b.BookAuthors)
+                            .ThenInclude(ba => ba.Author)
+                .Include(s => s.ShelfBooks)
+                    .ThenInclude(sb => sb.Book)
+                        .ThenInclude(b => b.BookGenres)
+                            .ThenInclude(bg => bg.Genre)
+                .Include(s => s.ShelfBooks)
+                    .ThenInclude(sb => sb.Book)
+                        .ThenInclude(b => b.Reviews)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (shelf == null) return NotFound("Półka nie istnieje.");
+            
+            // Allow only owner to see it (for now)
+            if (shelf.UserId != userId) return Forbid();
+
+            var shelfDto = new ShelfDto
+            {
+                Id = shelf.Id,
+                Name = shelf.Name,
+                BookCount = shelf.ShelfBooks.Count,
+                Books = shelf.ShelfBooks.Select(sb => new BookDto
+                {
+                    Id = sb.Book.Id,
+                    Title = sb.Book.Title,
+                    ISBN = sb.Book.ISBN,
+                    CoverUrl = sb.Book.CoverUrl,
+                    Authors = sb.Book.BookAuthors.Select(ba => $"{ba.Author.FirstName} {ba.Author.LastName}").ToList(),
+                    Genres = sb.Book.BookGenres.Select(bg => bg.Genre.Name).ToList(),
+                    Description = sb.Book.Description,
+                    AverageRating = sb.Book.Reviews.Any() ? sb.Book.Reviews.Average(r => r.Rating) : 0
+                }).ToList()
+            };
+
+            return Ok(shelfDto);
+        }
+
         [HttpPost]
-        public async Task<ActionResult> CreateShelf([FromBody] CreateShelfDto dto)
+        public async Task<ActionResult<ShelfDto>> CreateShelf([FromBody] CreateShelfDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -60,7 +106,15 @@ namespace backend.Controllers
             _context.Shelves.Add(shelf);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Półka utworzona", shelfId = shelf.Id });
+            var shelfDto = new ShelfDto
+            {
+                Id = shelf.Id,
+                Name = shelf.Name,
+                BookCount = 0,
+                Books = new List<BookDto>() 
+            };
+
+            return Ok(shelfDto);
         }
 
         // POST: api/shelves/{shelfId}/books (Dodaj książkę do półki)

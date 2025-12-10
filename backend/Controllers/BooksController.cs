@@ -42,6 +42,7 @@ namespace backend.Controllers
                 // Get author names from the join table
                 Authors = b.BookAuthors.Select(ba => $"{ba.Author.FirstName} {ba.Author.LastName}").ToList(),
                 Genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList(),
+                Description = b.Description,
                 // Calculate average rating if there are reviews
                 AverageRating = b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0
             }).ToListAsync();
@@ -69,6 +70,7 @@ namespace backend.Controllers
                 CoverUrl = book.CoverUrl,
                 Authors = book.BookAuthors.Select(ba => $"{ba.Author.FirstName} {ba.Author.LastName}").ToList(),
                 Genres = book.BookGenres.Select(bg => bg.Genre.Name).ToList(),
+                Description = book.Description,
                 AverageRating = book.Reviews.Any() ? book.Reviews.Average(r => r.Rating) : 0
             };
 

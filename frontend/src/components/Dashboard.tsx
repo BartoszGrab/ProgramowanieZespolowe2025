@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/axios';
 
 // MUI imports
 import Box from '@mui/material/Box';
@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid'; 
+import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -93,7 +93,7 @@ export default function Dashboard() {
     const [shelves, setShelves] = useState<Shelf[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    
+
     // -- STANY DO MODALA --
     const [openModal, setOpenModal] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
@@ -104,21 +104,8 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchShelves = async () => {
             try {
-                // const response = await axios.get('/api/shelves');
-                // Mocked response data
-                
-                const data = [
-                    { id: 1, name: 'Fantasy Favorites', description: 'A collection of my favorite fantasy novels.', bookCount: 12 },
-                    { id: 2, name: 'Sci-Fi Collection', description: 'Exploring the universe through science fiction.', bookCount: 8 },
-                    { id: 3, name: 'Mystery Must-Reads', description: 'Thrilling mystery books that keep me guessing.', bookCount: 5 },
-                ];
-                // if (Array.isArray(data)) {
-                //     setShelves(data);
-                // } else if (data && Array.isArray(data.shelves)) {
-                //     setShelves(data.shelves);
-                // } else {
-                    setShelves(data);
-                // }
+                const response = await axios.get('/api/shelves');
+                setShelves(response.data);
             } catch (err: any) {
                 console.error('Error fetching shelves:', err);
                 setError('Could not load your library shelves.');
@@ -155,12 +142,12 @@ export default function Dashboard() {
         try {
             // 1. Strzał do API
             const response = await axios.post('/api/shelves', newShelfData);
-            
+
             // 2. Aktualizacja stanu lokalnego (dodajemy nową półkę do listy bez ponownego fetcha)
-            const createdShelf = response.data; 
+            const createdShelf = response.data;
             // Zakładam, że backend zwraca stworzony obiekt z ID.
             // Jeśli backend zwraca tylko status 200, musisz przeładować listę (fetchShelves)
-            
+
             setShelves((prevShelves) => [...prevShelves, createdShelf]);
 
             // 3. Zamknięcie modala
@@ -177,13 +164,13 @@ export default function Dashboard() {
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
-            
+
             <DashboardContainer>
                 {/* Header */}
                 <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto' }}>
-                    <Typography 
-                        component="h1" 
-                        variant="h4" 
+                    <Typography
+                        component="h1"
+                        variant="h4"
                         sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 2 }}
                     >
                         <AutoStoriesIcon fontSize="large" color="primary" />
@@ -203,7 +190,7 @@ export default function Dashboard() {
                     {!isLoading && !error && (
                         <Grid container spacing={3}>
                             {/* Karta dodawania */}
-                            <Grid size={{xs: 12, sm: 6, md: 4, lg: 3 }}>
+                            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                                 <AddShelfCard onClick={handleOpenModal}>
                                     <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                                         <AddIcon sx={{ fontSize: 60, opacity: 0.7 }} />
@@ -215,7 +202,7 @@ export default function Dashboard() {
 
                             {/* Lista półek */}
                             {Array.isArray(shelves) && shelves.map((shelf) => (
-                                <Grid size={{xs: 12, sm: 6, md: 4, lg: 3 }} key={shelf.id}>
+                                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={shelf.id}>
                                     <ShelfCard onClick={() => handleShelfClick(shelf.id)}>
                                         <CardContent>
                                             <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', mb: 1 }}>
@@ -247,7 +234,7 @@ export default function Dashboard() {
                             <DialogContentText sx={{ mb: 2 }}>
                                 Organize your books by creating a new shelf. Give it a catchy name!
                             </DialogContentText>
-                            
+
                             {createError && (
                                 <Alert severity="error" sx={{ mb: 2 }}>
                                     {createError}
@@ -283,9 +270,9 @@ export default function Dashboard() {
                             <Button onClick={handleCloseModal} color="inherit">
                                 Cancel
                             </Button>
-                            <Button 
-                                type="submit" 
-                                variant="contained" 
+                            <Button
+                                type="submit"
+                                variant="contained"
                                 disabled={isCreating}
                             >
                                 {isCreating ? 'Creating...' : 'Create Shelf'}

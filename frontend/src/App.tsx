@@ -31,6 +31,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/shelves/:id" element={<Shelves />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/my-profile" element={<Profile />} />
           <Route path="/recommendations" element={<Recommendations />} />
           {/* <Route path="/books/:id" element={<Books />} /> TO DO LATER*/}
         </Routes>

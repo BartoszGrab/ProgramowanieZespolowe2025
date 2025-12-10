@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
@@ -9,16 +8,26 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import { styled, ThemeProvider } from '@mui/material/styles';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 // Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
@@ -81,16 +90,20 @@ const PageContainer = styled(Stack)(({ theme }) => ({
 
 const BookCard = styled(MuiCard)(({ theme }) => ({
     height: '100%',
+    minHeight: '350px',
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'space-between',
+    textAlign: 'center',
     padding: theme.spacing(2),
+    cursor: 'pointer',
     backgroundColor: theme.palette.background.paper,
     border: '1px solid',
     borderColor: theme.palette.divider,
     boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px',
     transition: 'all 0.3s ease-in-out',
     '&:hover': {
-        transform: 'translateY(-3px)',
+        transform: 'translateY(-5px)',
         boxShadow: 'hsla(220, 30%, 5%, 0.1) 0px 15px 25px 0px',
         borderColor: theme.palette.primary.main,
     },
@@ -100,7 +113,7 @@ const EmptyStateBox = styled(Box)(({ theme }) => ({
     textAlign: 'center',
     padding: theme.spacing(8),
     backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.shape.borderRadius * 2,
+    borderRadius: (theme.shape.borderRadius as number) * 2,
     border: '2px dashed',
     borderColor: theme.palette.divider,
 }));
@@ -112,9 +125,28 @@ export default function Recommendations() {
     const [hasBooks, setHasBooks] = useState<boolean>(false);
     const navigate = useNavigate();
 
+    // Add to shelf dialog state
+    const [addDialogOpen, setAddDialogOpen] = useState(false);
+    const [selectedBook, setSelectedBook] = useState<RecommendedBook | null>(null);
+    const [shelves, setShelves] = useState<Shelf[]>([]);
+    const [selectedShelfId, setSelectedShelfId] = useState<string | number>('');
+    const [isAdding, setIsAdding] = useState(false);
+    const [addError, setAddError] = useState<string | null>(null);
+    const [addSuccess, setAddSuccess] = useState<string | null>(null);
+
     useEffect(() => {
         fetchRecommendations();
+        fetchShelves();
     }, []);
+
+    const fetchShelves = async () => {
+        try {
+            const response = await axios.get<Shelf[]>('/api/shelves');
+            setShelves(response.data);
+        } catch (err) {
+            console.error('Failed to fetch shelves:', err);
+        }
+    };
 
     const fetchRecommendations = async () => {
         setIsLoading(true);
@@ -123,11 +155,11 @@ export default function Recommendations() {
         try {
             // Step 1: Get all shelves
             const shelvesResponse = await axios.get<Shelf[]>('/api/shelves');
-            const shelves = shelvesResponse.data;
+            const shelvesData = shelvesResponse.data;
 
-            console.log('Shelves response:', shelves);
+            console.log('Shelves response:', shelvesData);
 
-            if (!shelves || shelves.length === 0) {
+            if (!shelvesData || shelvesData.length === 0) {
                 setHasBooks(false);
                 setIsLoading(false);
                 return;
@@ -135,7 +167,7 @@ export default function Recommendations() {
 
             // Step 2: Get books from each shelf
             const allBooks: ShelfBookDto[] = [];
-            for (const shelf of shelves) {
+            for (const shelf of shelvesData) {
                 try {
                     const shelfResponse = await axios.get<ShelfDto>(`/api/shelves/${shelf.id}/books`);
                     console.log(`Shelf ${shelf.id} response:`, shelfResponse.data);
@@ -189,6 +221,84 @@ export default function Recommendations() {
         }
     };
 
+    const handleBookClick = (book: RecommendedBook) => {
+        setSelectedBook(book);
+        setSelectedShelfId('');
+        setAddError(null);
+        setAddSuccess(null);
+        setAddDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setAddDialogOpen(false);
+        setSelectedBook(null);
+        setAddError(null);
+        setAddSuccess(null);
+    };
+
+    const handleAddToShelf = async () => {
+        if (!selectedBook || !selectedShelfId) return;
+
+        setIsAdding(true);
+        setAddError(null);
+        setAddSuccess(null);
+
+        try {
+            // Search for the book in the database or Google Books
+            const searchQuery = `${selectedBook.title} ${selectedBook.author}`;
+            const searchResponse = await axios.get(`/api/books?search=${encodeURIComponent(searchQuery)}`);
+
+            let bookToAdd = null;
+
+            if (searchResponse.data && searchResponse.data.length > 0) {
+                // Find best match by title
+                bookToAdd = searchResponse.data.find((b: any) =>
+                    b.title.toLowerCase().includes(selectedBook.title.toLowerCase()) ||
+                    selectedBook.title.toLowerCase().includes(b.title.toLowerCase())
+                ) || searchResponse.data[0];
+            }
+
+            if (!bookToAdd) {
+                setAddError(`Could not find "${selectedBook.title}" in the library. Try searching for it manually on the shelf page.`);
+                return;
+            }
+
+            // Add to shelf
+            const hasValidId = bookToAdd.id && bookToAdd.id !== '00000000-0000-0000-0000-000000000000';
+            const gId = bookToAdd.googleBookId || bookToAdd.GoogleBookId;
+
+            let payload: any = {};
+            if (hasValidId) {
+                payload = { bookId: bookToAdd.id };
+            } else if (gId) {
+                payload = { googleBookId: gId };
+            } else if (bookToAdd.isbn) {
+                payload = { isbn: bookToAdd.isbn };
+            } else {
+                setAddError('Could not identify the book. Please add it manually.');
+                return;
+            }
+
+            await axios.post(`/api/shelves/${selectedShelfId}/books`, payload);
+
+            setAddSuccess(`"${selectedBook.title}" has been added to your shelf!`);
+
+            // Close dialog after a short delay
+            setTimeout(() => {
+                handleCloseDialog();
+            }, 1500);
+
+        } catch (err: any) {
+            console.error('Failed to add book to shelf:', err);
+            const msg = err.response?.data?.message ||
+                (typeof err.response?.data === 'string' ? err.response?.data :
+                    err.message || 'Failed to add book. Please try again.');
+            setAddError(msg);
+        } finally {
+            setIsAdding(false);
+        }
+    };
+
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
@@ -213,7 +323,7 @@ export default function Recommendations() {
                         Book Recommendations
                     </Typography>
                     <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-                        Personalized suggestions based on your reading history
+                        Personalized suggestions based on your reading history. Click on a book to add it to your shelf!
                     </Typography>
                 </Box>
 
@@ -264,26 +374,73 @@ export default function Recommendations() {
                             <Grid container spacing={3}>
                                 {category.items.map((book, bookIndex) => (
                                     <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={bookIndex}>
-                                        <BookCard>
-                                            <CardContent sx={{ flexGrow: 1 }}>
-                                                <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+                                        <BookCard onClick={() => handleBookClick(book)}>
+                                            {/* Book Cover Placeholder */}
+                                            <CardMedia
+                                                sx={{
+                                                    height: 150,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    backgroundColor: '#f5f5f5',
+                                                    borderRadius: 1,
+                                                    mb: 2
+                                                }}
+                                            >
+                                                <MenuBookIcon sx={{ fontSize: 60, color: 'text.disabled' }} />
+                                            </CardMedia>
+
+                                            <CardContent sx={{ flexGrow: 1, p: 0 }}>
+                                                <Typography
+                                                    variant="h6"
+                                                    sx={{
+                                                        fontWeight: 'bold',
+                                                        mb: 0.5,
+                                                        fontSize: '1rem',
+                                                        lineHeight: 1.2,
+                                                        display: '-webkit-box',
+                                                        overflow: 'hidden',
+                                                        WebkitBoxOrient: 'vertical',
+                                                        WebkitLineClamp: 2,
+                                                    }}
+                                                >
                                                     {book.title}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                                                     by {book.author}
                                                 </Typography>
-                                                <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        fontStyle: 'italic',
+                                                        fontSize: '0.8rem',
+                                                        display: '-webkit-box',
+                                                        overflow: 'hidden',
+                                                        WebkitBoxOrient: 'vertical',
+                                                        WebkitLineClamp: 2,
+                                                        color: 'text.secondary'
+                                                    }}
+                                                >
                                                     "{book.reason}"
                                                 </Typography>
+                                            </CardContent>
+
+                                            <Box sx={{ mt: 'auto', pt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
                                                 {book.match_score && (
                                                     <Chip
                                                         label={`${Math.round(book.match_score * 100)}% match`}
                                                         size="small"
                                                         color="success"
-                                                        sx={{ mt: 2 }}
                                                     />
                                                 )}
-                                            </CardContent>
+                                                <Chip
+                                                    icon={<AddCircleOutlineIcon />}
+                                                    label="Click to add to shelf"
+                                                    size="small"
+                                                    color="primary"
+                                                    variant="outlined"
+                                                />
+                                            </Box>
                                         </BookCard>
                                     </Grid>
                                 ))}
@@ -292,6 +449,63 @@ export default function Recommendations() {
                     ))}
                 </Box>
             </PageContainer>
+
+            {/* Add to Shelf Dialog */}
+            <Dialog open={addDialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+                <DialogTitle>
+                    Add to Shelf
+                </DialogTitle>
+                <DialogContent>
+                    {selectedBook && (
+                        <Box sx={{ mb: 3 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                                {selectedBook.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                by {selectedBook.author}
+                            </Typography>
+                        </Box>
+                    )}
+
+                    {addError && <Alert severity="error" sx={{ mb: 2 }}>{addError}</Alert>}
+                    {addSuccess && <Alert severity="success" sx={{ mb: 2 }}>{addSuccess}</Alert>}
+
+                    <FormControl fullWidth>
+                        <InputLabel id="shelf-select-label">Select Shelf</InputLabel>
+                        <Select
+                            labelId="shelf-select-label"
+                            value={selectedShelfId}
+                            label="Select Shelf"
+                            onChange={(e) => setSelectedShelfId(e.target.value)}
+                            disabled={isAdding || !!addSuccess}
+                        >
+                            {shelves.map((shelf) => (
+                                <MenuItem key={shelf.id} value={shelf.id}>
+                                    {shelf.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    {shelves.length === 0 && (
+                        <Alert severity="info" sx={{ mt: 2 }}>
+                            You don't have any shelves yet. Create one first on the Dashboard.
+                        </Alert>
+                    )}
+                </DialogContent>
+                <DialogActions sx={{ px: 3, pb: 3 }}>
+                    <Button onClick={handleCloseDialog} color="inherit" disabled={isAdding}>
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={handleAddToShelf}
+                        disabled={!selectedShelfId || isAdding || !!addSuccess}
+                    >
+                        {isAdding ? 'Adding...' : 'Add to Shelf'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </ThemeProvider>
     );
 }

@@ -39,6 +39,41 @@ dotnet run
 ```
 - API powinno działać np. na `https://localhost:7200`.
 
+### d) API Rekomendacji Książek
+
+Backend udostępnia endpoint do rekomendacji książek (wymaga uruchomionego books-rec):
+
+```bash
+# Start Qdrant (vector database)
+sudo docker run -d -p 6333:6333 --name qdrant qdrant/qdrant
+
+# Start books-rec microservice
+cd ../books-rec
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/pip install pydantic-settings
+.venv/bin/python -m uvicorn app.main:app --port 8000
+```
+
+**Endpoints:**
+
+| Endpoint | Metoda | Opis |
+|----------|--------|------|
+| `/api/recommendations/health` | GET | Sprawdź status serwisu |
+| `/api/recommendations` | POST | Pobierz rekomendacje książek |
+
+**Przykład użycia:**
+```bash
+curl -X POST https://localhost:7200/api/recommendations \
+  -H "Content-Type: application/json" \
+  -d '{
+    "preferredLanguage": "pl",
+    "history": [
+      {"title": "Wiedźmin", "author": "Andrzej Sapkowski", "genre": "Fantasy", "rating": 5}
+    ]
+  }'
+```
+
 ---
 
 ## 3. Frontend (React + Vite)

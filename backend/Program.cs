@@ -88,6 +88,15 @@ builder.Services.AddCors(options =>
 // Register custom services
 builder.Services.AddScoped<JwtService>();
 
+// Register HttpClient for books-rec microservice
+builder.Services.AddHttpClient<BooksRecService>(client =>
+{
+    var baseUrl = builder.Configuration["BooksRecService:BaseUrl"] 
+        ?? "http://localhost:8000";
+    client.BaseAddress = new Uri(baseUrl);
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

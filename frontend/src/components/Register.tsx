@@ -60,7 +60,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 
-export default function Register(props: { disableCustomTheme?: boolean }) {
+export default function Register() {
     // // <-- form state hook -->
     // const [formData, setFormData] = useState<RegisterRequest>({
     //     email: '',
@@ -294,6 +294,11 @@ export default function Register(props: { disableCustomTheme?: boolean }) {
                         >
                             Sign Up
                         </Button>
+                        {errors.general && (
+                            <Typography color="error" variant="body2" align="center" sx={{ mt: 1 }}>
+                                {errors.general}
+                            </Typography>
+                        )}
                     </Box>
                     <Divider>
                         <Typography sx={{ color: 'text.secondary' }}>or</Typography>

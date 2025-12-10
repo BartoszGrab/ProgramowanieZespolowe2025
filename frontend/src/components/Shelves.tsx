@@ -30,20 +30,10 @@ import FormControl from '@mui/material/FormControl';
 // Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
 import mainTheme from '../themes/mainTheme';
-import { Book } from '@mui/icons-material';
+import type { ShelfData, ShelfBook } from '../types/book';
+import BookDetailsDialog from './BookDetailsDialog';
 
-interface Book {
-    id: string | number;
-    title: string;
-    authors?: string[];
-    description?: string;
-}
 
-interface ShelfData {
-    name: string;
-    description?: string;
-    books: Book[];
-}
 
 const ShelvesContainer = styled(Stack)(({ theme }) => ({
     minHeight: '100vh',
@@ -111,26 +101,30 @@ export default function Shelves() {
     // State for Autocomplete: can be an Author object or a string (if typing new)
     const [authorInput, setAuthorInput] = useState<string | { id: string; firstName: string; lastName: string } | null>(null);
 
-    useEffect(() => {
-        const fetchShelfBooks = async () => {
-            if (!id) return;
-            try {
-                // Zakładam API: /api/shelves/:id/books, które zwraca { name, description, books: [] }
-                const response = await axios.get(`/api/shelves/${id}/books`);
-                const data = response.data;
-                if (data && data.books) {
-                    setShelfData(data);
-                } else {
-                    setShelfData({ name: 'Unknown Shelf', description: '', books: [] });
-                }
-            } catch (err: any) {
-                console.error('Error fetching shelf books:', err);
-                setError('Could not load books for this shelf.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    // -- DETAILS MODAL --
+    const [detailsOpen, setDetailsOpen] = useState(false);
+    const [selectedBook, setSelectedBook] = useState<ShelfBook | null>(null);
 
+    const fetchShelfBooks = async () => {
+        if (!id) return;
+        try {
+            // Zakładam API: /api/shelves/:id/books, które zwraca { name, description, books: [] }
+            const response = await axios.get(`/api/shelves/${id}/books`);
+            const data = response.data;
+            if (data && data.books) {
+                setShelfData(data);
+            } else {
+                setShelfData({ id: id, name: 'Unknown Shelf', bookCount: 0, description: '', books: [] });
+            }
+        } catch (err: any) {
+            console.error('Error fetching shelf books:', err);
+            setError('Could not load books for this shelf.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
         const fetchAuthors = async () => {
             try {
                 const response = await axios.get('/api/authors');
@@ -143,6 +137,16 @@ export default function Shelves() {
         fetchShelfBooks();
         fetchAuthors();
     }, [id]);
+
+    const handleBookClick = (book: ShelfBook) => {
+        setSelectedBook(book);
+        setDetailsOpen(true);
+    };
+
+    const handleCloseDetails = () => {
+        setDetailsOpen(false);
+        setSelectedBook(null);
+    };
 
     const handleBackToDashboard = () => {
         navigate('/dashboard');
@@ -277,7 +281,7 @@ export default function Shelves() {
 
                             {shelfData.books.map((book) => (
                                 <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={book.id}>
-                                    <BookCard>
+                                    <BookCard onClick={() => handleBookClick(book)} sx={{ cursor: 'pointer' }}>
                                         <CardContent sx={{ flexGrow: 1 }}>
                                             <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', mb: 1 }}>
                                                 {book.title}
@@ -353,7 +357,7 @@ export default function Shelves() {
                                         return `${option.firstName} ${option.lastName}`;
                                     }}
                                     value={authorInput}
-                                    onChange={(event: any, newValue: string | { id: string; firstName: string; lastName: string } | null) => {
+                                    onChange={(_event: any, newValue: string | { id: string; firstName: string; lastName: string } | null) => {
                                         setAuthorInput(newValue);
                                     }}
                                     onInputChange={(event: any, newInputValue: string) => {
@@ -447,6 +451,17 @@ export default function Shelves() {
 
 
             </ShelvesContainer>
+
+            {/* DETAILS DIALOG */}
+            {id && (
+                <BookDetailsDialog
+                    open={detailsOpen}
+                    onClose={handleCloseDetails}
+                    book={selectedBook}
+                    shelfId={id}
+                    onUpdate={fetchShelfBooks}
+                />
+            )}
         </ThemeProvider>
     );
 }

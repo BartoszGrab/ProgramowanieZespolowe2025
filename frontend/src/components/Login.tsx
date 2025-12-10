@@ -59,7 +59,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function Login(props: { disableCustomTheme?: boolean }) {
+export default function Login() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -69,7 +69,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
   const navigate = useNavigate();
 
   // <-- error state hook -->
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
   const [isLoading, setIsLoading] = useState(false);
 
   // <-- email regex -->
@@ -122,7 +122,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
       navigate('/dashboard');
     } catch (error: any) {
       console.error('Login failed:', error);
-      setErrors({ general: error.response?.data?.message || 'Login failed' });
+
     } finally {
       setIsLoading(false);
     }

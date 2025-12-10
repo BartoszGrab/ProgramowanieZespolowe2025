@@ -72,7 +72,7 @@ namespace backend.Controllers
                 Id = shelf.Id,
                 Name = shelf.Name,
                 BookCount = shelf.ShelfBooks.Count,
-                Books = shelf.ShelfBooks.Select(sb => new BookDto
+                Books = shelf.ShelfBooks.Select(sb => new ShelfBookDto
                 {
                     Id = sb.Book.Id,
                     Title = sb.Book.Title,
@@ -81,7 +81,10 @@ namespace backend.Controllers
                     Authors = sb.Book.BookAuthors.Select(ba => $"{ba.Author.FirstName} {ba.Author.LastName}").ToList(),
                     Genres = sb.Book.BookGenres.Select(bg => bg.Genre.Name).ToList(),
                     Description = sb.Book.Description,
-                    AverageRating = sb.Book.Reviews.Any() ? sb.Book.Reviews.Average(r => r.Rating) : 0
+                    PageCount = sb.Book.PageCount,
+                    AverageRating = sb.Book.Reviews.Any() ? sb.Book.Reviews.Average(r => r.Rating) : 0,
+                    CurrentPage = sb.CurrentPage,
+                    AddedAt = sb.AddedAt
                 }).ToList()
             };
 
@@ -111,7 +114,9 @@ namespace backend.Controllers
                 Id = shelf.Id,
                 Name = shelf.Name,
                 BookCount = 0,
-                Books = new List<BookDto>() 
+                Name = shelf.Name,
+                BookCount = 0,
+                Books = new List<ShelfBookDto>() 
             };
 
             return Ok(shelfDto);
@@ -149,6 +154,28 @@ namespace backend.Controllers
 
             await _context.SaveChangesAsync();
             return Ok(new { message = "Książka dodana do półki" });
+        }
+
+        // PUT: api/shelves/{shelfId}/books/{bookId}/progress
+        [HttpPut("{shelfId}/books/{bookId}/progress")]
+        public async Task<ActionResult> UpdateBookProgress(Guid shelfId, Guid bookId, [FromBody] UpdateShelfBookProgressDto dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var shelfBook = await _context.ShelfBooks
+                .Include(sb => sb.Shelf)
+                .Include(sb => sb.Book)
+                .FirstOrDefaultAsync(sb => sb.ShelfId == shelfId && sb.BookId == bookId && sb.Shelf.UserId == userId);
+
+            if (shelfBook == null) return NotFound("Nie znaleziono książki na Twojej półce.");
+
+            if (dto.CurrentPage > shelfBook.Book.PageCount)
+                return BadRequest($"Obecna strona ({dto.CurrentPage}) nie może być większa niż liczba stron w książce ({shelfBook.Book.PageCount}).");
+
+            shelfBook.CurrentPage = dto.CurrentPage;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Postęp zaktualizowany." });
         }
     }
 }

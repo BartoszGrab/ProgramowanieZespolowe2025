@@ -14,6 +14,7 @@ namespace backend.DTOs
         public string? Description { get; set; } 
         public int PageCount { get; set; }
         public double AverageRating { get; set; } // Calculated in the controller
+        public string? GoogleBookId { get; set; } // External ID from Google Books
     }
 
     // For adding a new book

@@ -41,8 +41,9 @@ namespace backend.DTOs
     // For adding a book to a shelf
     public class AddBookToShelfDto
     {
-        [Required]
-        public Guid BookId { get; set; }
+        public Guid? BookId { get; set; }
+        public string? Isbn { get; set; }
+        public string? GoogleBookId { get; set; }
     }
 
     // NEW: For updating reading progress

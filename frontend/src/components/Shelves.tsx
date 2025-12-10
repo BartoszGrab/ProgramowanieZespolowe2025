@@ -9,8 +9,10 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
@@ -18,6 +20,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled, ThemeProvider } from '@mui/material/styles';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -112,6 +116,11 @@ export default function Shelves() {
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedBook, setSelectedBook] = useState<ShelfBook | null>(null);
 
+    // -- DELETE CONFIRMATION MODAL --
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [bookToDelete, setBookToDelete] = useState<ShelfBook | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
     const fetchShelfBooks = async () => {
         if (!id) return;
         try {
@@ -193,24 +202,37 @@ export default function Shelves() {
         if (!selectedExistingBook || !id) return;
         setIsCreating(true);
         try {
-            await axios.post(`/api/shelves/${id}/books`, { bookId: selectedExistingBook.id });
+            // Check if it's a "local" book (has a real UUID) or a "Google" book (empty/null ID)
+            const hasValidId = selectedExistingBook.id && selectedExistingBook.id !== '00000000-0000-0000-0000-000000000000';
+            const gId = selectedExistingBook.googleBookId || selectedExistingBook.GoogleBookId;
+
+            let payload: any = {};
+            if (hasValidId) {
+                payload = { bookId: selectedExistingBook.id };
+            } else if (gId) {
+                payload = { googleBookId: gId };
+            } else if (selectedExistingBook.isbn) {
+                payload = { isbn: selectedExistingBook.isbn };
+            } else {
+                throw new Error("Selected book has no ID, Google ID, or ISBN. Cannot add.");
+            }
+
+            await axios.post(`/api/shelves/${id}/books`, payload);
+
             setShelfData((prevData) => {
                 if (!prevData) return null;
                 // Add the selected book to the list (mapping to ShelfBook format roughly)
-                const newBook: ShelfBook = {
-                    ...selectedExistingBook,
-                    currentPage: 0,
-                    addedAt: new Date().toISOString()
-                };
-                return {
-                    ...prevData,
-                    books: [...prevData.books, newBook]
-                };
+                // Note: The backend returns the real ID now, but we just re-fetch or optimistically add.
+                // Optimistic add might be tricky if we don't have the new ID.
+                return { ...prevData }; // For simplicity, we might want to just re-fetch.
             });
+            // Re-fetch to get the full book details (including new ID if created)
+            fetchShelfBooks();
             handleCloseModal();
         } catch (err: any) {
             console.error('Failed to add existing book:', err);
-            setCreateError(err.response?.data?.message || 'Failed to add book.');
+            const msg = err.response?.data?.message || (typeof err.response?.data === 'string' ? err.response?.data : err.message || 'Failed to add book.');
+            setCreateError(msg);
         } finally {
             setIsCreating(false);
         }
@@ -284,6 +306,41 @@ export default function Shelves() {
         }
     };
 
+    // -- DELETE BOOK LOGIC --
+    const handleRemoveClick = (event: React.MouseEvent, book: ShelfBook) => {
+        event.stopPropagation(); // Prevent opening details
+        setBookToDelete(book);
+        setDeleteConfirmOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!bookToDelete || !id) return;
+        setIsDeleting(true);
+
+        try {
+            await axios.delete(`/api/shelves/${id}/books/${bookToDelete.id}`);
+
+            setShelfData((prevData) => {
+                if (!prevData) return null;
+                return {
+                    ...prevData,
+                    books: prevData.books.filter(b => b.id !== bookToDelete.id)
+                };
+            });
+            handleCancelDelete(); // Close only on success
+        } catch (err: any) {
+            console.error("Failed to remove book:", err);
+            alert(`Failed to remove book: ${err.response?.data || err.message}`);
+            setIsDeleting(false); // Re-enable button
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setDeleteConfirmOpen(false);
+        setBookToDelete(null);
+        setIsDeleting(false);
+    };
+
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
@@ -338,21 +395,60 @@ export default function Shelves() {
 
                             {shelfData.books.map((book) => (
                                 <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={book.id}>
-                                    <BookCard onClick={() => handleBookClick(book)} sx={{ cursor: 'pointer' }}>
-                                        <CardContent sx={{ flexGrow: 1 }}>
-                                            <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', mb: 1 }}>
+                                    <BookCard onClick={() => handleBookClick(book)} sx={{ cursor: 'pointer', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                        <CardMedia
+                                            component="img"
+                                            height="200"
+                                            image={book.coverUrl || 'https://via.placeholder.com/150'}
+                                            alt={book.title}
+                                            sx={{ objectFit: 'contain', backgroundColor: '#f5f5f5', pt: 2 }}
+                                        />
+                                        <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                                            <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold', fontSize: '1rem', lineHeight: 1.2, mb: 1 }}>
                                                 {book.title}
                                             </Typography>
-                                            {book.authors && book.authors.length > 0 && (
-                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                                    by {book.authors.join(', ')}
+                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                                                    {book.authors.join(', ')}
                                                 </Typography>
+                                                <IconButton
+                                                    size="small"
+                                                    color="error"
+                                                    onClick={(e: React.MouseEvent) => handleRemoveClick(e, book)}
+                                                    sx={{
+                                                        mt: -0.5,
+                                                        mr: -0.5,
+                                                        opacity: 0.6,
+                                                        '&:hover': { opacity: 1, backgroundColor: 'rgba(211, 47, 47, 0.1)' }
+                                                    }}
+                                                >
+                                                    <DeleteIcon fontSize="small" />
+                                                </IconButton>
+                                            </Box>
+
+                                            {/* Progress Bar */}
+                                            {book.pageCount > 0 && (
+                                                <Box sx={{ width: '100%', mr: 1, mb: 1 }}>
+                                                    <LinearProgress variant="determinate" value={(book.currentPage / book.pageCount) * 100} />
+                                                    <Typography variant="caption" color="text.secondary">
+                                                        {Math.round((book.currentPage / book.pageCount) * 100)}% read
+                                                    </Typography>
+                                                </Box>
                                             )}
-                                            {book.description && (
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {book.description}
-                                                </Typography>
-                                            )}
+
+                                            <Typography
+                                                variant="body2"
+                                                color="text.secondary"
+                                                sx={{
+                                                    display: '-webkit-box',
+                                                    overflow: 'hidden',
+                                                    WebkitBoxOrient: 'vertical',
+                                                    WebkitLineClamp: 3, // Limit to 3 lines
+                                                    textOverflow: 'ellipsis'
+                                                }}
+                                            >
+                                                {book.description || 'No description available.'}
+                                            </Typography>
                                         </CardContent>
                                     </BookCard>
                                 </Grid>
@@ -571,6 +667,25 @@ export default function Shelves() {
                     onUpdate={fetchShelfBooks}
                 />
             )}
+
+            {/* DELETE CONFIRMATION DIALOG */}
+            <Dialog
+                open={deleteConfirmOpen}
+                onClose={handleCancelDelete}
+            >
+                <DialogTitle>Remove Book?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to remove "{bookToDelete?.title}" from this shelf? This action cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancelDelete} color="inherit" disabled={isDeleting}>Cancel</Button>
+                    <Button onClick={handleConfirmDelete} color="error" autoFocus disabled={isDeleting}>
+                        {isDeleting ? 'Removing...' : 'Remove'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </ThemeProvider>
     );
 }

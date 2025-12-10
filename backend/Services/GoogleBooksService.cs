@@ -2,7 +2,8 @@ using System.Text.Json;
 
 namespace backend.Services
 {
-    public record BookDto(
+    public record GoogleBook(
+        string Id, // Volume ID
         string? Isbn,
         string? Title,
         List<string>? Authors,
@@ -16,7 +17,9 @@ namespace backend.Services
 
     public interface IGoogleBooksService
     {
-        Task<BookDto?> GetByIsbnAsync(string isbn, CancellationToken ct = default);
+        Task<GoogleBook?> GetByIsbnAsync(string isbn, CancellationToken ct = default);
+        Task<GoogleBook?> GetByGoogleIdAsync(string googleId, CancellationToken ct = default);
+        Task<List<GoogleBook>> SearchBooksAsync(string query, int maxResults = 10, CancellationToken ct = default);
     }
 
     public class GoogleBooksService : IGoogleBooksService
@@ -30,7 +33,31 @@ namespace backend.Services
             _config = config;
         }
 
-        public async Task<BookDto?> GetByIsbnAsync(string isbn, CancellationToken ct = default)
+        public async Task<List<GoogleBook>> SearchBooksAsync(string query, int maxResults = 10, CancellationToken ct = default)
+        {
+            var key = _config["GoogleBooks:ApiKey"];
+            var url = $"volumes?q={Uri.EscapeDataString(query)}&maxResults={maxResults}" + (string.IsNullOrEmpty(key) ? "" : $"&key={key}");
+
+            using var res = await _http.GetAsync(url, ct);
+            if (!res.IsSuccessStatusCode) return new List<GoogleBook>();
+
+            using var stream = await res.Content.ReadAsStreamAsync(ct);
+            using var doc = await JsonDocument.ParseAsync(stream, cancellationToken: ct);
+            var root = doc.RootElement;
+
+            if (!root.TryGetProperty("items", out var items) || items.ValueKind != JsonValueKind.Array)
+                return new List<GoogleBook>();
+
+            var results = new List<GoogleBook>();
+            foreach (var item in items.EnumerateArray())
+            {
+                 var book = ParseVolume(item);
+                 if (book != null) results.Add(book);
+            }
+            return results;
+        }
+
+        public async Task<GoogleBook?> GetByIsbnAsync(string isbn, CancellationToken ct = default)
         {
             var key = _config["GoogleBooks:ApiKey"];
             var url = $"volumes?q=isbn:{isbn}" + (string.IsNullOrEmpty(key) ? "" : $"&key={key}");
@@ -44,7 +71,29 @@ namespace backend.Services
 
             if (!root.TryGetProperty("totalItems", out var total) || total.GetInt32() == 0) return null;
             var item = root.GetProperty("items")[0];
-            var info = item.GetProperty("volumeInfo");
+            return ParseVolume(item);
+        }
+
+        public async Task<GoogleBook?> GetByGoogleIdAsync(string googleId, CancellationToken ct = default)
+        {
+            var key = _config["GoogleBooks:ApiKey"];
+            var url = $"volumes/{googleId}" + (string.IsNullOrEmpty(key) ? "" : $"?key={key}");
+
+            using var res = await _http.GetAsync(url, ct);
+            if (!res.IsSuccessStatusCode) return null;
+
+            using var stream = await res.Content.ReadAsStreamAsync(ct);
+            using var doc = await JsonDocument.ParseAsync(stream, cancellationToken: ct);
+            var root = doc.RootElement; // The root is the volume object itself for this endpoint
+
+            return ParseVolume(root);
+        }
+
+        private GoogleBook? ParseVolume(JsonElement item)
+        {
+             // ID is usually at root level of item, volumeInfo is property
+            if (!item.TryGetProperty("volumeInfo", out var info)) return null;
+            var volumeId = item.TryGetProperty("id", out var idProp) ? idProp.GetString() ?? "" : "";
 
             string? extractIsbn()
             {
@@ -68,19 +117,18 @@ namespace backend.Services
                     : new List<string>();
             }
 
-            var dto = new BookDto(
+            return new GoogleBook(
+                Id: volumeId,
                 Isbn: extractIsbn(),
-                Title: info.GetProperty("title").GetString(),
+                Title: info.TryGetProperty("title", out var t) ? t.GetString() : null,
                 Authors: info.TryGetProperty("authors", out var a) ? readStringList(a) : new List<string>(),
                 Publisher: info.TryGetProperty("publisher", out var p) ? p.GetString() : null,
                 PublishedDate: info.TryGetProperty("publishedDate", out var pd) ? pd.GetString() : null,
                 Description: info.TryGetProperty("description", out var d) ? d.GetString() : null,
                 PageCount: info.TryGetProperty("pageCount", out var pc) && pc.ValueKind == JsonValueKind.Number ? pc.GetInt32() : null,
                 Categories: info.TryGetProperty("categories", out var c) ? readStringList(c) : new List<string>(),
-                Thumbnail: info.TryGetProperty("imageLinks", out var il) && il.TryGetProperty("thumbnail", out var t) ? t.GetString() : null
+                Thumbnail: info.TryGetProperty("imageLinks", out var il) && il.TryGetProperty("thumbnail", out var th) ? th.GetString() : null
             );
-
-            return dto;
         }
     }
 }

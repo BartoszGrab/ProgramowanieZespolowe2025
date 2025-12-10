@@ -1,6 +1,7 @@
 using backend.Data;
 using backend.DTOs;
 using backend.Models;
+using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,12 @@ namespace backend.Controllers
     public class ShelvesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IGoogleBooksService _googleBooksService; // Changed from UserManager to IGoogleBooksService
 
-        public ShelvesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ShelvesController(ApplicationDbContext context, IGoogleBooksService googleBooksService) // Changed constructor signature
         {
             _context = context;
-            _userManager = userManager;
+            _googleBooksService = googleBooksService;
         }
 
         // GET: api/shelves (Get MY shelves)
@@ -132,13 +133,63 @@ namespace backend.Controllers
 
             if (shelf == null) return NotFound("Półka nie istnieje lub nie należy do Ciebie.");
 
-            // Check if the book exists
-            var bookExists = await _context.Books.AnyAsync(b => b.Id == dto.BookId);
-            if (!bookExists) return NotFound("Książka nie istnieje.");
+            Guid targetBookId;
+
+            if (dto.BookId.HasValue && dto.BookId != Guid.Empty)
+            {
+                targetBookId = dto.BookId.Value;
+                // Check if the book exists
+                var bookExists = await _context.Books.AnyAsync(b => b.Id == targetBookId);
+                if (!bookExists) return NotFound("Książka nie istnieje.");
+            }
+            else if (!string.IsNullOrEmpty(dto.GoogleBookId))
+            {
+                 // Try to fetch by Google ID directly to ensure we get the right book even without standard ISBN
+                 var gBook = await _googleBooksService.GetByGoogleIdAsync(dto.GoogleBookId);
+                 if (gBook == null) return NotFound($"Book with Google ID {dto.GoogleBookId} not found.");
+
+                 // Check if we already have this book by ISBN (if available)
+                 Book? existingBook = null;
+                 if (!string.IsNullOrEmpty(gBook.Isbn))
+                 {
+                     existingBook = await _context.Books.FirstOrDefaultAsync(b => b.ISBN == gBook.Isbn);
+                 }
+
+                 if (existingBook != null)
+                 {
+                     targetBookId = existingBook.Id;
+                 }
+                 else
+                 {
+                     // Create new Book
+                     targetBookId = await CreateBookFromGoogleBook(gBook);
+                 }
+            }
+            else if (!string.IsNullOrEmpty(dto.Isbn))
+            {
+                // Try to find by ISBN
+                var existingBook = await _context.Books.FirstOrDefaultAsync(b => b.ISBN == dto.Isbn);
+                if (existingBook != null)
+                {
+                    targetBookId = existingBook.Id;
+                }
+                else
+                {
+                    // Fetch from Google
+                    var gBook = await _googleBooksService.GetByIsbnAsync(dto.Isbn);
+                    if (gBook == null) return NotFound($"Book with ISBN {dto.Isbn} not found in Google Books.");
+                    
+                    targetBookId = await CreateBookFromGoogleBook(gBook);
+                }
+            }
+            else
+            {
+                return BadRequest("Musisz podać BookId, GoogleBookId lub ISBN.");
+            }
 
             // Check if the book is already on the shelf
             var alreadyOnShelf = await _context.ShelfBooks
-                .AnyAsync(sb => sb.ShelfId == shelfId && sb.BookId == dto.BookId);
+                .AnyAsync(sb => sb.ShelfId == shelfId && sb.BookId == targetBookId);
 
             if (alreadyOnShelf) return BadRequest("Ta książka już jest na tej półce.");
 
@@ -146,12 +197,33 @@ namespace backend.Controllers
             _context.ShelfBooks.Add(new ShelfBook
             {
                 ShelfId = shelfId,
-                BookId = dto.BookId,
+                BookId = targetBookId,
                 AddedAt = DateTime.UtcNow
             });
 
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Książka dodana do półki" });
+            return Ok(new { message = "Książka dodana do półki", bookId = targetBookId });
+        }
+
+        // DELETE: api/shelves/{shelfId}/books/{bookId}
+        [HttpDelete("{shelfId}/books/{bookId}")]
+        public async Task<ActionResult> RemoveBookFromShelf(Guid shelfId, Guid bookId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var shelfBook = await _context.ShelfBooks
+                .Include(sb => sb.Shelf)
+                .FirstOrDefaultAsync(sb => sb.ShelfId == shelfId && sb.BookId == bookId && sb.Shelf.UserId == userId);
+
+            if (shelfBook == null)
+            {
+                return NotFound("Książka nie znajduje się na tej półce lub półka nie należy do Ciebie.");
+            }
+
+            _context.ShelfBooks.Remove(shelfBook);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Książka usunięta z półki." });
         }
 
         // PUT: api/shelves/{shelfId}/books/{bookId}/progress
@@ -174,6 +246,51 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Postęp zaktualizowany." });
+        }
+        private async Task<Guid> CreateBookFromGoogleBook(backend.Services.GoogleBook gBook)
+        {
+            var newBook = new Book
+            {
+                Title = gBook.Title ?? "Unknown",
+                ISBN = gBook.Isbn ?? "TMP_" + Guid.NewGuid().ToString("N").Substring(0, 9), // Fallback if no ISBN (max 13 chars)
+                CoverUrl = gBook.Thumbnail,
+                Description = gBook.Description,
+                PageCount = gBook.PageCount ?? 0,
+                PublishedDate = DateTime.TryParse(gBook.PublishedDate, out var d) ? d.ToUniversalTime() : null
+            };
+
+            // Handle Authors
+            foreach (var authorName in gBook.Authors ?? new List<string>())
+            {
+                var parts = authorName.Split(' ');
+                var lastName = parts.Last();
+                var firstName = parts.Length > 1 ? string.Join(" ", parts.Take(parts.Length - 1)) : "";
+                if (string.IsNullOrEmpty(firstName)) firstName = authorName;
+
+                var author = await _context.Authors.FirstOrDefaultAsync(a => a.FirstName == firstName && a.LastName == lastName);
+                if (author == null)
+                {
+                    author = new Author { FirstName = firstName, LastName = lastName };
+                    _context.Authors.Add(author);
+                }
+                newBook.BookAuthors.Add(new BookAuthor { Author = author, Book = newBook });
+            }
+
+            // Handle Genres (Categories)
+            foreach (var genreName in gBook.Categories ?? new List<string>())
+            {
+                 var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Name == genreName);
+                 if (genre == null)
+                 {
+                     genre = new Genre { Name = genreName };
+                     _context.Genres.Add(genre);
+                 }
+                 newBook.BookGenres.Add(new BookGenre { Genre = genre, Book = newBook });
+            }
+
+            _context.Books.Add(newBook);
+            await _context.SaveChangesAsync();
+            return newBook.Id;
         }
     }
 }

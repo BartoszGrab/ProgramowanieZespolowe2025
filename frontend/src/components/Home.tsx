@@ -79,13 +79,13 @@ export default function Home() {
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
-            
+
             <HomeContainer>
                 {/* App Description */}
                 <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto', textAlign: 'center' }}>
-                    <Typography 
-                        component="h1" 
-                        variant="h4" 
+                    <Typography
+                        component="h1"
+                        variant="h4"
                         sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2 }}
                     >
                         <AutoStoriesIcon fontSize="large" color="primary" />
@@ -102,7 +102,7 @@ export default function Home() {
                         {isLoggedIn ? (
                             <>
                                 {/* Logged In: Dashboard and Shelves */}
-                                 <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                                     <ActionCard onClick={() => handleCardClick('/dashboard')}>
                                         <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                                             <DashboardIcon sx={{ fontSize: 60, color: 'primary.main' }} />
@@ -111,6 +111,19 @@ export default function Home() {
                                             </Typography>
                                             <Typography variant="body2" sx={{ opacity: 0.9 }}>
                                                 Manage your shelves and books
+                                            </Typography>
+                                        </CardContent>
+                                    </ActionCard>
+                                </Grid>
+                                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                    <ActionCard onClick={() => handleCardClick('/recommendations')}>
+                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                                            <LibraryBooksIcon sx={{ fontSize: 60, color: 'primary.main' }} />
+                                            <Typography variant="h6" color="textPrimary" sx={{ fontWeight: 'bold' }}>
+                                                Get Recommendations
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                                                Discover books tailored to your taste
                                             </Typography>
                                         </CardContent>
                                     </ActionCard>

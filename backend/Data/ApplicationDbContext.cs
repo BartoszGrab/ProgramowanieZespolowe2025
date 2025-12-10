@@ -24,6 +24,7 @@ namespace backend.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<UserFollow> UserFollows { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserRecommendation> UserRecommendations { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

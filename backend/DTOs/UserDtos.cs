@@ -20,4 +20,15 @@ namespace backend.DTOs
         [Url]
         public string ProfilePictureUrl { get; set; } = string.Empty;
     }
+
+    public class UserCommunityDto
+    {
+        public string Id { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public string? Bio { get; set; }
+        public string? ProfilePictureUrl { get; set; }
+        public int FollowersCount { get; set; }
+        public int FollowingCount { get; set; }
+        public bool IsFollowing { get; set; }
+    }
 }

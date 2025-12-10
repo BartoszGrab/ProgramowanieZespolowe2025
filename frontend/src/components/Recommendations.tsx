@@ -194,7 +194,7 @@ export default function Recommendations() {
                 title: book.title,
                 author: book.authors?.join(', ') || 'Unknown',
                 genre: book.genres?.[0] || 'General',
-                rating: book.averageRating || 4
+                rating: Math.round(book.averageRating || 4)
             }));
 
             console.log('History for recommendations:', history);

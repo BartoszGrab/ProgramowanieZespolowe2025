@@ -16,6 +16,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PeopleIcon from '@mui/icons-material/People';
 
 // Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
@@ -124,6 +125,19 @@ export default function Home() {
                                             </Typography>
                                             <Typography variant="body2" sx={{ opacity: 0.9 }}>
                                                 Discover books tailored to your taste
+                                            </Typography>
+                                        </CardContent>
+                                    </ActionCard>
+                                </Grid>
+                                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                                    <ActionCard onClick={() => handleCardClick('/community')}>
+                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                                            <PeopleIcon sx={{ fontSize: 60, color: 'primary.main' }} />
+                                            <Typography variant="h6" color="textPrimary" sx={{ fontWeight: 'bold' }}>
+                                                Community
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                                                Find and follow other book lovers
                                             </Typography>
                                         </CardContent>
                                     </ActionCard>

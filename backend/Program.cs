@@ -97,6 +97,12 @@ builder.Services.AddHttpClient<BooksRecService>(client =>
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 
+// Register HttpClient for Google Books API
+builder.Services.AddHttpClient<backend.Services.IGoogleBooksService, backend.Services.GoogleBooksService>(client =>
+{
+    client.BaseAddress = new Uri("https://www.googleapis.com/books/v1/");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

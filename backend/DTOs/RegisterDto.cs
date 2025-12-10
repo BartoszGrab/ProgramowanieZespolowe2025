@@ -18,7 +18,7 @@ namespace backend.DTOs
         /// User's password
         /// </summary>
         [Required(ErrorMessage = "Password is required")]
-        [MinLength(12, ErrorMessage = "Password must be at least 12 characters long")]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
         public string Password { get; set; } = string.Empty;
 
         ///<summary>

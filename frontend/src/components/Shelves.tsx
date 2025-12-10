@@ -24,6 +24,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import FormControl from '@mui/material/FormControl';
 
 // Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
@@ -99,12 +101,15 @@ export default function Shelves() {
     const [shelfData, setShelfData] = useState<ShelfData | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [authors, setAuthors] = useState<{ id: string; firstName: string; lastName: string }[]>([]);
     const navigate = useNavigate();
 
     // -- STANY DO MODALA --
     const [openModal, setOpenModal] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
     const [createError, setCreateError] = useState<string>('');
+    // State for Autocomplete: can be an Author object or a string (if typing new)
+    const [authorInput, setAuthorInput] = useState<string | { id: string; firstName: string; lastName: string } | null>(null);
 
     useEffect(() => {
         const fetchShelfBooks = async () => {
@@ -125,7 +130,18 @@ export default function Shelves() {
                 setIsLoading(false);
             }
         };
+
+        const fetchAuthors = async () => {
+            try {
+                const response = await axios.get('/api/authors');
+                setAuthors(response.data);
+            } catch (err) {
+                console.error('Failed to fetch authors', err);
+            }
+        };
+
         fetchShelfBooks();
+        fetchAuthors();
     }, [id]);
 
     const handleBackToDashboard = () => {
@@ -146,23 +162,62 @@ export default function Shelves() {
         setCreateError('');
 
         const formData = new FormData(event.currentTarget);
-        const newBookData = {
-            title: formData.get('name') as string,
-            author: formData.get('author') as string,
-            description: formData.get('description') as string,
-        };
+        let authorIdToUse = '';
 
         try {
-            const response = await axios.post('/api/shelves/books', newBookData); // TO DO!!! ENDPOINT
+            // 0. Resolve Author
+            if (typeof authorInput === 'string') {
+                // User typed a new name -> Create Author
+                const nameParts = authorInput.trim().split(' ');
+                const firstName = nameParts[0] || 'Unknown';
+                const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Author';
 
-            const createdBook = response.data;
+                const newAuthorPayload = { firstName, lastName };
+                const authorRes = await axios.post('/api/authors', newAuthorPayload);
+                authorIdToUse = authorRes.data.id;
+            } else if (authorInput && 'id' in authorInput) {
+                // User selected existing author
+                authorIdToUse = authorInput.id;
+            } else {
+                throw new Error("Please select or enter an author.");
+            }
 
-            setBooks((prevBooks) => [...prevBooks, createdBook]);
+            // Clean ISBN - remove hyphens
+            const rawIsbn = formData.get('isbn') as string;
+            const cleanIsbn = rawIsbn.replace(/-/g, '');
+
+            const bookPayload = {
+                title: formData.get('title') as string,
+                isbn: cleanIsbn,
+                pageCount: Number(formData.get('pageCount')),
+                publishedDate: formData.get('publishedDate') ? new Date(formData.get('publishedDate') as string).toISOString() : null,
+                coverUrl: formData.get('coverUrl') as string,
+                description: formData.get('description') as string,
+                authorIds: [authorIdToUse],
+                genreIds: []
+            };
+
+            // 1. Create Book
+            const bookResponse = await axios.post('/api/books', bookPayload);
+            const createdBook = bookResponse.data;
+
+            // 2. Add to Shelf
+            if (id) {
+                await axios.post(`/api/shelves/${id}/books`, { bookId: createdBook.id });
+            }
+
+            setShelfData((prevData) => {
+                if (!prevData) return null;
+                return {
+                    ...prevData,
+                    books: [...prevData.books, createdBook]
+                };
+            });
 
             handleCloseModal();
         } catch (err: any) {
-            console.error('Failed to create book:', err);
-            setCreateError(err.response?.data?.message || 'Failed to create book. Try again.');
+            console.error('Failed to create book/author:', err);
+            setCreateError(err.response?.data?.message || (typeof err.response?.data === 'string' ? err.response?.data : err.message || 'Failed to create book. Try again.'));
         } finally {
             setIsCreating(false);
         }
@@ -265,24 +320,101 @@ export default function Shelves() {
                                 autoFocus
                                 required
                                 margin="dense"
-                                id="name"
-                                name="name"
-                                label="Book Name"
+                                id="title"
+                                name="title"
+                                label="Book Title"
                                 type="text"
                                 fullWidth
                                 variant="outlined"
-                                placeholder="Hary Pota i twoj stary"
+                                placeholder="Harry Potter..."
                             />
+
+                            <TextField
+                                required
+                                margin="dense"
+                                id="isbn"
+                                name="isbn"
+                                label="ISBN"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                placeholder="978-3-16-148410-0"
+                            />
+
+                            <FormControl fullWidth margin="dense">
+                                {/* <InputLabel id="author-select-label">Author</InputLabel> */}
+                                <Autocomplete
+                                    freeSolo
+                                    id="author-autocomplete"
+                                    options={authors}
+                                    getOptionLabel={(option) => {
+                                        // option can be string (user typed) or object (selected)
+                                        if (typeof option === 'string') return option;
+                                        return `${option.firstName} ${option.lastName}`;
+                                    }}
+                                    value={authorInput}
+                                    onChange={(event: any, newValue: string | { id: string; firstName: string; lastName: string } | null) => {
+                                        setAuthorInput(newValue);
+                                    }}
+                                    onInputChange={(event: any, newInputValue: string) => {
+                                        // This handles typing; usually onChange handles selection/creation if freeSolo
+                                        // We'll rely on onChange's newValue for final submission, 
+                                        // but if newValue is null (cleared), we might track typing here if needed.
+                                        // For freeSolo, onChange usually captures the string on 'Enter' or blur.
+
+                                        // However, if user just types and doesn't hit enter, 'value' might lag.
+                                        // Simple approach: trust onChange for explicit actions, 
+                                        // but for free text, we need to ensure we capture it.
+                                        if (event?.type === 'change') {
+                                            setAuthorInput(newInputValue);
+                                        }
+                                    }}
+                                    renderInput={(params: any) => (
+                                        <TextField
+                                            {...params}
+                                            label="Author (Select or Type New)"
+                                            placeholder="J.K. Rowling"
+                                            required={!authorInput} // simplistic validation
+                                        />
+                                    )}
+                                />
+                            </FormControl>
+
+                            <Grid container spacing={2}>
+                                <Grid size={{ xs: 6 }}>
+                                    <TextField
+                                        margin="dense"
+                                        id="pageCount"
+                                        name="pageCount"
+                                        label="Pages"
+                                        type="number"
+                                        fullWidth
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid size={{ xs: 6 }}>
+                                    <TextField
+                                        margin="dense"
+                                        id="publishedDate"
+                                        name="publishedDate"
+                                        label="Published Date"
+                                        type="date"
+                                        fullWidth
+                                        variant="outlined"
+                                        InputLabelProps={{ shrink: true }}
+                                    />
+                                </Grid>
+                            </Grid>
+
                             <TextField
                                 margin="dense"
-                                id="author"
-                                name="author"
-                                label="Author"
-                                type="text"
+                                id="coverUrl"
+                                name="coverUrl"
+                                label="Cover URL"
+                                type="url"
                                 fullWidth
-                                multiline
                                 variant="outlined"
-                                placeholder="J.K. Rowling"
+                                placeholder="https://..."
                             />
                             <TextField
                                 margin="dense"

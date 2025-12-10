@@ -88,6 +88,7 @@ namespace backend.Controllers
                 Rating = review.Rating,
                 Comment = review.Comment,
                 UserName = review.User.UserName ?? "Unknown",
+                UserAvatarUrl = review.User.ProfilePictureUrl,
                 CreatedAt = review.CreatedAt,
                 BookId = review.BookId
             });
@@ -108,6 +109,7 @@ namespace backend.Controllers
                     Rating = r.Rating,
                     Comment = r.Comment,
                     UserName = r.User.UserName ?? "Unknown",
+                    UserAvatarUrl = r.User.ProfilePictureUrl,
                     CreatedAt = r.CreatedAt,
                     BookId = r.BookId
                 })

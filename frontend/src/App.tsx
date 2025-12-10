@@ -13,6 +13,7 @@ import Register from './components/Register'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import Shelves from './components/Shelves'
+import Profile from './components/Profile'
 import Recommendations from './components/Recommendations'
 
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/shelves/:id" element={<Shelves />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/recommendations" element={<Recommendations />} />
           {/* <Route path="/books/:id" element={<Books />} /> TO DO LATER*/}
         </Routes>

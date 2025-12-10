@@ -263,9 +263,12 @@ namespace backend.Controllers
             foreach (var authorName in gBook.Authors ?? new List<string>())
             {
                 var parts = authorName.Split(' ');
-                var lastName = parts.Last();
-                var firstName = parts.Length > 1 ? string.Join(" ", parts.Take(parts.Length - 1)) : "";
-                if (string.IsNullOrEmpty(firstName)) firstName = authorName;
+                var lastNameRaw = parts.Last();
+                var firstNameRaw = parts.Length > 1 ? string.Join(" ", parts.Take(parts.Length - 1)) : "";
+                if (string.IsNullOrEmpty(firstNameRaw)) firstNameRaw = authorName;
+
+                var lastName = lastNameRaw.Length > 100 ? lastNameRaw.Substring(0, 100) : lastNameRaw;
+                var firstName = firstNameRaw.Length > 100 ? firstNameRaw.Substring(0, 100) : firstNameRaw;
 
                 var author = await _context.Authors.FirstOrDefaultAsync(a => a.FirstName == firstName && a.LastName == lastName);
                 if (author == null)
@@ -277,8 +280,11 @@ namespace backend.Controllers
             }
 
             // Handle Genres (Categories)
-            foreach (var genreName in gBook.Categories ?? new List<string>())
+            foreach (var genreNameRaw in gBook.Categories ?? new List<string>())
             {
+                 // Truncate to 50 chars to fit DB
+                 var genreName = genreNameRaw.Length > 50 ? genreNameRaw.Substring(0, 50) : genreNameRaw;
+
                  var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Name == genreName);
                  if (genre == null)
                  {

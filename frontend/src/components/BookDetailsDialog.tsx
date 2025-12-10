@@ -202,7 +202,13 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
                         {reviews.map((r) => (
                             <Box key={r.id} sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
                                 <Stack direction="row" spacing={2} alignItems="center" mb={1}>
-                                    <Avatar sx={{ width: 32, height: 32 }}>{r.userName[0]?.toUpperCase()}</Avatar>
+                                    <Avatar
+                                        src={r.userAvatarUrl}
+                                        alt={r.userName}
+                                        sx={{ width: 32, height: 32 }}
+                                    >
+                                        {r.userName[0]?.toUpperCase()}
+                                    </Avatar>
                                     <Typography variant="subtitle2">{r.userName}</Typography>
                                     <Rating value={r.rating} readOnly size="small" />
                                     <Typography variant="caption" color="text.secondary">

@@ -3,6 +3,7 @@ export interface Review {
     rating: number;
     comment?: string;
     userName: string;
+    userAvatarUrl?: string;
     createdAt: string;
     bookId: string;
 }

@@ -6,13 +6,16 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import mainTheme from './themes/mainTheme';
-import {Navigation} from './customs/Navigation';
+import { Navigation } from './customs/Navigation';
 
 import Home from './components/Home';
 import Register from './components/Register'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import Shelves from './components/Shelves'
+import Profile from './components/Profile'
+import Recommendations from './components/Recommendations'
+import Community from './components/Community'
 
 
 
@@ -27,8 +30,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-           <Route path="/shelves/:id" element={<Shelves />} />
-           {/* <Route path="/books/:id" element={<Books />} /> TO DO LATER*/}
+          <Route path="/shelves/:id" element={<Shelves />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/my-profile" element={<Profile />} />
+          <Route path="/recommendations" element={<Recommendations />} />
+          <Route path="/community" element={<Community />} />
+          {/* <Route path="/books/:id" element={<Books />} /> TO DO LATER*/}
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

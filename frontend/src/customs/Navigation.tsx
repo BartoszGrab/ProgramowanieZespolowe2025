@@ -15,7 +15,7 @@ export const Navigation: React.FC = () => {
             //setIsLoggedIn(true);
         };
         checkLogin();
-        
+
         window.addEventListener('storage', checkLogin);
         return () => window.removeEventListener('storage', checkLogin);
     }, []);
@@ -30,18 +30,22 @@ export const Navigation: React.FC = () => {
 
     return (
         <>
-            <AppBar position="static" sx={{ 
+            <AppBar position="static" sx={{
                 height: { xs: '56px', md: '64px' },
                 background: 'linear-gradient(90deg, #DD980A 0%, #BE6904 100%)'
             }}>
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
-                        📚 Your Virtual Book Collection 
+                        📚 Your Virtual Book Collection
                     </Typography>
                     {/* Przyciski widoczne na md+ */}
                     <Button color="inherit" href="/" sx={{ display: { xs: 'none', md: 'block' } }}>Home</Button>
                     {isLoggedIn ? (
-                        <Button color="inherit" onClick={handleLogout} sx={{ display: { xs: 'none', md: 'block' } }}>Logout</Button>
+                        <>
+                            <Button color="inherit" href="/dashboard" sx={{ display: { xs: 'none', md: 'block' } }}>Dashboard</Button>
+                            <Button color="inherit" href="/profile" sx={{ display: { xs: 'none', md: 'block' } }}>My Profile</Button>
+                            <Button color="inherit" onClick={handleLogout} sx={{ display: { xs: 'none', md: 'block' } }}>Logout</Button>
+                        </>
                     ) : (
                         <>
                             <Button color="inherit" href="/login" sx={{ display: { xs: 'none', md: 'block' } }}>Login</Button>
@@ -61,9 +65,17 @@ export const Navigation: React.FC = () => {
                         <ListItemText primary="Home" />
                     </ListItemButton>
                     {isLoggedIn ? (
-                        <ListItemButton onClick={handleLogout}>
-                            <ListItemText primary="Logout" />
-                        </ListItemButton>
+                        <>
+                            <ListItemButton component="a" href="/dashboard">
+                                <ListItemText primary="Dashboard" />
+                            </ListItemButton>
+                            <ListItemButton component="a" href="/profile">
+                                <ListItemText primary="My Profile" />
+                            </ListItemButton>
+                            <ListItemButton onClick={handleLogout}>
+                                <ListItemText primary="Logout" />
+                            </ListItemButton>
+                        </>
                     ) : (
                         <>
                             <ListItemButton component="a" href="/login">

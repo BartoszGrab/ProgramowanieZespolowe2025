@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/axios';
 
 // MUI imports
 import Box from '@mui/material/Box';
@@ -9,8 +9,10 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
@@ -18,30 +20,26 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled, ThemeProvider } from '@mui/material/styles';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import FormControl from '@mui/material/FormControl';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 // Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
 import mainTheme from '../themes/mainTheme';
-import { Book } from '@mui/icons-material';
+import type { ShelfData, ShelfBook } from '../types/book';
+import BookDetailsDialog from './BookDetailsDialog';
 
-interface Book {
-    id: string | number;
-    title: string;
-    author?: string;
-    description?: string;
-}
 
-interface ShelfData {
-    name: string;
-    description?: string;
-    books: Book[];
-}
 
 const ShelvesContainer = styled(Stack)(({ theme }) => ({
     minHeight: '100vh',
@@ -82,7 +80,7 @@ const BookCard = styled(MuiCard)(({ theme }) => ({
 }));
 
 const AddBookCard = styled(BookCard)(({ theme }) => ({
-      backgroundColor: 'transparent',
+    backgroundColor: 'transparent',
     borderStyle: 'dashed',
     borderWidth: '2px',
     borderColor: theme.palette.primary.dark,
@@ -97,83 +95,257 @@ const AddBookCard = styled(BookCard)(({ theme }) => ({
 export default function Shelves() {
     const { id } = useParams<{ id: string }>(); // Pobierz ID półki z URL
     const [shelfData, setShelfData] = useState<ShelfData | null>(null);
-    const [books, setBooks] = useState<Book[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [authors, setAuthors] = useState<{ id: string; firstName: string; lastName: string }[]>([]);
     const navigate = useNavigate();
 
     // -- STANY DO MODALA --
     const [openModal, setOpenModal] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
     const [createError, setCreateError] = useState<string>('');
+    // State for Autocomplete: can be an Author object or a string (if typing new)
+    const [authorInput, setAuthorInput] = useState<string | { id: string; firstName: string; lastName: string } | null>(null);
+
+    // -- ADD BOOK MODAL STATE --
+    const [tabValue, setTabValue] = useState(0);
+    const [searchBookOptions, setSearchBookOptions] = useState<any[]>([]);
+    const [selectedExistingBook, setSelectedExistingBook] = useState<any | null>(null);
+
+    // -- DETAILS MODAL --
+    const [detailsOpen, setDetailsOpen] = useState(false);
+    const [selectedBook, setSelectedBook] = useState<ShelfBook | null>(null);
+
+    // -- DELETE CONFIRMATION MODAL --
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [bookToDelete, setBookToDelete] = useState<ShelfBook | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const fetchShelfBooks = async () => {
+        if (!id) return;
+        try {
+            // Zakładam API: /api/shelves/:id/books, które zwraca { name, description, books: [] }
+            const response = await axios.get(`/api/shelves/${id}/books`);
+            const data = response.data;
+            if (data && data.books) {
+                setShelfData(data);
+            } else {
+                setShelfData({ id: id, name: 'Unknown Shelf', bookCount: 0, description: '', books: [] });
+            }
+        } catch (err: any) {
+            console.error('Error fetching shelf books:', err);
+            setError('Could not load books for this shelf.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchShelfBooks = async () => {
-            if (!id) return;
+        const fetchAuthors = async () => {
             try {
-                // Zakładam API: /api/shelves/:id/books, które zwraca { name, description, books: [] }
-                const response = await axios.get(`/api/shelves/${id}/books`);
-                const data = response.data;
-                if (data && data.books) {
-                    setShelfData(data);
-                } else {
-                    setShelfData({ name: 'Unknown Shelf', description: '', books: [] });
-                }
-            } catch (err: any) {
-                console.error('Error fetching shelf books:', err);
-                setError('Could not load books for this shelf.');
-            } finally {
-                setIsLoading(false);
+                const response = await axios.get('/api/authors');
+                setAuthors(response.data);
+            } catch (err) {
+                console.error('Failed to fetch authors', err);
             }
         };
+
         fetchShelfBooks();
+        fetchAuthors();
     }, [id]);
+
+    const handleBookClick = (book: ShelfBook) => {
+        setSelectedBook(book);
+        setDetailsOpen(true);
+    };
+
+    const handleCloseDetails = () => {
+        setDetailsOpen(false);
+        setSelectedBook(null);
+    };
 
     const handleBackToDashboard = () => {
         navigate('/dashboard');
     };
 
     // Otwieranie/zamykanie modala
-    const handleOpenModal = () => setOpenModal(true);
+    const handleOpenModal = () => {
+        setOpenModal(true);
+        setTabValue(0); // Reset to first tab
+    };
     const handleCloseModal = () => {
         setOpenModal(false);
         setCreateError(''); // Czyścimy błędy przy zamknięciu
+        setSelectedExistingBook(null); // Reset selection
+    };
+
+    const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+        setTabValue(newValue);
+        setCreateError('');
+    };
+
+    // -- LOGIKA SZUKANIA ISTNIEJACEJ KSIAZKI --
+    const handleSearchBooks = async (query: string) => {
+        if (!query) {
+            setSearchBookOptions([]);
+            return;
+        }
+        try {
+            const res = await axios.get(`/api/books?search=${query}`);
+            setSearchBookOptions(res.data);
+        } catch (err) {
+            console.error("Failed to search books", err);
+        }
+    };
+
+    const handleAddExistingBook = async () => {
+        if (!selectedExistingBook || !id) return;
+        setIsCreating(true);
+        try {
+            // Check if it's a "local" book (has a real UUID) or a "Google" book (empty/null ID)
+            const hasValidId = selectedExistingBook.id && selectedExistingBook.id !== '00000000-0000-0000-0000-000000000000';
+            const gId = selectedExistingBook.googleBookId || selectedExistingBook.GoogleBookId;
+
+            let payload: any = {};
+            if (hasValidId) {
+                payload = { bookId: selectedExistingBook.id };
+            } else if (gId) {
+                payload = { googleBookId: gId };
+            } else if (selectedExistingBook.isbn) {
+                payload = { isbn: selectedExistingBook.isbn };
+            } else {
+                throw new Error("Selected book has no ID, Google ID, or ISBN. Cannot add.");
+            }
+
+            await axios.post(`/api/shelves/${id}/books`, payload);
+
+            setShelfData((prevData) => {
+                if (!prevData) return null;
+                // Add the selected book to the list (mapping to ShelfBook format roughly)
+                // Note: The backend returns the real ID now, but we just re-fetch or optimistically add.
+                // Optimistic add might be tricky if we don't have the new ID.
+                return { ...prevData }; // For simplicity, we might want to just re-fetch.
+            });
+            // Re-fetch to get the full book details (including new ID if created)
+            fetchShelfBooks();
+            handleCloseModal();
+        } catch (err: any) {
+            console.error('Failed to add existing book:', err);
+            const msg = err.response?.data?.message || (typeof err.response?.data === 'string' ? err.response?.data : err.message || 'Failed to add book.');
+            setCreateError(msg);
+        } finally {
+            setIsCreating(false);
+        }
     };
 
     // -- LOGIKA TWORZENIA Ksiazki --
-        const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-            event.preventDefault(); // Zapobiega przeładowaniu strony
-            setIsCreating(true);
-            setCreateError('');
-    
-            const formData = new FormData(event.currentTarget);
-            const newBookData = {
-                title: formData.get('name') as string,
-                author: formData.get('author') as string,
-                description: formData.get('description') as string,
-            };
-    
-            try {
-                const response = await axios.post('/api/shelves/books', newBookData); // TO DO!!! ENDPOINT
-                
-                const createdBook = response.data; 
-                
-                setBooks((prevBooks) => [...prevBooks, createdBook]);
-    
-                handleCloseModal();
-            } catch (err: any) {
-                console.error('Failed to create book:', err);
-                setCreateError(err.response?.data?.message || 'Failed to create book. Try again.');
-            } finally {
-                setIsCreating(false);
+    const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault(); // Zapobiega przeładowaniu strony
+        setIsCreating(true);
+        setCreateError('');
+
+        const formData = new FormData(event.currentTarget);
+        let authorIdToUse = '';
+
+        try {
+            // 0. Resolve Author
+            if (typeof authorInput === 'string') {
+                // User typed a new name -> Create Author
+                const nameParts = authorInput.trim().split(' ');
+                const firstName = nameParts[0] || 'Unknown';
+                const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Author';
+
+                const newAuthorPayload = { firstName, lastName };
+                const authorRes = await axios.post('/api/authors', newAuthorPayload);
+                authorIdToUse = authorRes.data.id;
+            } else if (authorInput && 'id' in authorInput) {
+                // User selected existing author
+                authorIdToUse = authorInput.id;
+            } else {
+                throw new Error("Please select or enter an author.");
             }
-        };
+
+            // Clean ISBN - remove hyphens
+            const rawIsbn = formData.get('isbn') as string;
+            const cleanIsbn = rawIsbn.replace(/-/g, '');
+
+            const bookPayload = {
+                title: formData.get('title') as string,
+                isbn: cleanIsbn,
+                pageCount: Number(formData.get('pageCount')),
+                publishedDate: formData.get('publishedDate') ? new Date(formData.get('publishedDate') as string).toISOString() : null,
+                coverUrl: formData.get('coverUrl') as string,
+                description: formData.get('description') as string,
+                authorIds: [authorIdToUse],
+                genreIds: []
+            };
+
+            // 1. Create Book
+            const bookResponse = await axios.post('/api/books', bookPayload);
+            const createdBook = bookResponse.data;
+
+            // 2. Add to Shelf
+            if (id) {
+                await axios.post(`/api/shelves/${id}/books`, { bookId: createdBook.id });
+            }
+
+            setShelfData((prevData) => {
+                if (!prevData) return null;
+                return {
+                    ...prevData,
+                    books: [...prevData.books, createdBook]
+                };
+            });
+
+            handleCloseModal();
+        } catch (err: any) {
+            console.error('Failed to create book/author:', err);
+            setCreateError(err.response?.data?.message || (typeof err.response?.data === 'string' ? err.response?.data : err.message || 'Failed to create book. Try again.'));
+        } finally {
+            setIsCreating(false);
+        }
+    };
+
+    // -- DELETE BOOK LOGIC --
+    const handleRemoveClick = (event: React.MouseEvent, book: ShelfBook) => {
+        event.stopPropagation(); // Prevent opening details
+        setBookToDelete(book);
+        setDeleteConfirmOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!bookToDelete || !id) return;
+        setIsDeleting(true);
+
+        try {
+            await axios.delete(`/api/shelves/${id}/books/${bookToDelete.id}`);
+
+            setShelfData((prevData) => {
+                if (!prevData) return null;
+                return {
+                    ...prevData,
+                    books: prevData.books.filter(b => b.id !== bookToDelete.id)
+                };
+            });
+            handleCancelDelete(); // Close only on success
+        } catch (err: any) {
+            console.error("Failed to remove book:", err);
+            alert(`Failed to remove book: ${err.response?.data || err.message}`);
+            setIsDeleting(false); // Re-enable button
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setDeleteConfirmOpen(false);
+        setBookToDelete(null);
+        setIsDeleting(false);
+    };
 
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
-            
+
             <ShelvesContainer>
                 {/* Header */}
                 <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto' }}>
@@ -184,9 +356,9 @@ export default function Shelves() {
                     >
                         Back to Dashboard
                     </Button>
-                    <Typography 
-                        component="h1" 
-                        variant="h4" 
+                    <Typography
+                        component="h1"
+                        variant="h4"
                         sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 2 }}
                     >
                         <MenuBookIcon fontSize="large" color="primary" />
@@ -209,113 +381,311 @@ export default function Shelves() {
                     {error && <Alert severity="error" sx={{ mb: 4 }}>{error}</Alert>}
 
                     {!isLoading && !error && shelfData && (
-                            <Grid container spacing={3}>
-                                
-                                <Grid size={{xs: 12, sm: 6, md: 4, lg: 3 }}>
-                                    <AddBookCard onClick={handleOpenModal}>
-                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                                            <AddIcon sx={{ fontSize: 60, opacity: 0.7 }} />
-                                            <Typography variant="h6" color="textPrimary" sx={{ opacity: 0.6 }} fontWeight="bold">Create New Book</Typography>
-                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>Add your new favourite</Typography>
-                                        </CardContent>
-                                    </AddBookCard>
-                                </Grid>
+                        <Grid container spacing={3}>
 
-                                {shelfData.books.map((book) => (
-                                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={book.id}>
-                                        <BookCard>
-                                            <CardContent sx={{ flexGrow: 1 }}>
-                                                <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                                    {book.title}
-                                                </Typography>
-                                                {book.author && (
-                                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                                        by {book.author}
-                                                    </Typography>
-                                                )}
-                                                {book.description && (
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        {book.description}
-                                                    </Typography>
-                                                )}
-                                            </CardContent>
-                                        </BookCard>
-                                    </Grid>
-                                ))}
+                            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                                <AddBookCard onClick={handleOpenModal}>
+                                    <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                                        <AddIcon sx={{ fontSize: 60, opacity: 0.7 }} />
+                                        <Typography variant="h6" color="textPrimary" sx={{ opacity: 0.6 }} fontWeight="bold">Create New Book</Typography>
+                                        <Typography variant="body2" sx={{ opacity: 0.9 }}>Add your new favourite</Typography>
+                                    </CardContent>
+                                </AddBookCard>
                             </Grid>
-                        ) 
+
+                            {shelfData.books.map((book) => (
+                                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={book.id}>
+                                    <BookCard onClick={() => handleBookClick(book)} sx={{ cursor: 'pointer', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                        <CardMedia
+                                            component="img"
+                                            height="200"
+                                            image={book.coverUrl || 'https://via.placeholder.com/150'}
+                                            alt={book.title}
+                                            sx={{ objectFit: 'contain', backgroundColor: '#f5f5f5', pt: 2 }}
+                                        />
+                                        <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                                            <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold', fontSize: '1rem', lineHeight: 1.2, mb: 1 }}>
+                                                {book.title}
+                                            </Typography>
+                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                                                    {book.authors.join(', ')}
+                                                </Typography>
+                                                <IconButton
+                                                    size="small"
+                                                    color="error"
+                                                    onClick={(e: React.MouseEvent) => handleRemoveClick(e, book)}
+                                                    sx={{
+                                                        mt: -0.5,
+                                                        mr: -0.5,
+                                                        opacity: 0.6,
+                                                        '&:hover': { opacity: 1, backgroundColor: 'rgba(211, 47, 47, 0.1)' }
+                                                    }}
+                                                >
+                                                    <DeleteIcon fontSize="small" />
+                                                </IconButton>
+                                            </Box>
+
+                                            {/* Progress Bar */}
+                                            {book.pageCount > 0 && (
+                                                <Box sx={{ width: '100%', mr: 1, mb: 1 }}>
+                                                    <LinearProgress variant="determinate" value={(book.currentPage / book.pageCount) * 100} />
+                                                    <Typography variant="caption" color="text.secondary">
+                                                        {Math.round((book.currentPage / book.pageCount) * 100)}% read
+                                                    </Typography>
+                                                </Box>
+                                            )}
+
+                                            <Typography
+                                                variant="body2"
+                                                color="text.secondary"
+                                                sx={{
+                                                    display: '-webkit-box',
+                                                    overflow: 'hidden',
+                                                    WebkitBoxOrient: 'vertical',
+                                                    WebkitLineClamp: 3, // Limit to 3 lines
+                                                    textOverflow: 'ellipsis'
+                                                }}
+                                            >
+                                                {book.description || 'No description available.'}
+                                            </Typography>
+                                        </CardContent>
+                                    </BookCard>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )
                     }
                 </Box>
 
                 {/* --- MODAL (DIALOG) TWORZENIA Ksiazki --- */}
                 <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
-                    <Box component="form" onSubmit={handleCreateSubmit}>
-                        <DialogTitle>Create New Book</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText sx={{ mb: 2 }}>
-                                Fill in the details below to create a new book in this shelf.
-                            </DialogContentText>
-                            
-                            {createError && (
-                                <Alert severity="error" sx={{ mb: 2 }}>
-                                    {createError}
-                                </Alert>
-                            )}
+                    <Box>
+                        <DialogTitle>Add Book to Shelf</DialogTitle>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 3 }}>
+                            <Tabs value={tabValue} onChange={handleTabChange}>
+                                <Tab label="Search Library" />
+                                <Tab label="Create New" />
+                            </Tabs>
+                        </Box>
 
-                            <TextField
-                                autoFocus
-                                required
-                                margin="dense"
-                                id="name"
-                                name="name"
-                                label="Book Name"
-                                type="text"
-                                fullWidth
-                                variant="outlined"
-                                placeholder="Hary Pota i twoj stary"
-                            />
-                             <TextField
-                                margin="dense"
-                                id="author"
-                                name="author"
-                                label="Author"
-                                type="text"
-                                fullWidth
-                                multiline
-                                variant="outlined"
-                                placeholder="J.K. Rowling"
-                            />
-                            <TextField
-                                margin="dense"
-                                id="description"
-                                name="description"
-                                label="Description"
-                                type="text"
-                                fullWidth
-                                multiline
-                                rows={3}
-                                variant="outlined"
-                                placeholder="A young wizard's journey begins..."
-                            />
-                        </DialogContent>
-                        <DialogActions sx={{ px: 3, pb: 3 }}>
-                            <Button onClick={handleCloseModal} color="inherit">
-                                Cancel
-                            </Button>
-                            <Button 
-                                type="submit" 
-                                variant="contained" 
-                                disabled={isCreating}
-                            >
-                                {isCreating ? 'Creating...' : 'Create Book'}
-                            </Button>
-                        </DialogActions>
+                        {/* TAB 0: SEARCH EXISTING */}
+                        <div role="tabpanel" hidden={tabValue !== 0}>
+                            {tabValue === 0 && (
+                                <>
+                                    <DialogContent>
+                                        <DialogContentText sx={{ mb: 2 }}>
+                                            Search for an existing book in the library and add it to your shelf.
+                                        </DialogContentText>
+                                        {createError && <Alert severity="error" sx={{ mb: 2 }}>{createError}</Alert>}
+
+                                        <Autocomplete
+                                            id="search-books"
+                                            options={searchBookOptions}
+                                            getOptionLabel={(option) => `${option.title} (${option.isbn})`}
+                                            filterOptions={(x) => x} // Disable built-in filtering, rely on server
+                                            onInputChange={(_e, newUrl) => handleSearchBooks(newUrl)}
+                                            onChange={(_e, newValue) => setSelectedExistingBook(newValue)}
+                                            renderOption={(props, option) => (
+                                                <li {...props}>
+                                                    <Box>
+                                                        <Typography variant="body1" fontWeight="bold">{option.title}</Typography>
+                                                        <Typography variant="caption" color="text.secondary">
+                                                            ISBN: {option.isbn} | By {option.authors.join(', ')}
+                                                        </Typography>
+                                                    </Box>
+                                                </li>
+                                            )}
+                                            renderInput={(params) => (
+                                                <TextField {...params} label="Search by Title or ISBN" fullWidth />
+                                            )}
+                                        />
+                                    </DialogContent>
+                                    <DialogActions sx={{ px: 3, pb: 3 }}>
+                                        <Button onClick={handleCloseModal} color="inherit">Cancel</Button>
+                                        <Button
+                                            variant="contained"
+                                            onClick={handleAddExistingBook}
+                                            disabled={!selectedExistingBook || isCreating}
+                                        >
+                                            {isCreating ? 'Adding...' : 'Add to Shelf'}
+                                        </Button>
+                                    </DialogActions>
+                                </>
+                            )}
+                        </div>
+
+                        {/* TAB 1: CREATE NEW */}
+                        <div role="tabpanel" hidden={tabValue !== 1}>
+                            {tabValue === 1 && (
+                                <Box component="form" onSubmit={handleCreateSubmit}>
+                                    <DialogContent>
+                                        <DialogContentText sx={{ mb: 2 }}>
+                                            Can't find it? Create a new book entry.
+                                        </DialogContentText>
+
+                                        {createError && (
+                                            <Alert severity="error" sx={{ mb: 2 }}>
+                                                {createError}
+                                            </Alert>
+                                        )}
+
+                                        <TextField
+                                            autoFocus
+                                            required
+                                            margin="dense"
+                                            id="title"
+                                            name="title"
+                                            label="Book Title"
+                                            type="text"
+                                            fullWidth
+                                            variant="outlined"
+                                            placeholder="Harry Potter..."
+                                        />
+
+                                        <TextField
+                                            required
+                                            margin="dense"
+                                            id="isbn"
+                                            name="isbn"
+                                            label="ISBN"
+                                            type="text"
+                                            fullWidth
+                                            variant="outlined"
+                                            placeholder="978-3-16-148410-0"
+                                        />
+
+                                        <FormControl fullWidth margin="dense">
+                                            {/* <InputLabel id="author-select-label">Author</InputLabel> */}
+                                            <Autocomplete
+                                                freeSolo
+                                                id="author-autocomplete"
+                                                options={authors}
+                                                getOptionLabel={(option) => {
+                                                    // option can be string (user typed) or object (selected)
+                                                    if (typeof option === 'string') return option;
+                                                    return `${option.firstName} ${option.lastName}`;
+                                                }}
+                                                value={authorInput}
+                                                onChange={(_event: any, newValue: string | { id: string; firstName: string; lastName: string } | null) => {
+                                                    setAuthorInput(newValue);
+                                                }}
+                                                onInputChange={(event: any, newInputValue: string) => {
+                                                    if (event?.type === 'change') {
+                                                        setAuthorInput(newInputValue);
+                                                    }
+                                                }}
+                                                renderInput={(params: any) => (
+                                                    <TextField
+                                                        {...params}
+                                                        label="Author (Select or Type New)"
+                                                        placeholder="J.K. Rowling"
+                                                        required={!authorInput} // simplistic validation
+                                                    />
+                                                )}
+                                            />
+                                        </FormControl>
+
+                                        <Grid container spacing={2}>
+                                            <Grid size={{ xs: 6 }}>
+                                                <TextField
+                                                    margin="dense"
+                                                    id="pageCount"
+                                                    name="pageCount"
+                                                    label="Pages"
+                                                    type="number"
+                                                    fullWidth
+                                                    variant="outlined"
+                                                />
+                                            </Grid>
+                                            <Grid size={{ xs: 6 }}>
+                                                <TextField
+                                                    margin="dense"
+                                                    id="publishedDate"
+                                                    name="publishedDate"
+                                                    label="Published Date"
+                                                    type="date"
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    InputLabelProps={{ shrink: true }}
+                                                />
+                                            </Grid>
+                                        </Grid>
+
+                                        <TextField
+                                            margin="dense"
+                                            id="coverUrl"
+                                            name="coverUrl"
+                                            label="Cover URL"
+                                            type="url"
+                                            fullWidth
+                                            variant="outlined"
+                                            placeholder="https://..."
+                                        />
+                                        <TextField
+                                            margin="dense"
+                                            id="description"
+                                            name="description"
+                                            label="Description"
+                                            type="text"
+                                            fullWidth
+                                            multiline
+                                            rows={3}
+                                            variant="outlined"
+                                            placeholder="A young wizard's journey begins..."
+                                        />
+                                    </DialogContent>
+                                    <DialogActions sx={{ px: 3, pb: 3 }}>
+                                        <Button onClick={handleCloseModal} color="inherit">
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            disabled={isCreating}
+                                        >
+                                            {isCreating ? 'Creating...' : 'Create Book'}
+                                        </Button>
+                                    </DialogActions>
+                                </Box>
+                            )}
+                        </div>
                     </Box>
                 </Dialog>
 
 
 
             </ShelvesContainer>
+
+            {/* DETAILS DIALOG */}
+            {id && (
+                <BookDetailsDialog
+                    open={detailsOpen}
+                    onClose={handleCloseDetails}
+                    book={selectedBook}
+                    shelfId={id}
+                    onUpdate={fetchShelfBooks}
+                />
+            )}
+
+            {/* DELETE CONFIRMATION DIALOG */}
+            <Dialog
+                open={deleteConfirmOpen}
+                onClose={handleCancelDelete}
+            >
+                <DialogTitle>Remove Book?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to remove "{bookToDelete?.title}" from this shelf? This action cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancelDelete} color="inherit" disabled={isDeleting}>Cancel</Button>
+                    <Button onClick={handleConfirmDelete} color="error" autoFocus disabled={isDeleting}>
+                        {isDeleting ? 'Removing...' : 'Remove'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </ThemeProvider>
     );
 }

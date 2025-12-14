@@ -1,10 +1,7 @@
-import { useState } from 'react'
-//import './App.css'
+// MUI imports
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Button, Typography, Container, AppBar, Toolbar } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
 import mainTheme from './themes/mainTheme';
 import { Navigation } from './customs/Navigation';
 
@@ -18,13 +15,18 @@ import Recommendations from './components/Recommendations'
 import Community from './components/Community'
 
 
-
+/**
+ * The main App component that sets up the application structure.
+ * Provides theme, routing, and navigation for the entire application.
+ */
 function App() {
   return (
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
       <BrowserRouter>
+      {/* --- Navigation Component --- */}
         <Navigation />
+        {/* --- Application Routes --- */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
@@ -35,7 +37,6 @@ function App() {
           <Route path="/my-profile" element={<Profile />} />
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/community" element={<Community />} />
-          {/* <Route path="/books/:id" element={<Books />} /> TO DO LATER*/}
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

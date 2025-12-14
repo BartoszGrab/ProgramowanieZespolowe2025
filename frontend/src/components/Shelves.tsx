@@ -40,7 +40,10 @@ import type { ShelfData, ShelfBook } from '../types/book';
 import BookDetailsDialog from './BookDetailsDialog';
 
 
-
+/**
+ * Styled container for the shelves page layout.
+ * Includes responsive padding and a radial gradient background.
+ */
 const ShelvesContainer = styled(Stack)(({ theme }) => ({
     minHeight: '100vh',
     padding: theme.spacing(4),
@@ -59,6 +62,10 @@ const ShelvesContainer = styled(Stack)(({ theme }) => ({
     },
 }));
 
+/**
+ * Styled card component for displaying books.
+ * Adds hover effects (lift and shadow) for better interactivity.
+ */
 const BookCard = styled(MuiCard)(({ theme }) => ({
     height: '100%',
     minHeight: '250px',
@@ -79,6 +86,10 @@ const BookCard = styled(MuiCard)(({ theme }) => ({
     },
 }));
 
+/**
+ * Styled card component for the "Add New Book" action.
+ * Uses dashed borders and transparency to distinguish it from content cards.
+ */
 const AddBookCard = styled(BookCard)(({ theme }) => ({
     backgroundColor: 'transparent',
     borderStyle: 'dashed',
@@ -92,41 +103,50 @@ const AddBookCard = styled(BookCard)(({ theme }) => ({
     },
 }));
 
+/**
+ * The Shelves page component.
+ * Displays books in a specific shelf, allows adding new books or searching existing ones,
+ * and provides functionality to remove books or view details.
+ */
 export default function Shelves() {
-    const { id } = useParams<{ id: string }>(); // Pobierz ID półki z URL
+    const { id } = useParams<{ id: string }>();
     const [shelfData, setShelfData] = useState<ShelfData | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [authors, setAuthors] = useState<{ id: string; firstName: string; lastName: string }[]>([]);
     const navigate = useNavigate();
 
-    // -- STANY DO MODALA --
+    // --- State: Add Book Modal ---
     const [openModal, setOpenModal] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
     const [createError, setCreateError] = useState<string>('');
     // State for Autocomplete: can be an Author object or a string (if typing new)
     const [authorInput, setAuthorInput] = useState<string | { id: string; firstName: string; lastName: string } | null>(null);
 
-    // -- ADD BOOK MODAL STATE --
+    // --- State: Add Book Modal Tabs ---
     const [tabValue, setTabValue] = useState(0);
     const [searchBookOptions, setSearchBookOptions] = useState<any[]>([]);
     const [selectedExistingBook, setSelectedExistingBook] = useState<any | null>(null);
 
-    // -- DETAILS MODAL --
+    // --- State: Book Details Modal ---
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedBook, setSelectedBook] = useState<ShelfBook | null>(null);
 
-    // -- DELETE CONFIRMATION MODAL --
+    // --- State: Delete Confirmation Modal ---
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [bookToDelete, setBookToDelete] = useState<ShelfBook | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    /**
+     * Fetches the books for the current shelf from the backend.
+     */
     const fetchShelfBooks = async () => {
         if (!id) return;
         try {
-            // Zakładam API: /api/shelves/:id/books, które zwraca { name, description, books: [] }
+            // Api Call
             const response = await axios.get(`/api/shelves/${id}/books`);
             const data = response.data;
+            // Response handling
             if (data && data.books) {
                 setShelfData(data);
             } else {
@@ -140,6 +160,9 @@ export default function Shelves() {
         }
     };
 
+    /**
+     * Initial data fetch on component mount.
+     */
     useEffect(() => {
         const fetchAuthors = async () => {
             try {
@@ -154,37 +177,66 @@ export default function Shelves() {
         fetchAuthors();
     }, [id]);
 
+    /**
+     * Opens the book details modal for the selected book.
+     * @param book - The book to display details for
+     */
     const handleBookClick = (book: ShelfBook) => {
         setSelectedBook(book);
         setDetailsOpen(true);
     };
 
+    /**
+     * Closes the book details modal.
+     */
     const handleCloseDetails = () => {
         setDetailsOpen(false);
         setSelectedBook(null);
     };
 
+    /**
+     * Navigates back to the dashboard.
+     */
     const handleBackToDashboard = () => {
         navigate('/dashboard');
     };
 
-    // Otwieranie/zamykanie modala
+    // --- Modal Handlers ---
+
+    
+    /**
+     * Opens the add book modal.
+     */
     const handleOpenModal = () => {
         setOpenModal(true);
         setTabValue(0); // Reset to first tab
     };
+
+    /**
+     * Closes the add book modal and resets state.
+     */
     const handleCloseModal = () => {
         setOpenModal(false);
         setCreateError(''); // Czyścimy błędy przy zamknięciu
         setSelectedExistingBook(null); // Reset selection
     };
 
+    /**
+     * Handles tab changes in the add book modal.
+     * @param _event - The event (unused)
+     * @param newValue - The new tab index
+     */
     const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);
         setCreateError('');
     };
 
-    // -- LOGIKA SZUKANIA ISTNIEJACEJ KSIAZKI --
+    // --- Search Existing Book Logic ---
+
+    /**
+     * Searches for books in the library based on user input.
+     * @param query - The search query string
+     */
     const handleSearchBooks = async (query: string) => {
         if (!query) {
             setSearchBookOptions([]);
@@ -198,6 +250,10 @@ export default function Shelves() {
         }
     };
 
+    /**
+     * Adds an existing book to the shelf.
+     * Handles different ID types (local UUID, Google Book ID, ISBN).
+     */
     const handleAddExistingBook = async () => {
         if (!selectedExistingBook || !id) return;
         setIsCreating(true);
@@ -222,9 +278,7 @@ export default function Shelves() {
             setShelfData((prevData) => {
                 if (!prevData) return null;
                 // Add the selected book to the list (mapping to ShelfBook format roughly)
-                // Note: The backend returns the real ID now, but we just re-fetch or optimistically add.
-                // Optimistic add might be tricky if we don't have the new ID.
-                return { ...prevData }; // For simplicity, we might want to just re-fetch.
+                return { ...prevData };
             });
             // Re-fetch to get the full book details (including new ID if created)
             fetchShelfBooks();
@@ -238,7 +292,13 @@ export default function Shelves() {
         }
     };
 
-    // -- LOGIKA TWORZENIA Ksiazki --
+    // --- Create New Book Logic ---
+
+    /**
+     * Handles the submission of the create new book form.
+     * Resolves author (create if new), creates book, adds to shelf.
+     * @param event - The form event
+     */
     const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // Zapobiega przeładowaniu strony
         setIsCreating(true);
@@ -306,13 +366,22 @@ export default function Shelves() {
         }
     };
 
-    // -- DELETE BOOK LOGIC --
+    // --- Delete Book Logic ---
+
+    /**
+     * Initiates the delete confirmation for a book.
+     * @param event - The click event (to prevent opening details)
+     * @param book - The book to delete
+     */
     const handleRemoveClick = (event: React.MouseEvent, book: ShelfBook) => {
         event.stopPropagation(); // Prevent opening details
         setBookToDelete(book);
         setDeleteConfirmOpen(true);
     };
 
+    /**
+     * Confirms and performs the book removal from the shelf.
+     */
     const handleConfirmDelete = async () => {
         if (!bookToDelete || !id) return;
         setIsDeleting(true);
@@ -335,6 +404,9 @@ export default function Shelves() {
         }
     };
 
+    /**
+     * Cancels the delete confirmation.
+     */
     const handleCancelDelete = () => {
         setDeleteConfirmOpen(false);
         setBookToDelete(null);
@@ -347,7 +419,7 @@ export default function Shelves() {
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
 
             <ShelvesContainer>
-                {/* Header */}
+                {/* --- Section: Header --- */}
                 <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto' }}>
                     <Button
                         startIcon={<ArrowBackIcon />}
@@ -371,7 +443,7 @@ export default function Shelves() {
                     )}
                 </Box>
 
-                {/* Grid */}
+                {/* --- Section: Grid --- */}
                 <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
                     {isLoading && (
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
@@ -458,7 +530,7 @@ export default function Shelves() {
                     }
                 </Box>
 
-                {/* --- MODAL (DIALOG) TWORZENIA Ksiazki --- */}
+                {/* --- Dialog: Add a book --- */}
                 <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
                     <Box>
                         <DialogTitle>Add Book to Shelf</DialogTitle>
@@ -657,7 +729,7 @@ export default function Shelves() {
 
             </ShelvesContainer>
 
-            {/* DETAILS DIALOG */}
+            {/* --- Dialog: Details --- */}
             {id && (
                 <BookDetailsDialog
                     open={detailsOpen}
@@ -668,7 +740,7 @@ export default function Shelves() {
                 />
             )}
 
-            {/* DELETE CONFIRMATION DIALOG */}
+            {/* --- Dialog: Delete Confirmation --- */}
             <Dialog
                 open={deleteConfirmOpen}
                 onClose={handleCancelDelete}

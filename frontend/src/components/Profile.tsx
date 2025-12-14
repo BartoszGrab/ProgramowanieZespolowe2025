@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import {
-    Box,
     Typography,
     Container,
     Avatar,
@@ -14,11 +13,19 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+/**
+ * Styled container for the profile page layout.
+ * Adds vertical padding for spacing.
+ */
 const ProfileContainer = styled(Container)(({ theme }) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
 }));
 
+/**
+ * Styled paper component for displaying user statistics.
+ * Centers content and adds a subtle shadow for depth.
+ */
 const StatCard = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(3),
     textAlign: 'center',
@@ -31,22 +38,42 @@ const StatCard = styled(Paper)(({ theme }) => ({
     boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px',
 }));
 
+/**
+ * Data Transfer Object representing the current user's profile.
+ */
 interface UserProfile {
+    /** Unique identifier for the user */
     id: string;
+    /** Publicly visible name */
     displayName: string;
+    /** Email address associated with the account */
     email: string;
+    /** URL to the user's avatar image */
     profilePictureUrl?: string;
+    /** Total number of shelves created by the user */
     shelvesCount: number;
+    /** Total number of unique books across all shelves */
     uniqueBooksCount: number;
+    /** Date when the user account was created */
     createdAt: string;
 }
 
+/**
+ * The Profile page component.
+ * Displays user details, statistics, and allows avatar updates.
+ */
 export default function Profile() {
+    // --- State: Profile Data ---
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    // --- State: Avatar Update ---
     const [newAvatarUrl, setNewAvatarUrl] = useState('');
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
+    /**
+     * Fetches the current user's profile data from the backend on mount.
+     */
     const fetchProfile = async () => {
         try {
             const response = await axios.get('/api/users/me');
@@ -60,15 +87,21 @@ export default function Profile() {
         }
     };
 
+    // --- Effects ---
     useEffect(() => {
         fetchProfile();
     }, []);
 
+    /**
+     * Updates the user's profile picture URL.
+     * Sends the new URL to the backend and updates local state on success.
+     */
     const handleAvatarUpdate = async () => {
         try {
             await axios.put('/api/users/me/avatar', { profilePictureUrl: newAvatarUrl });
             setMessage({ type: 'success', text: 'Avatar updated successfully!' });
-            // Update local state
+            
+            // Optimistically update local state to reflect changes immediately
             if (profile) {
                 setProfile({ ...profile, profilePictureUrl: newAvatarUrl });
             }
@@ -78,13 +111,16 @@ export default function Profile() {
         }
     };
 
+    // --- Render: Loading & Error States ---
     if (isLoading) return <Typography sx={{ mt: 4, textAlign: 'center' }}>Loading profile...</Typography>;
     if (!profile) return <Typography sx={{ mt: 4, textAlign: 'center' }}>Profile not found.</Typography>;
 
     return (
         <ProfileContainer maxWidth="md">
+            {/* --- Section: User Details & Settings --- */}
             <Paper sx={{ p: 4, mb: 4 }}>
                 <Grid container spacing={4} alignItems="center">
+                    {/* Left Column: Avatar & Info */}
                     <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Avatar
                             alt={profile.displayName}
@@ -96,6 +132,7 @@ export default function Profile() {
                         <Typography variant="caption" sx={{ mt: 1 }}>Joined: {new Date(profile.createdAt).toLocaleDateString()}</Typography>
                     </Grid>
 
+                    {/* Right Column: Update Form */}
                     <Grid size={{ xs: 12, md: 8 }}>
                         <Typography variant="h6" gutterBottom>Update Avatar</Typography>
                         <Typography variant="body2" color="text.secondary" paragraph>
@@ -122,6 +159,8 @@ export default function Profile() {
             </Paper>
 
             <Grid container spacing={3}>
+
+                {/* --- Section: Statistics --- */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <StatCard>
                         <Typography variant="h3" color="primary" fontWeight="bold">

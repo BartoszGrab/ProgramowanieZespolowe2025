@@ -19,24 +19,52 @@ import {
 } from '@mui/material';
 
 interface BookDetailsDialogProps {
+    /**
+     * Controls the visibility of the dialog
+     */
     open: boolean;
+
+    /**
+     * Callback to close the dialog
+     */
     onClose: () => void;
+
+    /**
+     *  The book objcet to display details for
+     */
     book: ShelfBook | null;
+    
+    /**
+     * The shelf ID the book belongs to
+     */
     shelfId: string;
-    onUpdate: () => void; // Refresh shelf data
+
+    /**
+     *  Callback triggered after a succesful modification --- to refresh parent state
+     */
+    onUpdate: () => void;
 }
 
+/**
+ * @returns The dialog window presenting book object's details
+ * and allowing progress updates and reviews.
+ */
 export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelfId }: BookDetailsDialogProps) {
+    // --- State: Reading Progress ---
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [loadingProgress, setLoadingProgress] = useState(false);
 
-    // Review State
+    // --- State: Reviews ---
     const [reviews, setReviews] = useState<Review[]>([]);
+    // Initialize myReview with default values for a new review state
     const [myReview, setMyReview] = useState<Partial<Review>>({ rating: 0, comment: '' });
     const [loadingReviews, setLoadingReviews] = useState(false);
     const [submittingReview, setSubmittingReview] = useState(false);
     const [error, setError] = useState('');
 
+    /**
+     *  Effect: When the book changes, initialize state and fetch reviews
+     */
     useEffect(() => {
         if (book) {
             setCurrentPage(book.currentPage);
@@ -45,6 +73,9 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
         }
     }, [book]);
 
+    /**
+     * Fetches all available reviews for the current book
+     */
     const fetchReviews = async () => {
         if (!book) return;
         setLoadingReviews(true);
@@ -53,22 +84,31 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
             setReviews(res.data);
         } catch (err) {
             console.error("Failed to fetch reviews", err);
+            // Logging essential for debugging, without disrupting user experience
         } finally {
             setLoadingReviews(false);
         }
     };
 
+    /**
+     * Fetches the current user's review for the book, if it exists.
+     * Handles the case where no review exists gracefully.
+     */
     const fetchMyReview = async () => {
         if (!book) return;
         try {
             const res = await axios.get(`/api/reviews/my/${book.id}`);
             setMyReview(res.data);
         } catch (err) {
-            // It's okay if not found (404), user hasn't reviewed yet
+            // It's okay if not found (404) --- user hasn't reviewed yet
+            // Setting default empty review state
             setMyReview({ rating: 0, comment: '' });
         }
     };
 
+    /**
+     * Handles updating the reading progress of the book.
+     */
     const handleUpdateProgress = async () => {
         if (!book) return;
         setLoadingProgress(true);
@@ -77,7 +117,6 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
                 currentPage: Number(currentPage)
             });
             onUpdate(); // refresh parent
-            // alert("Progress updated!");
         } catch (err: any) {
             console.error(err);
             setError("Failed to update progress");
@@ -86,8 +125,14 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
         }
     };
 
+    /**
+     * Handles submitting or updating the user's review for the book.
+     * Validates input and manages submission state.
+     */
     const handleSubmitReview = async () => {
         if (!book) return;
+
+        // Validation: Rating is mandatory
         if (!myReview.rating || myReview.rating === 0) {
             setError("Please select a rating.");
             return;
@@ -100,16 +145,22 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
                 rating: myReview.rating,
                 comment: myReview.comment
             });
+
+
             fetchReviews(); // Refresh review list
             fetchMyReview(); // Refresh my review
+
+
         } catch (err: any) {
             console.error(err);
+            // Extract meaningful error message if available
             setError(err.response?.data?.message || err.response?.data || "Failed to submit review");
         } finally {
             setSubmittingReview(false);
         }
     };
 
+    // Guard clause: If no book is provided, render nothing.
     if (!book) return null;
 
     return (
@@ -117,14 +168,14 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
             <DialogTitle>{book.title}</DialogTitle>
             <DialogContent dividers>
                 <Box sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
-                    {/* Cover */}
+                    {/* --- Section: Book Cover --- */}
                     {book.coverUrl && (
                         <Box sx={{ flexShrink: 0 }}>
                             <img src={book.coverUrl} alt={book.title} style={{ width: '150px', borderRadius: '8px' }} />
                         </Box>
                     )}
 
-                    {/* Metadata */}
+                    {/* --- Section: Metadata & Progress --- */}
                     <Box sx={{ flexGrow: 1 }}>
                         <Typography variant="subtitle1" color="text.secondary">
                             By {book.authors.join(', ')}
@@ -142,6 +193,7 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
                                 type="number"
                                 label="Pages Read"
                                 value={currentPage}
+                                // value is capped at book.pageCount
                                 onChange={(e) => setCurrentPage(Math.min(Number(e.target.value), book.pageCount))}
                                 inputProps={{ min: 0, max: book.pageCount }}
                                 size="small"
@@ -163,12 +215,12 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
 
                 <Divider sx={{ my: 3 }} />
 
-                {/* Reviews Section */}
+                {/* --- Section: Reviews --- */}
                 <Typography variant="h6" gutterBottom>Reviews</Typography>
 
                 {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-                {/* My Review Form */}
+                {/* -- Sub-section: Current User Review Form -- */}
                 <Box sx={{ p: 2, bgcolor: 'action.hover', borderRadius: 2, mb: 3 }}>
                     <Typography variant="subtitle2" gutterBottom>Write a Review</Typography>
                     <Rating
@@ -193,7 +245,7 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
                     </Button>
                 </Box>
 
-                {/* List of Reviews */}
+                {/* -- Sub-section: Review List -- */}
                 {loadingReviews ? (
                     <CircularProgress />
                 ) : (

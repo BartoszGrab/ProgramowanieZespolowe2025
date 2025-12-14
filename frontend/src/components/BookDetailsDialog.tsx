@@ -51,7 +51,7 @@ interface BookDetailsDialogProps {
  */
 export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelfId }: BookDetailsDialogProps) {
     // --- State: Reading Progress ---
-    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number | string>(book?.currentPage || 0);
     const [loadingProgress, setLoadingProgress] = useState(false);
 
     // --- State: Reviews ---
@@ -103,6 +103,23 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
             // It's okay if not found (404) --- user hasn't reviewed yet
             // Setting default empty review state
             setMyReview({ rating: 0, comment: '' });
+        }
+    };
+
+    const handlePagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!book) return;
+        const val = e.target.value;
+
+        if (val === '') {
+            setCurrentPage('');
+            return;
+        }
+
+        const numVal = parseInt(val, 10);
+
+        if (!isNaN(numVal) && numVal >= 0) {
+            const cappedVal = Math.min(numVal, book.pageCount);
+            setCurrentPage(cappedVal);
         }
     };
 
@@ -192,12 +209,13 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
                             <TextField
                                 type="number"
                                 label="Pages Read"
+                                onChange={handlePagesChange}
                                 value={currentPage}
+                                onFocus={(event) => event.target.select()}
                                 // value is capped at book.pageCount
-                                onChange={(e) => setCurrentPage(Math.min(Number(e.target.value), book.pageCount))}
-                                inputProps={{ min: 0, max: book.pageCount }}
                                 size="small"
                                 sx={{ width: '120px' }}
+                                InputProps={{ inputProps: { min: 0, max: book.pageCount } }}
                             />
                             <Typography variant="body2" color="text.secondary">
                                 / {book.pageCount} pages

@@ -558,8 +558,11 @@ export default function Shelves() {
                                             filterOptions={(x) => x} // Disable built-in filtering, rely on server
                                             onInputChange={(_e, newUrl) => handleSearchBooks(newUrl)}
                                             onChange={(_e, newValue) => setSelectedExistingBook(newValue)}
-                                            renderOption={(props, option) => (
-                                                <li {...props}>
+                                            renderOption={(props, option) => {
+                                            const { key, ...rest } = props; 
+                                            
+                                            return (
+                                                <li key={key} {...rest}>
                                                     <Box>
                                                         <Typography variant="body1" fontWeight="bold">{option.title}</Typography>
                                                         <Typography variant="caption" color="text.secondary">
@@ -567,7 +570,8 @@ export default function Shelves() {
                                                         </Typography>
                                                     </Box>
                                                 </li>
-                                            )}
+                                            );
+                                        }}
                                             renderInput={(params) => (
                                                 <TextField {...params} label="Search by Title or ISBN" fullWidth />
                                             )}

@@ -24,16 +24,31 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import ColorModeSelect from '../customs/ColorModeSelect';
 import mainTheme from '../themes/mainTheme';
 
+
+/**
+ * Data Transfer Object representing a user in the community.
+ */
 interface UserCommunityDto {
+    /** Unique identifier for the user */
     id: string;
+    /** Publicly visible name */
     displayName: string;
+    /** Short user biography */
     bio?: string;
+    /** URL to the user's avatar image */
     profilePictureUrl?: string;
+    /** Total number of users following this user */
     followersCount: number;
+    /** Total number of users this user is following */
     followingCount: number;
+    /** Indicates if the currently logged-in user is following this user */
     isFollowing: boolean;
 }
 
+/**
+ * Styled container for the entire page layout.
+ * Includes responsive padding and a radial gradient background.
+ */
 const PageContainer = styled(Stack)(({ theme }) => ({
     minHeight: '100vh',
     padding: theme.spacing(4),
@@ -52,6 +67,10 @@ const PageContainer = styled(Stack)(({ theme }) => ({
     },
 }));
 
+/**
+ * Styled card component for individual user profiles.
+ * Adds hover effects (lift and shadow) for better interactivity.
+ */
 const UserCard = styled(MuiCard)(({ theme }) => ({
     height: '100%',
     display: 'flex',
@@ -69,16 +88,26 @@ const UserCard = styled(MuiCard)(({ theme }) => ({
     },
 }));
 
+/**
+ * The Community page component.
+ * Displays a grid of users and allows the current user to follow/unfollow them.
+ */
 export default function Community() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [users, setUsers] = useState<UserCommunityDto[]>([]);
     const navigate = useNavigate();
 
+    /**
+     * Initial data fetch on component mount.
+     */
     useEffect(() => {
         fetchUsers();
     }, []);
 
+    /**
+     * Retrieves the list of all community members from the backend.
+     */
     const fetchUsers = async () => {
         setIsLoading(true);
         setError(null);
@@ -93,9 +122,17 @@ export default function Community() {
         }
     };
 
+    /**
+     * Toggles the follow status for a specific user.
+     * Performs an optimistic UI update to ensure the interface feels snappy,
+     * updating the `isFollowing` state and `followersCount` immediately.
+     * 
+     * @param user - The user object to follow or unfollow
+     */    
     const handleFollowToggle = async (user: UserCommunityDto) => {
         try {
             if (user.isFollowing) {
+                // Optimistic update: Unfollow
                 await axios.delete(`/api/users/${user.id}/follow`);
                 setUsers(prevUsers => prevUsers.map(u =>
                     u.id === user.id
@@ -103,6 +140,7 @@ export default function Community() {
                         : u
                 ));
             } else {
+                // Optimistic update: Follow
                 await axios.post(`/api/users/${user.id}/follow`);
                 setUsers(prevUsers => prevUsers.map(u =>
                     u.id === user.id
@@ -122,7 +160,7 @@ export default function Community() {
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
 
             <PageContainer>
-                {/* Header */}
+                {/* --- Section: Header --- */}
                 <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto' }}>
                     <Button
                         startIcon={<ArrowBackIcon />}
@@ -144,22 +182,27 @@ export default function Community() {
                     </Typography>
                 </Box>
 
-                {/* Content */}
+                {/* --- Section: Main Content --- */}
                 <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
+
+                    {/* Loading State */}
                     {isLoading && (
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
                             <CircularProgress />
                         </Box>
                     )}
 
+                    {/* Error State */}
                     {error && <Alert severity="error" sx={{ mb: 4 }}>{error}</Alert>}
 
+                    {/* Empty State */}
                     {!isLoading && !error && users.length === 0 && (
                         <Typography variant="h6" align="center" color="text.secondary" sx={{ mt: 4 }}>
                             No users found. Be the first to invite your friends!
                         </Typography>
                     )}
-
+                    
+                    {/* Users Grid */}
                     <Grid container spacing={3}>
                         {users.map((user) => (
                             <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={user.id}>

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
-import type { LoginRequest } from '../types/auth';
 
 // MUI imports:
 import Box from '@mui/material/Box';
@@ -22,8 +21,11 @@ import { styled, ThemeProvider } from '@mui/material/styles';
 import ColorModeSelect from '../customs/ColorModeSelect';
 import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
 import mainTheme from '../themes/mainTheme';
-import { Navigation } from '../customs/Navigation';
 
+/**
+ * Styled card component for the login form.
+ * Centers content and adds responsive sizing and shadow effects.
+ */
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -39,7 +41,10 @@ const Card = styled(MuiCard)(({ theme }) => ({
   },
 }));
 
-
+/**
+ * Styled container for the login page layout.
+ * Includes responsive padding and a radial gradient background.
+ */
 const SignInContainer = styled(Stack)(({ theme }) => ({
   paddingTop: '64px',
   minHeight: '100%',
@@ -59,29 +64,44 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+/**
+ * The Login page component.
+ * Handles user authentication via email/password and provides options for social login.
+ */
 export default function Login() {
+    // --- State: Form Validation ---
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
 
-  // <-- navigation hook -->
+  // --- Hooks ---
   const navigate = useNavigate();
 
-  // <-- error state hook -->
-
+  // --- State: Submission Status ---
   const [isLoading, setIsLoading] = useState(false);
 
-  // <-- email regex -->
+  // Email validation regex
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-  // <-- validate form data -->
+
+  /**
+   * Validates the login form inputs.
+   * Checks for empty fields and valid email format.
+   * @returns {boolean} True if the form is valid, false otherwise.
+   */
   const validate = () => {
     const email = document.getElementById('email') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
     let isValid = true;
 
-    // check if login request fields are not empty
+    // Reset errors
+    setEmailError(false);
+    setEmailErrorMessage('');
+    setPasswordError(false);
+    setPasswordErrorMessage('');
+
+    // Check if fields are not empty
     if (!email.value) {
       setEmailError(true);
       setEmailErrorMessage('Email cannot be null');
@@ -93,7 +113,7 @@ export default function Login() {
       isValid = false;
     }
 
-    // check email format with regex
+    // Check email format with regex
     if (email.value && !emailRegex.test(email.value)) {
       setEmailError(true);
       setEmailErrorMessage('Invalid email format');
@@ -103,8 +123,15 @@ export default function Login() {
     return isValid;
   };
 
+  /**
+   * Handles the form submission.
+   * Validates input, sends credentials to the API, and manages authentication state.
+   * @param e - The form event
+   */ 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Validate form inputs
     if (!validate()) {
       e.preventDefault();
       return;
@@ -116,8 +143,12 @@ export default function Login() {
     };
     setIsLoading(true);
     try {
+
+      // Api call to login endpoint
       const response = await axios.post('/api/auth/login', formData);
       console.log('Login successful:', response.data);
+
+      // Store auth token and navigate to dashboard
       localStorage.setItem('authToken', response.data.token);
       navigate('/dashboard');
     } catch (error: any) {
@@ -135,6 +166,8 @@ export default function Login() {
       <ColorModeSelect
         sx={{ position: 'fixed', top: '1rem', right: '1rem' }}
       />
+
+      {/* --- Sign In Form --- */}
       <SignInContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography

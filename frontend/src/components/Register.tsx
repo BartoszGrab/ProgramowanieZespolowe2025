@@ -1,9 +1,9 @@
 // register
 import * as React from 'react';
 import { useState } from 'react';
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
-import type { RegisterRequest } from '../types/auth';
+
 //MUI imports:
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,18 +13,22 @@ import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled, ThemeProvider } from '@mui/material/styles';
+
+// Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
 import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
 import mainTheme from '../themes/mainTheme';
-import { Navigation } from '../customs/Navigation';
 
 
+/**
+ * Styled card component for the registration form.
+ * Centers content and adds responsive sizing and shadow effects.
+ */
 const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -40,7 +44,10 @@ const Card = styled(MuiCard)(({ theme }) => ({
     },
 }));
 
-// TODO: OGARNAC SKALOWANIE TLA NA MOBILCE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+/**
+ * Styled container for the registration page layout.
+ * Includes responsive padding and a radial gradient background.
+ */
 const SignUpContainer = styled(Stack)(({ theme }) => ({
     paddingTop: '64px',
     minHeight: '100%',
@@ -59,15 +66,12 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
     },
 }));
 
-
+/**
+ * The Register page component.
+ * Handles new user registration with form validation and API integration.
+ */
 export default function Register() {
-    // // <-- form state hook -->
-    // const [formData, setFormData] = useState<RegisterRequest>({
-    //     email: '',
-    //     password: '',
-    //     confirmPassword: '',
-    //     displayName: ''
-    // });
+    // --- State: Form Validation ---
     const [emailError, setEmailError] = React.useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
     const [passwordError, setPasswordError] = React.useState(false);
@@ -75,27 +79,28 @@ export default function Register() {
     const [displayNameError, setDisplayNameError] = React.useState(false);
     const [displayNameErrorMessage, setDisplayNameErrorMessage] = React.useState('');
 
-    // <-- navigation hook -->
-    const navigate = useNavigate();
-
-    // <-- error state hook -->
+    // --- State: Submission Status ---
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [isLoading, setisLoading] = useState(false);
 
-    // // <-- handle change in form inputs -->
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     setFormData({
-    //         ...formData,
-    //         [e.target.name]: e.target.value
-    //     });
-    // };
+    // --- Hooks ---
+    const navigate = useNavigate();
 
-    // <-- email regex -->
+    // Email validation regex
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    //<-- validate form data -->
+    /**
+     * Validates the registration form inputs.
+     * Checks for:
+     * - Empty fields
+     * - Password matching
+     * - Password complexity (length, unique chars)
+     * - Email format
+     * - Display name length
+     * 
+     * @returns {boolean} True if the form is valid, false otherwise.
+     */
     const validate = () => {
-        // const newErrors: {[key: string]: string} = {};
         const email = document.getElementById('email') as HTMLInputElement;
         const password = document.getElementById('password') as HTMLInputElement;
         const confirmPassword = document.getElementById('confirmPassword') as HTMLInputElement;
@@ -103,7 +108,15 @@ export default function Register() {
 
         let isValid = true;
 
-        // check if register request fields are not empty
+        // Reset errors
+        setEmailError(false);
+        setEmailErrorMessage('');
+        setPasswordError(false);
+        setPasswordErrorMessage('');
+        setDisplayNameError(false);
+        setDisplayNameErrorMessage('');
+
+        // Check for empty fields
         if (!email.value) {
             setEmailError(true);
             setEmailErrorMessage('Email cannot be null');
@@ -116,33 +129,34 @@ export default function Register() {
             isValid = false;
         }
 
+         if (displayName.value.length === 0) {
+            setDisplayNameError(true);
+            setDisplayNameErrorMessage('Display Name cannot be null');
+            isValid = false;
+        }
+
+        // Check password matching
         if (confirmPassword.value != password.value) {
             setPasswordError(true);
             setPasswordErrorMessage('Passwords do not match');
             isValid = false;
         }
 
-        if (displayName.value.length === 0) {
-            setDisplayNameError(true);
-            setDisplayNameErrorMessage('Display Name cannot be null');
-            isValid = false;
-        }
-
-        // check email format with regex
+        // Check email format with regex
         if (email.value && !emailRegex.test(email.value)) {
             setEmailError(true);
             setEmailErrorMessage('Invalid email format');
             isValid = false;
         }
 
-        // check password length
+        // Check password complexity
         if (password.value && password.value.length < 8) {
             setPasswordError(true);
             setPasswordErrorMessage('Password must be at least 8 characters long');
             isValid = false;
         }
 
-        // check if password contains at least four unique characters
+        // -- Check if password contains at least four unique characters
         if (password.value) {
             const uniqueChars = new Set(password.value);
             if (uniqueChars.size < 4) {
@@ -152,7 +166,7 @@ export default function Register() {
             }
         }
 
-        // check display name length
+        // Check display name length
         if (displayName.value && (displayName.value.length < 3 || displayName.value.length > 30)) {
             setDisplayNameError(true);
             setDisplayNameErrorMessage('Display Name must be between 3 and 30 characters long');
@@ -162,8 +176,15 @@ export default function Register() {
         return isValid;
     };
 
+    /**
+     * Handles the form submission.
+     * Validates input, sends registration data to the API, and redirects on success.
+     * @param e - The form event
+     */
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        
+        // Validate form inputs
         if (!validate()) {
             e.preventDefault();
             return;
@@ -176,11 +197,16 @@ export default function Register() {
             password: data.get('password') as string,
             confirmPassword: data.get('confirmPassword') as string,
         }
+
         setisLoading(true);
+        setErrors({}); // Clear previous API errors
+        
         try {
+            // API Call
             const response = await axios.post('/api/auth/register', formData);
             console.log('Registration successful:', response.data);
-            // Navigate to another page after successful registration
+            
+            // Navigate to login page after successful registration
             navigate('/login');
         } catch (error: any) {
             console.error('Registration failed:', error);
@@ -206,6 +232,7 @@ export default function Register() {
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
+            { /** --- Sing up Form --- */ }
             <SignUpContainer direction="column" justifyContent="space-between">
                 <Card variant="outlined">
                     <Typography

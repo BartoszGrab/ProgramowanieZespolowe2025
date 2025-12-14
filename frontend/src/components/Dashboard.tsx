@@ -16,7 +16,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { styled, ThemeProvider } from '@mui/material/styles';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import AddIcon from '@mui/icons-material/Add';
-// Nowe importy do Modala
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -26,16 +25,27 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 // Custom imports
-import ColorModeSelect from '../customs/ColorModeSelect';
+import ColorModeSelect from '../customs/ColorModeSelect'; // possible TODO: color mode switch implementation
 import mainTheme from '../themes/mainTheme';
 
+/**
+ * Data Transfer Object representing a book shelf.
+ */
 interface Shelf {
+    /** Unique identifier for the shelf */
     id: string | number;
+    /** Display name of the shelf */
     name: string;
+    /** Optional description of the shelf's contents */
     description?: string;
+    /** Number of books contained in this shelf */
     bookCount?: number;
 }
 
+/**
+ * Styled container for the dashboard layout.
+ * Includes responsive padding and a radial gradient background.
+ */
 const DashboardContainer = styled(Stack)(({ theme }) => ({
     minHeight: '100vh',
     padding: theme.spacing(4),
@@ -54,6 +64,10 @@ const DashboardContainer = styled(Stack)(({ theme }) => ({
     },
 }));
 
+/**
+ * Styled card component for displaying shelf summaries.
+ * Adds hover effects (lift and shadow) for better interactivity.
+ */
 const ShelfCard = styled(MuiCard)(({ theme }) => ({
     height: '100%',
     minHeight: '200px',
@@ -76,6 +90,10 @@ const ShelfCard = styled(MuiCard)(({ theme }) => ({
     },
 }));
 
+/**
+ * Specialized card component for the "Add New Shelf" action.
+ * Uses dashed borders and transparency to distinguish it from content cards.
+ */
 const AddShelfCard = styled(ShelfCard)(({ theme }) => ({
     backgroundColor: 'transparent',
     borderStyle: 'dashed',
@@ -89,18 +107,26 @@ const AddShelfCard = styled(ShelfCard)(({ theme }) => ({
     },
 }));
 
+/**
+ * The Dashboard page component.
+ * Displays the user's library shelves and provides functionality to create new ones.
+ */
 export default function Dashboard() {
+    // --- State: Data Fetching ---
     const [shelves, setShelves] = useState<Shelf[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    // -- STANY DO MODALA --
+    // --- State: Create Shelf Modal ---
     const [openModal, setOpenModal] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
     const [createError, setCreateError] = useState<string>('');
-
+    
     const navigate = useNavigate();
-
+    
+    /**
+     * Fetches the list of shelves from the backend on component mount.
+     */
     useEffect(() => {
         const fetchShelves = async () => {
             try {
@@ -116,20 +142,28 @@ export default function Dashboard() {
         fetchShelves();
     }, []);
 
+    /**
+     * Navigates to the detailed view of a specific shelf.
+     * @param shelfId - The ID of the shelf to view
+     */
     const handleShelfClick = (shelfId: string | number) => {
         navigate(`/shelves/${shelfId}`);
     };
 
-    // Otwieranie/zamykanie modala
+    // --- Modal Handlers ---
     const handleOpenModal = () => setOpenModal(true);
+
     const handleCloseModal = () => {
         setOpenModal(false);
-        setCreateError(''); // Czyścimy błędy przy zamknięciu
+        setCreateError(''); // Clear errors when closing
     };
 
-    // -- LOGIKA TWORZENIA PÓŁKI --
+    /**
+     * Handles the submission of the "Create Shelf" form.
+     * Sends data to the API and updates local state upon success.
+     */
     const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // Zapobiega przeładowaniu strony
+        event.preventDefault(); // Prevent page reload
         setIsCreating(true);
         setCreateError('');
 
@@ -140,17 +174,15 @@ export default function Dashboard() {
         };
 
         try {
-            // 1. Strzał do API
+            // Api call to create the new shelf
             const response = await axios.post('/api/shelves', newShelfData);
 
-            // 2. Aktualizacja stanu lokalnego (dodajemy nową półkę do listy bez ponownego fetcha)
+            // Update local state with the newly created shelf
             const createdShelf = response.data;
-            // Zakładam, że backend zwraca stworzony obiekt z ID.
-            // Jeśli backend zwraca tylko status 200, musisz przeładować listę (fetchShelves)
 
             setShelves((prevShelves) => [...prevShelves, createdShelf]);
 
-            // 3. Zamknięcie modala
+            // Close the modal
             handleCloseModal();
         } catch (err: any) {
             console.error('Failed to create shelf:', err);
@@ -166,7 +198,7 @@ export default function Dashboard() {
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
 
             <DashboardContainer>
-                {/* Header */}
+                {/* --- Section: Header --- */}
                 <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto' }}>
                     <Typography
                         component="h1"
@@ -178,7 +210,7 @@ export default function Dashboard() {
                     </Typography>
                 </Box>
 
-                {/* Grid */}
+                {/* --- Section: Shelves Grid --- */}
                 <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
                     {isLoading && (
                         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
@@ -189,7 +221,8 @@ export default function Dashboard() {
 
                     {!isLoading && !error && (
                         <Grid container spacing={3}>
-                            {/* Karta dodawania */}
+                            
+                            {/* Add New Shelf Card */}
                             <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                                 <AddShelfCard onClick={handleOpenModal}>
                                     <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
@@ -200,7 +233,7 @@ export default function Dashboard() {
                                 </AddShelfCard>
                             </Grid>
 
-                            {/* Lista półek */}
+                            {/* Existing Shelves List */}
                             {Array.isArray(shelves) && shelves.map((shelf) => (
                                 <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={shelf.id}>
                                     <ShelfCard onClick={() => handleShelfClick(shelf.id)}>
@@ -226,7 +259,7 @@ export default function Dashboard() {
                     )}
                 </Box>
 
-                {/* --- MODAL (DIALOG) TWORZENIA PÓŁKI --- */}
+                {/* --- Dialog: Create Shelf --- */}
                 <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
                     <Box component="form" onSubmit={handleCreateSubmit}>
                         <DialogTitle>Create New Shelf</DialogTitle>

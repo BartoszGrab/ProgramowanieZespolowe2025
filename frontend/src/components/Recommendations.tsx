@@ -33,43 +33,76 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ColorModeSelect from '../customs/ColorModeSelect';
 import mainTheme from '../themes/mainTheme';
 
+/**
+ * DTO for a book residing on a shelf.
+ */
 interface ShelfBookDto {
+    /** Unique identifier for the book */
     id: string;
+    /** Title of the book */
     title: string;
+    /** List of authors of the book */
     authors?: string[];
+    /** List of genres associated with the book */
     genres?: string[];
+    /** Average rating of the book */
     averageRating?: number;
 }
 
+/**
+ * DTO for a shelf containing books.
+ */
 interface ShelfDto {
+    /** Unique identifier for the shelf */
     id: string | number;
+    /** Name of the shelf */
     name: string;
+    /** Total number of books on the shelf */
     bookCount: number;
+    /** List of books on the shelf */
     books: ShelfBookDto[];
 }
 
+/**
+ * Simplified shelf object for selection lists.
+ */
 interface Shelf {
     id: string | number;
     name: string;
 }
 
+/**
+ * Represents a single book recommendation returned by the AI service.
+ */
 interface RecommendedBook {
     title: string;
     author: string;
+    /** Explanation for the recommendation */
     reason: string;
+    /** Optional match score indicating relevance */
     match_score?: number;
 }
 
+/**
+ * A category of recommendations (e.g., "Because you read Sci-Fi").
+ */
 interface RecommendationCategory {
     category_title: string;
     type: string;
     items: RecommendedBook[];
 }
 
+/**
+ * API response structure for recommendations.
+ */
 interface RecommendationResponse {
     recommendations: RecommendationCategory[];
 }
 
+/**
+ * Styled container for the recommendations page layout.
+ * Includes responsive padding and a radial gradient background.
+ */
 const PageContainer = styled(Stack)(({ theme }) => ({
     minHeight: '100vh',
     padding: theme.spacing(4),
@@ -88,6 +121,10 @@ const PageContainer = styled(Stack)(({ theme }) => ({
     },
 }));
 
+/**
+ * Styled card component for displaying recommended books.
+ * Adds hover effects (lift and shadow) for better interactivity.
+ */
 const BookCard = styled(MuiCard)(({ theme }) => ({
     height: '100%',
     minHeight: '350px',
@@ -109,6 +146,9 @@ const BookCard = styled(MuiCard)(({ theme }) => ({
     },
 }));
 
+/**
+ * Styled container for the empty state message.
+ */
 const EmptyStateBox = styled(Box)(({ theme }) => ({
     textAlign: 'center',
     padding: theme.spacing(8),
@@ -118,14 +158,20 @@ const EmptyStateBox = styled(Box)(({ theme }) => ({
     borderColor: theme.palette.divider,
 }));
 
+/**
+ * The Recommendations page component.
+ * Analyzes the user's reading history to provide personalized book suggestions.
+ * Allows users to add recommended books directly to their shelves.
+ */
 export default function Recommendations() {
+    // --- State: Data Fetching ---
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [recommendations, setRecommendations] = useState<RecommendationCategory[]>([]);
     const [hasBooks, setHasBooks] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    // Add to shelf dialog state
+    // --- State: Add to Shelf Dialog ---
     const [addDialogOpen, setAddDialogOpen] = useState(false);
     const [selectedBook, setSelectedBook] = useState<RecommendedBook | null>(null);
     const [shelves, setShelves] = useState<Shelf[]>([]);
@@ -134,11 +180,17 @@ export default function Recommendations() {
     const [addError, setAddError] = useState<string | null>(null);
     const [addSuccess, setAddSuccess] = useState<string | null>(null);
 
+    /**
+     * Initial data fetch on component mount.
+     */
     useEffect(() => {
         fetchRecommendations();
         fetchShelves();
     }, []);
 
+    /**
+     * Fetches the list of available shelves for the "Add to Shelf" dialog.
+     */
     const fetchShelves = async () => {
         try {
             const response = await axios.get<Shelf[]>('/api/shelves');
@@ -148,6 +200,12 @@ export default function Recommendations() {
         }
     };
 
+    /**
+     * Orchestrates the recommendation process:
+     * 1. Fetches all user shelves.
+     * 2. Aggregates books from all shelves to build a reading history.
+     * 3. Sends the history to the recommendation engine.
+     */
     const fetchRecommendations = async () => {
         setIsLoading(true);
         setError(null);
@@ -221,6 +279,9 @@ export default function Recommendations() {
         }
     };
 
+    /**
+     * Opens the dialog to add a specific recommended book to a shelf.
+     */
     const handleBookClick = (book: RecommendedBook) => {
         setSelectedBook(book);
         setSelectedShelfId('');
@@ -229,6 +290,9 @@ export default function Recommendations() {
         setAddDialogOpen(true);
     };
 
+    /**
+     * Closes the "Add to Shelf" dialog and resets selection state.
+     */
     const handleCloseDialog = () => {
         setAddDialogOpen(false);
         setSelectedBook(null);
@@ -236,6 +300,12 @@ export default function Recommendations() {
         setAddSuccess(null);
     };
 
+    /**
+     * Handles the logic for adding a recommended book to a user's shelf.
+     * Since recommendations might not have internal IDs, this function:
+     * 1. Searches for the book in the system/Google Books to get a valid ID.
+     * 2. Adds the book to the selected shelf using the best available identifier.
+     */
     const handleAddToShelf = async () => {
         if (!selectedBook || !selectedShelfId) return;
 
@@ -263,7 +333,7 @@ export default function Recommendations() {
                 return;
             }
 
-            // Add to shelf
+            // Determine the correct ID payload for the API
             const hasValidId = bookToAdd.id && bookToAdd.id !== '00000000-0000-0000-0000-000000000000';
             const gId = bookToAdd.googleBookId || bookToAdd.GoogleBookId;
 
@@ -305,7 +375,7 @@ export default function Recommendations() {
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
 
             <PageContainer>
-                {/* Header */}
+                {/* --- Section: Header --- */}
                 <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto' }}>
                     <Button
                         startIcon={<ArrowBackIcon />}
@@ -327,8 +397,9 @@ export default function Recommendations() {
                     </Typography>
                 </Box>
 
-                {/* Content */}
+                {/* --- Section: Content --- */}
                 <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
+                    {/* Loading State */}
                     {isLoading && (
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 8, gap: 2 }}>
                             <CircularProgress />
@@ -336,8 +407,10 @@ export default function Recommendations() {
                         </Box>
                     )}
 
+                    {/* Error State */}
                     {error && <Alert severity="error" sx={{ mb: 4 }}>{error}</Alert>}
 
+                    {/* Empty State: No Books in Library */}
                     {!isLoading && !error && !hasBooks && (
                         <EmptyStateBox>
                             <MenuBookIcon sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
@@ -357,12 +430,14 @@ export default function Recommendations() {
                         </EmptyStateBox>
                     )}
 
+                    {/* No Recommendations State */}
                     {!isLoading && !error && hasBooks && recommendations.length === 0 && (
                         <Alert severity="info">
                             We couldn't generate recommendations at this time. Please try again later.
                         </Alert>
                     )}
-
+                    
+                    {/* Recommendations Grid */}
                     {!isLoading && !error && hasBooks && recommendations.map((category, categoryIndex) => (
                         <Box key={categoryIndex} sx={{ mb: 5 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
@@ -450,7 +525,7 @@ export default function Recommendations() {
                 </Box>
             </PageContainer>
 
-            {/* Add to Shelf Dialog */}
+            {/* --- Dialog: Add to Shelf --- */}
             <Dialog open={addDialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
                 <DialogTitle>
                     Add to Shelf

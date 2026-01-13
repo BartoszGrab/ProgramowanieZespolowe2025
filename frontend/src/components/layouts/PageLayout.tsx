@@ -30,7 +30,7 @@ export const PageLayout = ({ children, showColorMode = true }: PageLayoutProps) 
         <div className="absolute inset-0 bg-primary-dark/40 mix-blend-multiply backdrop-blur-[2px]" />
         
         {/* Opcjonalnie: Dodatkowy gradient od dołu, żeby stopka nie zlewała się z tłem */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background-paper/90 via-transparent to-background-paper/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background-paper/70 via-transparent to-background-paper/5 via-15%" />
       </div>
 
       {/* --- PRZEŁĄCZNIK MOTYWU --- */}

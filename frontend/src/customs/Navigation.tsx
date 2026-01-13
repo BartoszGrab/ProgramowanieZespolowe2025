@@ -3,60 +3,68 @@ import { useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItemText, ListItemButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-/**
- * Navigation component providing a responsive app bar with navigation links.
- * Includes a hamburger menu for mobile devices and handles user authentication state.
- */
 export const Navigation: React.FC = () => {
-     // --- State: Drawer and Authentication ---
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
-    /**
-     * Effect: Check login status on component mount and listen for storage changes.
-     * Updates isLoggedIn state based on presence of authToken in localStorage.
-     */
     useEffect(() => {
         const checkLogin = () => {
             setIsLoggedIn(!!localStorage.getItem('authToken'));
-            //setIsLoggedIn(true); // For testing purposes only
         };
         checkLogin();
-
-        // Listen for storage changes (e.g., logout in another tab)
         window.addEventListener('storage', checkLogin);
         return () => window.removeEventListener('storage', checkLogin);
     }, []);
 
-    /**
-     * Toggles the mobile drawer open/closed state.
-     */
     const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
-    /**
-     * Handles user logout by clearing the auth token, updating state, and navigating to home.
-     */
     const handleLogout = () => {
-        localStorage.removeItem('authToken'); // Clear token
+        localStorage.removeItem('authToken');
         setIsLoggedIn(false);
-        navigate('/'); // Navigate to home
+        navigate('/');
     };
 
     return (
         <>
-        {/* --- App Bar --- */}
-            <AppBar position="static" sx={{
-                height: { xs: '56px', md: '64px' },
-                background: 'linear-gradient(90deg, #DD980A 0%, #BE6904 100%)'
-            }}>
+            {/* --- App Bar --- */}
+            <AppBar 
+                // Używamy 'static' lub 'fixed' w zależności od potrzeb, ale 'absolute'
+                // sprawia, że pasek leży NA obrazku, a nie przesuwa go w dół.
+                position="absolute" 
+                
+                // Resetujemy domyślny cień
+                elevation={0}
+                
+                sx={{
+                    // 1. Zapewniamy, że pasek jest na wierzchu i zajmuje całą szerokość
+                    width: '100%',
+                    top: 0,
+                    zIndex: 50, // Wyższy index niż tło
+
+                    // 2. KLUCZOWE: Kolor tła w formacie RGBA
+                    // 255,255,255 = biały
+                    // 0.8 = 80% widoczności (możesz zmienić na 0.5, 0.9 itp.)
+                    backgroundColor: 'rgba(255, 255, 255, 0.0)',
+                    
+                    // 3. EFEKT ROZMYCIA (Glassmorphism)
+                    backdropFilter: 'blur(5px)',
+                    WebkitBackdropFilter: 'blur(5px)', // Wsparcie dla Safari
+                    
+                    // 4. Kolor tekstu (ciemny szary, żeby był czytelny na białym)
+                    color: '#ffffffff', // odpowiednik text-slate-800
+                    
+                    // 5. Delikatna ramka na dole dla lepszego kontrastu (opcjonalne)
+                    //borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+
+                    height: { xs: '56px', md: '64px' },
+                }}
+            >
                 <Toolbar>
-                    {/* App Title */}
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
                         📚 Your Virtual Book Collection
                     </Typography>
 
-                    {/* Buttons visible on md+ screens */}
                     <Button color="inherit" href="/" sx={{ display: { xs: 'none', md: 'block' } }}>Home</Button>
                     {isLoggedIn ? (
                         <>
@@ -71,14 +79,13 @@ export const Navigation: React.FC = () => {
                         </>
                     )}
 
-                    {/* Hamburger menu for xs screens */}
                     <IconButton color="inherit" onClick={toggleDrawer} sx={{ display: { xs: 'block', md: 'none' } }}>
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
             </AppBar>
 
-            {/* --- Drawer for Mobile Navigation --- */}
+            {/* --- Drawer --- */}
             <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
                 <List sx={{ width: 250 }}>
                     <ListItemButton component="a" href="/">

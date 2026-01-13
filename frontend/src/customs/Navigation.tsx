@@ -50,6 +50,8 @@ export const Navigation: React.FC = () => {
                     // 3. EFEKT ROZMYCIA (Glassmorphism)
                     backdropFilter: 'blur(5px)',
                     WebkitBackdropFilter: 'blur(5px)', // Wsparcie dla Safari
+
+                    marginBottom: '10rem',
                     
                     // 4. Kolor tekstu (ciemny szary, żeby był czytelny na białym)
                     color: '#ffffffff', // odpowiednik text-slate-800

@@ -23,6 +23,7 @@ import { styled, ThemeProvider } from '@mui/material/styles';
 import ColorModeSelect from '../customs/ColorModeSelect';
 import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
 import mainTheme from '../themes/mainTheme';
+import { PageLayout } from './layouts/PageLayout';
 
 
 /**
@@ -48,23 +49,23 @@ const Card = styled(MuiCard)(({ theme }) => ({
  * Styled container for the registration page layout.
  * Includes responsive padding and a radial gradient background.
  */
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-    paddingTop: '64px',
-    minHeight: '100%',
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(4),
-    },
-    '&::before': {
-        content: '""',
-        display: 'block',
-        position: 'absolute',
-        zIndex: -1,
-        inset: 0,
-        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
-        backgroundRepeat: 'no-repeat',
-    },
-}));
+// const SignUpContainer = styled(Stack)(({ theme }) => ({
+//     paddingTop: '64px',
+//     minHeight: '100%',
+//     padding: theme.spacing(2),
+//     [theme.breakpoints.up('sm')]: {
+//         padding: theme.spacing(4),
+//     },
+//     '&::before': {
+//         content: '""',
+//         display: 'block',
+//         position: 'absolute',
+//         zIndex: -1,
+//         inset: 0,
+//         backgroundImage: 'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
+//         backgroundRepeat: 'no-repeat',
+//     },
+// }));
 
 /**
  * The Register page component.
@@ -233,7 +234,8 @@ export default function Register() {
             <CssBaseline enableColorScheme />
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
             { /** --- Sing up Form --- */ }
-            <SignUpContainer direction="column" justifyContent="space-between">
+            {/* <SignUpContainer direction="column" justifyContent="space-between"> */}
+            <PageLayout>
                 <Card variant="outlined">
                     <Typography
                         component="h1"
@@ -353,7 +355,8 @@ export default function Register() {
                         </Button>
                     </Box>
                 </Card>
-            </SignUpContainer>
+            {/* </SignUpContainer> */}
+            </PageLayout>
         </ThemeProvider>
     );
 };

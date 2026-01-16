@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItemText, ListItemButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { green } from '@mui/material/colors';
 
 export const Navigation: React.FC = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -29,35 +30,32 @@ export const Navigation: React.FC = () => {
         <>
             {/* --- App Bar --- */}
             <AppBar 
-                // Używamy 'static' lub 'fixed' w zależności od potrzeb, ale 'absolute'
-                // sprawia, że pasek leży NA obrazku, a nie przesuwa go w dół.
+
+                // levitating effect
                 position="absolute" 
-                
-                // Resetujemy domyślny cień
+
+                // no shadow
                 elevation={0}
                 
                 sx={{
-                    // 1. Zapewniamy, że pasek jest na wierzchu i zajmuje całą szerokość
+                    // full width and fixed at top
                     width: '100%',
                     top: 0,
-                    zIndex: 50, // Wyższy index niż tło
+                    zIndex: 50, // index above other content
 
-                    // 2. KLUCZOWE: Kolor tła w formacie RGBA
-                    // 255,255,255 = biały
-                    // 0.8 = 80% widoczności (możesz zmienić na 0.5, 0.9 itp.)
+                    // transparent background
                     backgroundColor: 'rgba(255, 255, 255, 0.0)',
                     
-                    // 3. EFEKT ROZMYCIA (Glassmorphism)
+                    // glassmorphism effect
                     backdropFilter: 'blur(5px)',
-                    WebkitBackdropFilter: 'blur(5px)', // Wsparcie dla Safari
+                    WebkitBackdropFilter: 'blur(5px)', // safari support
 
                     marginBottom: '10rem',
                     
-                    // 4. Kolor tekstu (ciemny szary, żeby był czytelny na białym)
-                    color: '#ffffffff', // odpowiednik text-slate-800
+                    // text color
+                    color: '#ffffffff', 
                     
-                    // 5. Delikatna ramka na dole dla lepszego kontrastu (opcjonalne)
-                    //borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+                    //borderBottom: '1px solid rgba(255, 255, 255, 0.3)', // == to discuss
 
                     height: { xs: '56px', md: '64px' },
                 }}
@@ -88,8 +86,17 @@ export const Navigation: React.FC = () => {
             </AppBar>
 
             {/* --- Drawer --- */}
-            <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
-                <List sx={{ width: 250 }}>
+            <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}
+            slotProps={{ 
+                paper: {
+                    sx: {
+                        width: 150,
+                        backgroundColor: 'background.default',
+                        color: 'text.primary',
+                    }
+                } 
+            }}>
+                <List>
                     <ListItemButton component="a" href="/">
                         <ListItemText primary="Home" />
                     </ListItemButton>

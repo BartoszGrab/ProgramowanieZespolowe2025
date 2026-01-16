@@ -15,9 +15,10 @@ import FormControl from '@mui/material/FormControl';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled, ThemeProvider } from '@mui/material/styles';
+
+// Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
 import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
 import mainTheme from '../themes/mainTheme';

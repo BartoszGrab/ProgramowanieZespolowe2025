@@ -39,7 +39,7 @@ const ShelfItem = ({ shelf, onClick }: { shelf: Shelf; onClick: () => void }) =>
     <div
         onClick={onClick}
         className={`
-            group relative flex flex-col justify-between p-6 cursor-pointer min-h-[220px]
+            group relative flex flex-col justify-between p-6 cursor-pointer min-h-65
             bg-white/70 backdrop-blur-md
             border border-white/40 rounded-3xl
             shadow-lg hover:shadow-2xl hover:shadow-primary-main/20 hover:-translate-y-2
@@ -86,7 +86,7 @@ const AddShelfItem = ({ onClick }: { onClick: () => void }) => (
     <div
         onClick={onClick}
         className={`
-            group flex flex-col items-center justify-center text-center p-6 cursor-pointer min-h-55
+            group flex flex-col items-center justify-center text-center p-6 cursor-pointer min-h-65
             bg-white/30 backdrop-blur-sm
             border-2 border-dashed border-primary-main/40 rounded-3xl
             hover:bg-white/45 hover:border-primary-main hover:shadow-xl hover:-translate-y-1
@@ -200,7 +200,7 @@ export default function Dashboard() {
 
                     {!isLoading && !error && (
                         /* Grid System */
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                             
                             {/* Add New Shelf Card */}
                             <AddShelfItem onClick={handleOpenModal} />

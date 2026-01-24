@@ -44,7 +44,7 @@ const StatCard = ({ icon: Icon, value, label, delay }: any) => (
         <div className="absolute inset-0 bg-linear-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Ikona */}
-        <div className="relative z-10 mb-3 p-3 rounded-full bg-primary-light/10 text-primary-main group-hover:bg-primary-main group-hover:text-white transition-all duration-300">
+        <div className="relative z-10 mb-3 p-3 rounded-full bg-primary-light/10 bg-linear-to-r from-primary-main to-primary-dark group-hover:bg-primary-main group-hover:text-white transition-all duration-300">
             <Icon sx={{ fontSize: 28 }} />
         </div>
 
@@ -54,7 +54,7 @@ const StatCard = ({ icon: Icon, value, label, delay }: any) => (
         </span>
 
         {/* Etykieta */}
-        <span className="relative z-10 text-sm text-text-secondary font-medium uppercase tracking-wider opacity-80">
+        <span className="relative z-10 text-sm bg-clip-text text-transparent bg-linear-to-r from-primary-main to-primary-dark brightness-75 font-medium uppercase tracking-wider opacity-80">
             {label}
         </span>
     </div>
@@ -149,7 +149,7 @@ export default function Profile() {
                                 <Typography variant="body1" className="text-text-secondary mb-2">
                                     {profile.email}
                                 </Typography>
-                                <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary-light/10 text-primary-dark text-xs font-medium">
+                                <div className="inline-flex items-center py-1 rounded-full bg-primary-light/10 text-primary-dark text-xs font-medium">
                                     Joined: {new Date(profile.createdAt).toLocaleDateString()}
                                 </div>
                             </Grid>

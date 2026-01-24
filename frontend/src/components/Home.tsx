@@ -35,12 +35,12 @@ const ActionCard = ({ icon: Icon, title, subtitle, onClick, delay }: any) => (
         <div className="absolute inset-0 bg-linear-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Ikona w "bąbelku" */}
-        <div className="relative z-10 mb-6 p-4 rounded-2xl bg-primary-light/20 text-primary-main group-hover:scale-110 group-hover:bg-primary-main group-hover:text-white transition-all duration-300">
+        <div className="relative z-10 mb-6 p-4 rounded-2xl bg-primary-light/20 text-primary-dark group-hover:scale-110 group-hover:bg-primary-dark group-hover:text-white transition-all duration-300">
             <Icon sx={{ fontSize: 32 }} />
         </div>
 
         {/* Tekst */}
-        <h3 className="relative z-10 text-xl font-bold text-text-primary mb-2 group-hover:text-primary-dark transition-colors">
+        <h3 className="relative z-10 text-xl font-bold text-text-primary mb-2 group-hover:brightness-75 group-hover:text-primary-dark transition-colors">
             {title}
         </h3>
         <p className="relative z-10 text-sm text-text-secondary opacity-80 leading-relaxed">

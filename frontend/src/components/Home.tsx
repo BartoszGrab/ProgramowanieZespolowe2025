@@ -32,7 +32,7 @@ const ActionCard = ({ icon: Icon, title, subtitle, onClick, delay }: any) => (
         style={{ animationDelay: delay }}
     >
         {/* Dekoracyjne tło hover (subtelny gradient) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-linear-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Ikona w "bąbelku" */}
         <div className="relative z-10 mb-6 p-4 rounded-2xl bg-primary-light/20 text-primary-main group-hover:scale-110 group-hover:bg-primary-main group-hover:text-white transition-all duration-300">
@@ -128,7 +128,7 @@ export default function Home() {
                                     <ActionCard 
                                         icon={LoginIcon}
                                         title="Login"
-                                        subtitle="Access your existing collection and resume reading."
+                                        subtitle="Access your existing collection <3."
                                         onClick={() => handleCardClick('/login')}
                                     />
                                 </Grid>
@@ -136,7 +136,7 @@ export default function Home() {
                                     <ActionCard 
                                         icon={PersonAddIcon}
                                         title="Register"
-                                        subtitle="Start your journey today. It's free and easy!"
+                                        subtitle="Start your journey today. It's free!"
                                         onClick={() => handleCardClick('/register')}
                                     />
                                 </Grid>

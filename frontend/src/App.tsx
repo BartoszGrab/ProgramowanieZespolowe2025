@@ -14,6 +14,7 @@ import Shelves from './components/Shelves'
 import Profile from './components/Profile'
 import Recommendations from './components/Recommendations'
 import Community from './components/Community'
+import { AuthProvider } from './context/AuthContext';
 
 
 /**
@@ -24,6 +25,7 @@ function App() {
   return (
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
+      <AuthProvider>
       <BrowserRouter>
       {/* --- Navigation Component --- */}
         <Navigation />
@@ -41,6 +43,7 @@ function App() {
           <Route path="/community" element={<Community />} />
         </Routes>
       </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 

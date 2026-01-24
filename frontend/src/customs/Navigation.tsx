@@ -2,28 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItemText, ListItemButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { green } from '@mui/material/colors';
+
+
+//custom imports
+import { useAuth } from '../context/AuthContext';
+
 
 export const Navigation: React.FC = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const checkLogin = () => {
-            setIsLoggedIn(!!localStorage.getItem('authToken'));
-        };
-        checkLogin();
-        window.addEventListener('storage', checkLogin);
-        return () => window.removeEventListener('storage', checkLogin);
-    }, []);
+    const { isLoggedIn, logout } = useAuth();
 
     const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
     const handleLogout = () => {
-        localStorage.removeItem('authToken');
-        setIsLoggedIn(false);
+        logout(); // update auth context
         navigate('/');
+        navigate(0);
     };
 
     return (

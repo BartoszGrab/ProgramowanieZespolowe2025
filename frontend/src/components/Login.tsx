@@ -23,6 +23,7 @@ import ColorModeSelect from '../customs/ColorModeSelect';
 import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
 import mainTheme from '../themes/mainTheme';
 import { PageLayout } from './layouts/PageLayout';
+import { useAuth } from '../context/AuthContext';
 
 /**
  * Styled card component for the login form.
@@ -79,6 +80,8 @@ export default function Login() {
 
   // --- Hooks ---
   const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   // --- State: Submission Status ---
   const [isLoading, setIsLoading] = useState(false);
@@ -149,9 +152,8 @@ export default function Login() {
       // Api call to login endpoint
       const response = await axios.post('/api/auth/login', formData);
       console.log('Login successful:', response.data);
-
-      // Store auth token and navigate to dashboard
-      localStorage.setItem('authToken', response.data.token);
+      // Store the token and update auth state
+      login(response.data.token);
       navigate('/dashboard');
     } catch (error: any) {
       console.error('Login failed:', error);

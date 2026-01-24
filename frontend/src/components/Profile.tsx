@@ -2,78 +2,72 @@ import { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import {
     Typography,
-    Container,
     Avatar,
     Grid,
-    Paper,
     TextField,
     Button,
     Stack,
-    Alert
+    Alert,
+    Box,
+    CssBaseline
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import mainTheme from '../themes/mainTheme';
+import { PageLayout } from '../components/layouts/PageLayout'; // Zakładam, że masz ten layout dostępny
+import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
-/**
- * Styled container for the profile page layout.
- * Adds vertical padding for spacing.
- */
-const ProfileContainer = styled(Container)(({ theme }) => ({
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-}));
-
-/**
- * Styled paper component for displaying user statistics.
- * Centers content and adds a subtle shadow for depth.
- */
-const StatCard = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(3),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px',
-}));
-
-/**
- * Data Transfer Object representing the current user's profile.
- */
+// --- Interfejsy ---
 interface UserProfile {
-    /** Unique identifier for the user */
     id: string;
-    /** Publicly visible name */
     displayName: string;
-    /** Email address associated with the account */
     email: string;
-    /** URL to the user's avatar image */
     profilePictureUrl?: string;
-    /** Total number of shelves created by the user */
     shelvesCount: number;
-    /** Total number of unique books across all shelves */
     uniqueBooksCount: number;
-    /** Date when the user account was created */
     createdAt: string;
 }
 
-/**
- * The Profile page component.
- * Displays user details, statistics, and allows avatar updates.
- */
+// --- Komponent Statystyki (Stylizowany na ActionCard z Home) ---
+const StatCard = ({ icon: Icon, value, label, delay }: any) => (
+    <div
+        className={`
+            group relative h-full flex flex-col justify-center items-center text-center p-6
+            bg-white/70 backdrop-blur-md
+            border border-primary-light/30 rounded-3xl
+            shadow-sm hover:shadow-xl hover:shadow-primary-main/10 hover:-translate-y-1
+            transition-all duration-500 ease-out overflow-hidden
+        `}
+        style={{ animationDelay: delay }}
+    >
+        {/* Dekoracyjne tło hover */}
+        <div className="absolute inset-0 bg-linear-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        {/* Ikona */}
+        <div className="relative z-10 mb-3 p-3 rounded-full bg-primary-light/10 text-primary-main group-hover:bg-primary-main group-hover:text-white transition-all duration-300">
+            <Icon sx={{ fontSize: 28 }} />
+        </div>
+
+        {/* Wartość z Gradientem */}
+        <span className="relative z-10 text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-primary-main to-primary-dark mb-1">
+            {value}
+        </span>
+
+        {/* Etykieta */}
+        <span className="relative z-10 text-sm text-text-secondary font-medium uppercase tracking-wider opacity-80">
+            {label}
+        </span>
+    </div>
+);
+
 export default function Profile() {
-    // --- State: Profile Data ---
+    // --- State ---
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-
-    // --- State: Avatar Update ---
     const [newAvatarUrl, setNewAvatarUrl] = useState('');
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-    /**
-     * Fetches the current user's profile data from the backend on mount.
-     */
+    // --- Data Fetching ---
     const fetchProfile = async () => {
         try {
             const response = await axios.get('/api/users/me');
@@ -87,21 +81,17 @@ export default function Profile() {
         }
     };
 
-    // --- Effects ---
     useEffect(() => {
         fetchProfile();
     }, []);
 
-    /**
-     * Updates the user's profile picture URL.
-     * Sends the new URL to the backend and updates local state on success.
-     */
+    // --- Handlers ---
     const handleAvatarUpdate = async () => {
         try {
             await axios.put('/api/users/me/avatar', { profilePictureUrl: newAvatarUrl });
             setMessage({ type: 'success', text: 'Avatar updated successfully!' });
-            
-            // Optimistically update local state to reflect changes immediately
+
+            // Optimistic update
             if (profile) {
                 setProfile({ ...profile, profilePictureUrl: newAvatarUrl });
             }
@@ -111,73 +101,132 @@ export default function Profile() {
         }
     };
 
-    // --- Render: Loading & Error States ---
-    if (isLoading) return <Typography sx={{ mt: 4, textAlign: 'center' }}>Loading profile...</Typography>;
-    if (!profile) return <Typography sx={{ mt: 4, textAlign: 'center' }}>Profile not found.</Typography>;
+    // --- Render Loading/Error ---
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-text-secondary">
+                <Typography variant="h6">Loading profile...</Typography>
+            </div>
+        );
+    }
+
+    if (!profile) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-text-secondary">
+                <Typography variant="h6">Profile not found.</Typography>
+            </div>
+        );
+    }
 
     return (
-        <ProfileContainer maxWidth="md">
-            {/* --- Section: User Details & Settings --- */}
-            <Paper sx={{ p: 4, mb: 4 }}>
-                <Grid container spacing={4} alignItems="center">
-                    {/* Left Column: Avatar & Info */}
-                    <Grid size={{ xs: 12, md: 4 }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <Avatar
-                            alt={profile.displayName}
-                            src={profile.profilePictureUrl}
-                            sx={{ width: 150, height: 150, mb: 2, boxShadow: 3 }}
-                        />
-                        <Typography variant="h5" fontWeight="bold">{profile.displayName}</Typography>
-                        <Typography variant="body2" color="text.secondary">{profile.email}</Typography>
-                        <Typography variant="caption" sx={{ mt: 1 }}>Joined: {new Date(profile.createdAt).toLocaleDateString()}</Typography>
-                    </Grid>
+        <ThemeProvider theme={mainTheme}>
+            <CssBaseline enableColorScheme />
+            <PageLayout>
+                <Box className="max-w-4xl mx-auto py-8 px-4">
 
-                    {/* Right Column: Update Form */}
-                    <Grid size={{ xs: 12, md: 8 }}>
-                        <Typography variant="h6" gutterBottom>Update Avatar</Typography>
-                        <Typography variant="body2" color="text.secondary" paragraph>
-                            Paste a URL to an image to set your profile picture.
-                        </Typography>
-                        <Stack direction="row" spacing={2}>
-                            <TextField
-                                fullWidth
-                                label="Image URL"
-                                variant="outlined"
-                                size="small"
-                                value={newAvatarUrl}
-                                onChange={(e) => setNewAvatarUrl(e.target.value)}
+                    {/* --- Header: User Details Card --- */}
+                    <div className="mb-8 p-8 md:p-10 bg-white/70 backdrop-blur-md border border-primary-light/30 rounded-3xl shadow-sm relative overflow-hidden">
+                        {/* Dekoracyjny gradient w tle karty */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-main/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+
+                        <Grid container spacing={6} alignItems="center" className="relative z-10">
+                            
+                            {/* Left: Avatar & Info */}
+                            <Grid size={{ xs: 12, md: 5 }} className="flex flex-col items-center md:items-start text-center md:text-left">
+                                <div className="relative mb-6 group">
+                                    <div className="absolute -inset-1 bg-linear-to-r from-primary-main to-secondary-main rounded-full opacity-70 blur-sm group-hover:opacity-100 transition duration-500"></div>
+                                    <Avatar
+                                        alt={profile.displayName}
+                                        src={profile.profilePictureUrl}
+                                        sx={{ width: 140, height: 140, border: '4px solid white' }}
+                                        className="relative shadow-xl"
+                                    />
+                                </div>
+                                
+                                <Typography variant="h4" className="font-bold text-text-primary mb-1">
+                                    {profile.displayName}
+                                </Typography>
+                                <Typography variant="body1" className="text-text-secondary mb-2">
+                                    {profile.email}
+                                </Typography>
+                                <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary-light/10 text-primary-dark text-xs font-medium">
+                                    Joined: {new Date(profile.createdAt).toLocaleDateString()}
+                                </div>
+                            </Grid>
+
+                            {/* Right: Settings / Update Form */}
+                            <Grid size={{ xs: 12, md: 7 }}>
+                                <div className="bg-white/50 rounded-2xl p-6 border border-primary-light/20">
+                                    <Typography variant="h6" className="font-bold text-text-primary mb-2">
+                                        Update Avatar
+                                    </Typography>
+                                    <Typography variant="body2" className="text-text-secondary mb-4 opacity-80">
+                                        Paste a URL to an image to set your profile picture.
+                                    </Typography>
+
+                                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                                        <TextField
+                                            fullWidth
+                                            label="Image URL"
+                                            variant="outlined"
+                                            size="small"
+                                            value={newAvatarUrl}
+                                            onChange={(e) => setNewAvatarUrl(e.target.value)}
+                                            sx={{ 
+                                                bgcolor: 'white',
+                                                '& .MuiOutlinedInput-root': { borderRadius: '12px' } 
+                                            }}
+                                        />
+                                        <Button 
+                                            variant="contained" 
+                                            onClick={handleAvatarUpdate}
+                                            disableElevation
+                                            sx={{ 
+                                                borderRadius: '12px',
+                                                textTransform: 'none',
+                                                fontWeight: 'bold',
+                                                px: 4
+                                            }}
+                                        >
+                                            Save
+                                        </Button>
+                                    </Stack>
+
+                                    {message && (
+                                        <Alert 
+                                            severity={message.type} 
+                                            sx={{ mt: 2, borderRadius: '12px' }}
+                                        >
+                                            {message.text}
+                                        </Alert>
+                                    )}
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </div>
+
+                    {/* --- Section: Statistics --- */}
+                    <Grid container spacing={4}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                            <StatCard
+                                icon={CollectionsBookmarkIcon}
+                                value={profile.shelvesCount}
+                                label="Shelf Collections"
+                                delay="0.1s"
                             />
-                            <Button variant="contained" onClick={handleAvatarUpdate}>Save</Button>
-                        </Stack>
-                        {message && (
-                            <Alert severity={message.type} sx={{ mt: 2 }}>
-                                {message.text}
-                            </Alert>
-                        )}
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                            <StatCard
+                                icon={MenuBookIcon}
+                                value={profile.uniqueBooksCount}
+                                label="Unique Books"
+                                delay="0.2s"
+                            />
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Paper>
 
-            <Grid container spacing={3}>
-
-                {/* --- Section: Statistics --- */}
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <StatCard>
-                        <Typography variant="h3" color="primary" fontWeight="bold">
-                            {profile.shelvesCount}
-                        </Typography>
-                        <Typography variant="subtitle1">Shelf Collections</Typography>
-                    </StatCard>
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <StatCard>
-                        <Typography variant="h3" color="secondary" fontWeight="bold">
-                            {profile.uniqueBooksCount}
-                        </Typography>
-                        <Typography variant="subtitle1">Unique Books Collected</Typography>
-                    </StatCard>
-                </Grid>
-            </Grid>
-        </ProfileContainer>
+                </Box>
+            </PageLayout>
+        </ThemeProvider>
     );
 }

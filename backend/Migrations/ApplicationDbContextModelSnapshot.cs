@@ -185,6 +185,9 @@ namespace backend.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("FavoriteBookId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("FollowersCount")
                         .HasColumnType("integer");
 
@@ -192,6 +195,9 @@ namespace backend.Migrations
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsGenerated")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastLoginAt")
@@ -237,6 +243,8 @@ namespace backend.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FavoriteBookId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -664,6 +672,15 @@ namespace backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("backend.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("backend.Models.Book", "FavoriteBook")
+                        .WithMany()
+                        .HasForeignKey("FavoriteBookId");
+
+                    b.Navigation("FavoriteBook");
                 });
 
             modelBuilder.Entity("backend.Models.BookAuthor", b =>

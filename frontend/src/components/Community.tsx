@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
@@ -14,6 +13,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Divider from '@mui/material/Divider';
 import { styled, ThemeProvider } from '@mui/material/styles';
 import PeopleIcon from '@mui/icons-material/People';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -47,7 +48,6 @@ interface UserCommunityDto {
 
 /**
  * Styled container for the entire page layout.
- * Includes responsive padding and a radial gradient background.
  */
 const PageContainer = styled(Stack)(({ theme }) => ({
     minHeight: '100vh',
@@ -69,7 +69,6 @@ const PageContainer = styled(Stack)(({ theme }) => ({
 
 /**
  * Styled card component for individual user profiles.
- * Adds hover effects (lift and shadow) for better interactivity.
  */
 const UserCard = styled(MuiCard)(({ theme }) => ({
     height: '100%',
@@ -85,6 +84,7 @@ const UserCard = styled(MuiCard)(({ theme }) => ({
         transform: 'translateY(-3px)',
         boxShadow: 'hsla(220, 30%, 5%, 0.1) 0px 15px 25px 0px',
         borderColor: theme.palette.primary.main,
+        cursor: 'pointer'
     },
 }));
 
@@ -96,23 +96,27 @@ export default function Community() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [users, setUsers] = useState<UserCommunityDto[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
 
-    /**
-     * Initial data fetch on component mount.
-     */
+    // Debounce search input
     useEffect(() => {
-        fetchUsers();
-    }, []);
+        const delayDebounceFn = setTimeout(() => {
+            fetchUsers(searchQuery);
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery]);
 
     /**
-     * Retrieves the list of all community members from the backend.
+     * Retrieves the list of all community members or search results from the backend.
      */
-    const fetchUsers = async () => {
+    const fetchUsers = async (query = '') => {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await axios.get<UserCommunityDto[]>('/api/users');
+            const endpoint = query ? `/api/users/search?q=${encodeURIComponent(query)}` : '/api/users';
+            const response = await axios.get<UserCommunityDto[]>(endpoint);
             setUsers(response.data);
         } catch (err) {
             console.error('Error fetching users:', err);
@@ -124,12 +128,9 @@ export default function Community() {
 
     /**
      * Toggles the follow status for a specific user.
-     * Performs an optimistic UI update to ensure the interface feels snappy,
-     * updating the `isFollowing` state and `followersCount` immediately.
-     * 
-     * @param user - The user object to follow or unfollow
-     */    
-    const handleFollowToggle = async (user: UserCommunityDto) => {
+     */
+    const handleFollowToggle = async (user: UserCommunityDto, event: React.MouseEvent) => {
+        event.stopPropagation(); // Prevent navigation when clicking follow button
         try {
             if (user.isFollowing) {
                 // Optimistic update: Unfollow
@@ -150,8 +151,11 @@ export default function Community() {
             }
         } catch (err) {
             console.error('Error toggling follow:', err);
-            // Optionally show user feedback
         }
+    };
+
+    const handleCardClick = (userId: string) => {
+        navigate(`/user/${userId}`);
     };
 
     return (
@@ -161,25 +165,40 @@ export default function Community() {
 
             <PageContainer>
                 {/* --- Section: Header --- */}
-                <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto' }}>
+                <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto', textAlign: 'center' }}>
                     <Button
                         startIcon={<ArrowBackIcon />}
                         onClick={() => navigate('/')}
-                        sx={{ mb: 2 }}
+                        sx={{ mb: 2, display: 'inline-flex', alignSelf: 'flex-start' }}
                     >
                         Back to Home
                     </Button>
                     <Typography
                         component="h1"
                         variant="h4"
-                        sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 2 }}
+                        sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2 }}
                     >
                         <PeopleIcon fontSize="large" color="primary" />
                         Community
                     </Typography>
-                    <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+                    <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
                         Connect with other readers and discover new friends
                     </Typography>
+
+                    {/* Search Bar */}
+                    <Box sx={{ maxWidth: 500, mx: 'auto' }}>
+                        <TextField
+                            fullWidth
+                            label="Search users..."
+                            variant="outlined"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search by name or email"
+                            sx={{
+                                backgroundColor: 'background.paper',
+                            }}
+                        />
+                    </Box>
                 </Box>
 
                 {/* --- Section: Main Content --- */}
@@ -198,15 +217,15 @@ export default function Community() {
                     {/* Empty State */}
                     {!isLoading && !error && users.length === 0 && (
                         <Typography variant="h6" align="center" color="text.secondary" sx={{ mt: 4 }}>
-                            No users found. Be the first to invite your friends!
+                            No users found.
                         </Typography>
                     )}
-                    
+
                     {/* Users Grid */}
                     <Grid container spacing={3}>
                         {users.map((user) => (
                             <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={user.id}>
-                                <UserCard>
+                                <UserCard onClick={() => handleCardClick(user.id)}>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
                                         <Avatar
                                             src={user.profilePictureUrl}
@@ -219,21 +238,24 @@ export default function Community() {
                                         <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 1 }}>
                                             {user.bio || 'No bio available'}
                                         </Typography>
-                                        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                                            <Typography variant="caption" color="text.secondary">
-                                                <strong>{user.followersCount}</strong> Followers
-                                            </Typography>
-                                            <Typography variant="caption" color="text.secondary">
-                                                <strong>{user.followingCount}</strong> Following
-                                            </Typography>
-                                        </Box>
+                                        <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                                            <Box textAlign="center">
+                                                <Typography variant="subtitle2" fontWeight="bold">{user.followersCount}</Typography>
+                                                <Typography variant="caption" color="text.secondary">Followers</Typography>
+                                            </Box>
+                                            <Divider orientation="vertical" flexItem />
+                                            <Box textAlign="center">
+                                                <Typography variant="subtitle2" fontWeight="bold">{user.followingCount}</Typography>
+                                                <Typography variant="caption" color="text.secondary">Following</Typography>
+                                            </Box>
+                                        </Stack>
                                     </Box>
                                     <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'center' }}>
                                         <Button
                                             variant={user.isFollowing ? "outlined" : "contained"}
                                             color={user.isFollowing ? "secondary" : "primary"}
                                             startIcon={user.isFollowing ? <PersonRemoveIcon /> : <PersonAddIcon />}
-                                            onClick={() => handleFollowToggle(user)}
+                                            onClick={(e) => handleFollowToggle(user, e)}
                                             fullWidth
                                         >
                                             {user.isFollowing ? 'Unfollow' : 'Follow'}

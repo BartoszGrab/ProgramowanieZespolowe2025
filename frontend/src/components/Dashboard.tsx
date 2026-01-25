@@ -19,6 +19,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // Custom imports
 import mainTheme from '../themes/mainTheme';
@@ -170,17 +171,26 @@ export default function Dashboard() {
             <PageLayout>
                 
                 {/* --- Section: Header --- */}
-                <div className="flex items-center gap-3 mb-8 animate-fade-in pl-2">
-                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-sm">
-                         <AutoStoriesIcon sx={{ fontSize: 36 }} className="text-primary-light" />
-                    </div>
-                    <div>
-                        <h1 className="text-3xl sm:text-4xl font-bold text-primary-light tracking-tight drop-shadow-sm">
-                            My Library
-                        </h1>
-                        <p className="text-primary-light font-medium text-sm sm:text-base">
-                            Manage your collections
-                        </p>
+                <div className="w-full max-w-7xl mx-auto mb-8 pl-2 animate-fade-in">
+                     <Button
+                        startIcon={<ArrowBackIcon />}
+                        onClick={() => navigate('/')}
+                        sx={{ mb: 3, color: 'primary.light', '&:hover': { color: 'primary.main' } }}
+                    >
+                        Back to Home
+                    </Button>
+                    <div className="flex items-center gap-3">
+                        <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-sm">
+                            <AutoStoriesIcon sx={{ fontSize: 36 }} className="text-primary-light" />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl sm:text-4xl font-bold text-primary-light tracking-tight drop-shadow-sm">
+                                My Library
+                            </h1>
+                            <p className="text-primary-light font-medium text-sm sm:text-base">
+                                Manage your collections
+                            </p>
+                        </div>
                     </div>
                 </div>
 

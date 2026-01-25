@@ -312,10 +312,10 @@ export default function Recommendations() {
                 <div className="w-full max-w-7xl mx-auto mb-8 pl-2 animate-fade-in">
                     <Button
                         startIcon={<ArrowBackIcon />}
-                        onClick={() => navigate('/dashboard')}
+                        onClick={() => navigate('/')}
                         sx={{ mb: 3, color: 'primary.light', '&:hover': { color: 'primary.main' } }}
                     >
-                        Back to Dashboard
+                        Back to Home
                     </Button>
                     
                     <div className="flex items-center gap-3">

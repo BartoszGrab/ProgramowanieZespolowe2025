@@ -193,10 +193,10 @@ export default function Community() {
                 
                 {/* --- Header Section --- */}
                 <div className="w-full max-w-7xl mx-auto mb-8 pl-2 animate-fade-in">
-                    <Button
+                     <Button
                         startIcon={<ArrowBackIcon />}
                         onClick={() => navigate('/')}
-                        sx={{ mb: 3, color: 'text.secondary', '&:hover': { color: 'primary.main' } }}
+                        sx={{ mb: 3, color: 'primary.light', '&:hover': { color: 'primary.main' } }}
                     >
                         Back to Home
                     </Button>

@@ -1,232 +1,372 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from '../api/axios';
 import {
     Typography,
     Avatar,
-    Grid,
+    Paper,
     TextField,
     Button,
     Stack,
     Alert,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Autocomplete,
     Box,
-    CssBaseline
+    Divider
 } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import mainTheme from '../themes/mainTheme';
-import { PageLayout } from '../components/layouts/PageLayout'; // Zakładam, że masz ten layout dostępny
-import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+import EditIcon from '@mui/icons-material/Edit';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
-// --- Interfejsy ---
+// --- Types ---
+
+interface BookDto {
+    id: string;
+    title: string;
+    coverUrl?: string;
+    authors: string[];
+    googleBookId?: string;
+}
+
 interface UserProfile {
     id: string;
     displayName: string;
     email: string;
     profilePictureUrl?: string;
+    bio?: string;
     shelvesCount: number;
     uniqueBooksCount: number;
+    followersCount: number;
+    followingCount: number;
     createdAt: string;
+    isFollowing?: boolean;
+    favoriteBook?: BookDto;
 }
 
-// --- Komponent Statystyki (Stylizowany na ActionCard z Home) ---
-const StatCard = ({ icon: Icon, value, label, delay }: any) => (
-    <div
-        className={`
-            group relative h-full flex flex-col justify-center items-center text-center p-6
-            bg-white/70 backdrop-blur-md
-            border border-primary-light/30 rounded-3xl
-            shadow-sm hover:shadow-xl hover:shadow-primary-main/10 hover:-translate-y-1
-            transition-all duration-500 ease-out overflow-hidden
-        `}
-        style={{ animationDelay: delay }}
-    >
-        {/* Dekoracyjne tło hover */}
-        <div className="absolute inset-0 bg-linear-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+interface UpdateProfileDto {
+    bio?: string;
+    favoriteBookId?: string;
+    googleBookId?: string;
+}
 
-        {/* Ikona */}
-        <div className="relative z-10 mb-3 p-3 rounded-full bg-primary-light/10 bg-linear-to-r from-primary-main to-primary-dark group-hover:bg-primary-main group-hover:text-white transition-all duration-300">
-            <Icon sx={{ fontSize: 28 }} />
-        </div>
+// --- Styled Components ---
 
-        {/* Wartość z Gradientem */}
-        <span className="relative z-10 text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-primary-main to-primary-dark mb-1">
-            {value}
-        </span>
+const ProfileContainer = styled(Container)(({ theme }) => ({
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(8),
+}));
 
-        {/* Etykieta */}
-        <span className="relative z-10 text-sm bg-clip-text text-transparent bg-linear-to-r from-primary-main to-primary-dark brightness-75 font-medium uppercase tracking-wider opacity-80">
-            {label}
-        </span>
-    </div>
-);
+const StatCard = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(3),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+    transition: 'transform 0.2s',
+    '&:hover': {
+        transform: 'translateY(-4px)',
+    }
+}));
+
+const BookCover = styled('img')({
+    width: '80px',
+    height: '120px',
+    objectFit: 'cover',
+    borderRadius: '4px',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+});
 
 export default function Profile() {
-    // --- State ---
+    const { id } = useParams<{ id: string }>();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [newAvatarUrl, setNewAvatarUrl] = useState('');
-    const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
-    // --- Data Fetching ---
+    // Edit Modal State
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [editBio, setEditBio] = useState('');
+    const [editAvatarUrl, setEditAvatarUrl] = useState('');
+    const [selectedBook, setSelectedBook] = useState<BookDto | null>(null);
+    const [searchBooks, setSearchBooks] = useState<BookDto[]>([]);
+    const [searching, setSearching] = useState(false);
+
+    // Determine if we are viewing our own profile
+    const isOwnProfile = !id;
+
+    useEffect(() => {
+        fetchProfile();
+    }, [id]);
+
     const fetchProfile = async () => {
+        setIsLoading(true);
+        setError(null);
         try {
-            const response = await axios.get('/api/users/me');
+            const endpoint = id ? `/api/users/${id}` : '/api/users/me';
+            const response = await axios.get(endpoint);
             setProfile(response.data);
-            setNewAvatarUrl(response.data.profilePictureUrl || '');
-        } catch (error) {
-            console.error("Failed to fetch profile", error);
-            setMessage({ type: 'error', text: 'Failed to load profile data.' });
+
+            // Initialize edit state
+            setEditBio(response.data.bio || '');
+            setEditAvatarUrl(response.data.profilePictureUrl || '');
+            setSelectedBook(response.data.favoriteBook || null);
+
+        } catch (err) {
+            console.error("Failed to fetch profile", err);
+            setError("Failed to load profile.");
         } finally {
             setIsLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchProfile();
-    }, []);
+    const handleFollowToggle = async () => {
+        if (!profile) return;
 
-    // --- Handlers ---
-    const handleAvatarUpdate = async () => {
         try {
-            await axios.put('/api/users/me/avatar', { profilePictureUrl: newAvatarUrl });
-            setMessage({ type: 'success', text: 'Avatar updated successfully!' });
-
-            // Optimistic update
-            if (profile) {
-                setProfile({ ...profile, profilePictureUrl: newAvatarUrl });
+            if (profile.isFollowing) {
+                await axios.delete(`/api/users/${profile.id}/follow`);
+                setProfile(prev => prev ? ({ ...prev, isFollowing: false, followersCount: prev.followersCount - 1 }) : null);
+            } else {
+                await axios.post(`/api/users/${profile.id}/follow`);
+                setProfile(prev => prev ? ({ ...prev, isFollowing: true, followersCount: prev.followersCount + 1 }) : null);
             }
-        } catch (error: any) {
-            console.error("Failed to update avatar", error);
-            setMessage({ type: 'error', text: 'Failed to update avatar. Please check the URL.' });
+        } catch (err) {
+            console.error("Failed to toggle follow", err);
         }
     };
 
-    // --- Render Loading/Error ---
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center text-text-secondary">
-                <Typography variant="h6">Loading profile...</Typography>
-            </div>
-        );
-    }
+    const handleSearchBooks = async (query: string) => {
+        if (!query) {
+            setSearchBooks([]);
+            return;
+        }
+        setSearching(true);
+        try {
+            const response = await axios.get(`/api/books?search=${encodeURIComponent(query)}`);
+            setSearchBooks(response.data);
+        } catch (err) {
+            console.error("Failed to search books", err);
+        } finally {
+            setSearching(false);
+        }
+    };
 
-    if (!profile) {
-        return (
-            <div className="min-h-screen flex items-center justify-center text-text-secondary">
-                <Typography variant="h6">Profile not found.</Typography>
-            </div>
-        );
-    }
+    const handleSaveProfile = async () => {
+        try {
+            if (editAvatarUrl !== profile?.profilePictureUrl) {
+                await axios.put('/api/users/me/avatar', { profilePictureUrl: editAvatarUrl });
+            }
+
+            let favBookId = selectedBook?.id;
+            // Check if selected book is external (Google Book) - indicated by Empty GUID
+            if (selectedBook && selectedBook.id === '00000000-0000-0000-0000-000000000000') {
+                favBookId = undefined; // Do not send invalid GUID
+            }
+
+            const updateDto: UpdateProfileDto = {
+                bio: editBio,
+                favoriteBookId: favBookId,
+                googleBookId: selectedBook?.id === '00000000-0000-0000-0000-000000000000' ? selectedBook.googleBookId : undefined
+            };
+
+            await axios.put('/api/users/me/profile', updateDto);
+
+            setIsEditOpen(false);
+            fetchProfile();
+        } catch (err) {
+            console.error("Failed to update profile", err);
+        }
+    };
+
+    if (isLoading) return <Typography sx={{ mt: 8, textAlign: 'center' }}>Loading...</Typography>;
+    if (error || !profile) return <Container maxWidth="md"><Alert severity="error" sx={{ mt: 4 }}>{error || "Profile not found"}</Alert></Container>;
 
     return (
-        <ThemeProvider theme={mainTheme}>
-            <CssBaseline enableColorScheme />
-            <PageLayout>
-                <Box className="max-w-4xl mx-auto py-8 px-4">
-
-                    {/* --- Header: User Details Card --- */}
-                    <div className="mb-8 p-8 md:p-10 bg-white/70 backdrop-blur-md border border-primary-light/30 rounded-3xl shadow-sm relative overflow-hidden">
-                        {/* Dekoracyjny gradient w tle karty */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-main/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-
-                        <Grid container spacing={6} alignItems="center" className="relative z-10">
-                            
-                            {/* Left: Avatar & Info */}
-                            <Grid size={{ xs: 12, md: 5 }} className="flex flex-col items-center md:items-start text-center md:text-left">
-                                <div className="relative mb-6 group">
-                                    <div className="absolute -inset-1 bg-linear-to-r from-primary-main to-secondary-main rounded-full opacity-70 blur-sm group-hover:opacity-100 transition duration-500"></div>
-                                    <Avatar
-                                        alt={profile.displayName}
-                                        src={profile.profilePictureUrl}
-                                        sx={{ width: 140, height: 140, border: '4px solid white' }}
-                                        className="relative shadow-xl"
-                                    />
-                                </div>
-                                
-                                <Typography variant="h4" className="font-bold text-text-primary mb-1">
+        <ProfileContainer maxWidth="lg">
+            <Paper elevation={0} sx={{ p: 4, mb: 4, borderRadius: 4, border: '1px solid', borderColor: 'divider' }}>
+                <Grid container spacing={4} alignItems="center">
+                    <Grid size={{ xs: 12, md: 3 }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Avatar
+                            src={profile.profilePictureUrl}
+                            alt={profile.displayName}
+                            sx={{ width: 160, height: 160, mb: 2, boxShadow: 3, border: '4px solid white' }}
+                        />
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 9 }}>
+                        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="flex-start" spacing={2}>
+                            <Box>
+                                <Typography variant="h3" fontWeight={800} gutterBottom>
                                     {profile.displayName}
                                 </Typography>
-                                <Typography variant="body1" className="text-text-secondary mb-2">
-                                    {profile.email}
+                                <Typography variant="body1" color="text.secondary" sx={{ mb: 2, maxWidth: '600px' }}>
+                                    {profile.bio || "No bio yet."}
                                 </Typography>
-                                <div className="inline-flex items-center py-1 rounded-full bg-primary-light/10 text-primary-dark text-xs font-medium">
-                                    Joined: {new Date(profile.createdAt).toLocaleDateString()}
-                                </div>
-                            </Grid>
+                                <Typography variant="caption" color="text.secondary">
+                                    Joined {new Date(profile.createdAt).toLocaleDateString()}
+                                </Typography>
+                            </Box>
 
-                            {/* Right: Settings / Update Form */}
-                            <Grid size={{ xs: 12, md: 7 }}>
-                                <div className="bg-white/50 rounded-2xl p-6 border border-primary-light/20">
-                                    <Typography variant="h6" className="font-bold text-text-primary mb-2">
-                                        Update Avatar
-                                    </Typography>
-                                    <Typography variant="body2" className="text-text-secondary mb-4 opacity-80">
-                                        Paste a URL to an image to set your profile picture.
-                                    </Typography>
+                            <Box>
+                                {isOwnProfile ? (
+                                    <Button
+                                        variant="outlined"
+                                        startIcon={<EditIcon />}
+                                        onClick={() => setIsEditOpen(true)}
+                                    >
+                                        Edit Profile
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant={profile.isFollowing ? "outlined" : "contained"}
+                                        color={profile.isFollowing ? "secondary" : "primary"}
+                                        startIcon={profile.isFollowing ? <PersonRemoveIcon /> : <PersonAddIcon />}
+                                        onClick={handleFollowToggle}
+                                    >
+                                        {profile.isFollowing ? "Unfollow" : "Follow"}
+                                    </Button>
+                                )}
+                            </Box>
+                        </Stack>
 
-                                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                                        <TextField
-                                            fullWidth
-                                            label="Image URL"
-                                            variant="outlined"
-                                            size="small"
-                                            value={newAvatarUrl}
-                                            onChange={(e) => setNewAvatarUrl(e.target.value)}
-                                            sx={{ 
-                                                bgcolor: 'white',
-                                                '& .MuiOutlinedInput-root': { borderRadius: '12px' } 
-                                            }}
-                                        />
-                                        <Button 
-                                            variant="contained" 
-                                            onClick={handleAvatarUpdate}
-                                            disableElevation
-                                            sx={{ 
-                                                borderRadius: '12px',
-                                                textTransform: 'none',
-                                                fontWeight: 'bold',
-                                                px: 4
-                                            }}
-                                        >
-                                            Save
-                                        </Button>
-                                    </Stack>
-
-                                    {message && (
-                                        <Alert 
-                                            severity={message.type} 
-                                            sx={{ mt: 2, borderRadius: '12px' }}
-                                        >
-                                            {message.text}
-                                        </Alert>
-                                    )}
-                                </div>
-                            </Grid>
-                        </Grid>
-                    </div>
-
-                    {/* --- Section: Statistics --- */}
-                    <Grid container spacing={4}>
-                        <Grid size={{ xs: 12, sm: 6 }}>
-                            <StatCard
-                                icon={CollectionsBookmarkIcon}
-                                value={profile.shelvesCount}
-                                label="Shelf Collections"
-                                delay="0.1s"
-                            />
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 6 }}>
-                            <StatCard
-                                icon={MenuBookIcon}
-                                value={profile.uniqueBooksCount}
-                                label="Unique Books"
-                                delay="0.2s"
-                            />
-                        </Grid>
+                        <Stack direction="row" spacing={4} sx={{ mt: 4 }}>
+                            <Box textAlign="center">
+                                <Typography variant="h6" fontWeight="bold">{profile.followersCount}</Typography>
+                                <Typography variant="caption" color="text.secondary">Followers</Typography>
+                            </Box>
+                            <Box textAlign="center">
+                                <Typography variant="h6" fontWeight="bold">{profile.followingCount}</Typography>
+                                <Typography variant="caption" color="text.secondary">Following</Typography>
+                            </Box>
+                        </Stack>
                     </Grid>
+                </Grid>
+            </Paper>
 
-                </Box>
-            </PageLayout>
-        </ThemeProvider>
+            <Grid container spacing={3}>
+                <Grid size={{ xs: 12, md: 4 }}>
+                    <Stack spacing={3} height="100%">
+                        <StatCard>
+                            <Typography variant="h2" color="primary.main" fontWeight={800}>
+                                {profile.shelvesCount}
+                            </Typography>
+                            <Typography variant="subtitle1" fontWeight={600}>Shelves</Typography>
+                        </StatCard>
+                        <StatCard>
+                            <Typography variant="h2" color="secondary.main" fontWeight={800}>
+                                {profile.uniqueBooksCount}
+                            </Typography>
+                            <Typography variant="subtitle1" fontWeight={600}>Books Collected</Typography>
+                        </StatCard>
+                    </Stack>
+                </Grid>
+
+                <Grid size={{ xs: 12, md: 8 }}>
+                    <Paper elevation={0} sx={{ p: 3, height: '100%', borderRadius: 4, border: '1px solid', borderColor: 'divider' }}>
+                        <Typography variant="h6" fontWeight="bold" gutterBottom>
+                            Favorite Book
+                        </Typography>
+                        <Divider sx={{ mb: 2 }} />
+
+                        {profile.favoriteBook ? (
+                            <Stack direction="row" spacing={3}>
+                                <BookCover src={profile.favoriteBook.coverUrl || '/placeholder-book.png'} alt={profile.favoriteBook.title} />
+                                <Box>
+                                    <Typography variant="h5" fontWeight="bold" gutterBottom>
+                                        {profile.favoriteBook.title}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+                                        {profile.favoriteBook.authors.join(', ')}
+                                    </Typography>
+                                </Box>
+                            </Stack>
+                        ) : (
+                            <Box sx={{ py: 4, textAlign: 'center' }}>
+                                <Typography color="text.secondary">No favorite book selected.</Typography>
+                            </Box>
+                        )}
+                    </Paper>
+                </Grid>
+            </Grid>
+
+            {/* Edit Modal */}
+            <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)} maxWidth="sm" fullWidth>
+                <DialogTitle>Edit Profile</DialogTitle>
+                <DialogContent>
+                    <Stack spacing={3} sx={{ mt: 1 }}>
+                        <TextField
+                            label="Avatar URL"
+                            fullWidth
+                            value={editAvatarUrl}
+                            onChange={(e) => setEditAvatarUrl(e.target.value)}
+                        />
+                        <TextField
+                            label="Bio"
+                            fullWidth
+                            multiline
+                            rows={3}
+                            value={editBio}
+                            onChange={(e) => setEditBio(e.target.value)}
+                        />
+
+                        <Autocomplete
+                            options={searchBooks}
+                            loading={searching}
+                            getOptionLabel={(option) => option.title}
+                            filterOptions={(x) => x}
+                            onInputChange={(_, value) => handleSearchBooks(value)}
+                            value={selectedBook}
+                            onChange={(_, newValue) => setSelectedBook(newValue)}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Search Favorite Book"
+                                    placeholder="Type to search..."
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: (
+                                            <>
+                                                {searching ? <Box sx={{ mr: 2 }}>Loading...</Box> : null}
+                                                {params.InputProps.endAdornment}
+                                            </>
+                                        ),
+                                    }}
+                                />
+                            )}
+                            renderOption={(props, option) => (
+                                <li {...props} key={option.id}>
+                                    <Stack direction="row" spacing={2} alignItems="center">
+                                        {option.coverUrl &&
+                                            <img src={option.coverUrl} style={{ width: 30, height: 45, objectFit: 'cover' }} alt="" />
+                                        }
+                                        <Box>
+                                            <Typography variant="body2" fontWeight="bold">
+                                                {option.title}
+                                            </Typography>
+                                            <Typography variant="caption" color="text.secondary">
+                                                {option.authors.join(', ')}
+                                            </Typography>
+                                        </Box>
+                                    </Stack>
+                                </li>
+                            )}
+                        />
+                    </Stack>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setIsEditOpen(false)}>Cancel</Button>
+                    <Button onClick={handleSaveProfile} variant="contained">Save</Button>
+                </DialogActions>
+            </Dialog>
+
+        </ProfileContainer>
     );
 }

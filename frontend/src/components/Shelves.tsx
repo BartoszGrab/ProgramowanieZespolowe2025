@@ -3,21 +3,16 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../api/axios';
 
-// MUI imports
+// MUI imports (zachowane dla funkcjonalności modali i formularzy)
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Grid from '@mui/material/Grid';
-import CircularProgress from '@mui/material/CircularProgress';
 import LinearProgress from '@mui/material/LinearProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { styled, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -34,80 +29,115 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 // Custom imports
-import ColorModeSelect from '../customs/ColorModeSelect';
 import mainTheme from '../themes/mainTheme';
+import { PageLayout } from './layouts/PageLayout';
 import type { ShelfData, ShelfBook } from '../types/book';
 import BookDetailsDialog from './BookDetailsDialog';
 
+/**
+ * Komponent karty książki (Glassmorphism + Tailwind)
+ */
+const BookItem = ({ book, onClick, onRemove }: { book: ShelfBook, onClick: () => void, onRemove: (e: React.MouseEvent) => void }) => (
+    <div
+        onClick={onClick}
+        className={`
+            group relative flex flex-col justify-between h-full min-h-85 cursor-pointer
+            bg-white/70 backdrop-blur-md
+            border border-white/40 rounded-3xl
+            shadow-lg hover:shadow-2xl hover:shadow-primary-main/20 hover:-translate-y-2
+            transition-all duration-300 ease-out overflow-hidden
+        `}
+    >
+        {/* Dekoracyjne tło hover */}
+        <div className="absolute inset-0 bg-linear-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        {/* Cover Image Area */}
+        <div className="relative w-full h-48 bg-gray-50/50 flex items-center justify-center overflow-hidden rounded-t-3xl border-b border-white/40 pt-4">
+             {book.coverUrl ? (
+                <img 
+                    src={book.coverUrl} 
+                    alt={book.title} 
+                    className="h-full object-contain drop-shadow-md transform group-hover:scale-105 transition-transform duration-500" 
+                />
+            ) : (
+                <MenuBookIcon sx={{ fontSize: 60 }} className="text-primary-dark" />
+            )}
+            
+             {/* Delete Button (visible on hover) */}
+             <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
+                <IconButton 
+                    size="small" 
+                    onClick={onRemove}
+                    sx={{ bgcolor: 'rgba(255,255,255,0.8)', '&:hover': { bgcolor: '#ffebee', color: '#d32f2f' } }}
+                >
+                    <DeleteIcon fontSize="small" />
+                </IconButton>
+             </div>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col flex-grow p-5">
+            <h3 className="text-lg font-bold text-gray-900 leading-tight line-clamp-2 mb-1">
+                {book.title}
+            </h3>
+             <p className="text-sm text-primary-main font-bold mb-3">
+                {book.authors.join(', ')}
+            </p>
+
+            {/* Description */}
+            <p className="text-xs text-gray-600 line-clamp-3 mb-4 flex-grow leading-relaxed">
+                 {book.description || 'No description available.'}
+            </p>
+
+            {/* Progress Bar */}
+            {book.pageCount > 0 && (
+                <div className="mt-auto">
+                     <div className="flex justify-between items-end mb-1">
+                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Progress</span>
+                        <span className="text-xs font-bold text-primary-dark">
+                            {Math.round((book.currentPage / book.pageCount) * 100)}%
+                        </span>
+                     </div>
+                     <LinearProgress 
+                        variant="determinate" 
+                        value={(book.currentPage / book.pageCount) * 100} 
+                        sx={{ 
+                            borderRadius: 2, 
+                            height: 6, 
+                            bgcolor: 'rgba(0,0,0,0.05)', 
+                            '& .MuiLinearProgress-bar': { bgcolor: 'primary.main', borderRadius: 2 } 
+                        }} 
+                     />
+                </div>
+            )}
+        </div>
+    </div>
+);
 
 /**
- * Styled container for the shelves page layout.
- * Includes responsive padding and a radial gradient background.
+ * Komponent karty "Dodaj książkę"
  */
-const ShelvesContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '100vh',
-    padding: theme.spacing(4),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(6),
-    },
-    '&::before': {
-        content: '""',
-        display: 'block',
-        position: 'absolute',
-        zIndex: -1,
-        inset: 0,
-        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-    },
-}));
+const AddBookItem = ({ onClick }: { onClick: () => void }) => (
+    <div
+        onClick={onClick}
+        className={`
+            group flex flex-col items-center justify-center text-center p-6 cursor-pointer h-full min-h-[340px]
+            bg-white/30 backdrop-blur-sm
+            border-2 border-dashed border-primary-main/40 rounded-3xl
+            hover:bg-white/60 hover:border-primary-main hover:shadow-xl hover:-translate-y-1
+            transition-all duration-300
+        `}
+    >
+        <div className="mb-4 p-5 rounded-full bg-white/60 group-hover:bg-primary-main group-hover:text-white text-primary-main transition-all duration-300 shadow-sm">
+            <AddIcon sx={{ fontSize: 40 }} />
+        </div>
+        <h3 className="text-xl font-bold text-gray-800 mb-2">Add New Book</h3>
+        <p className="text-sm text-gray-600 font-medium max-w-50">
+            Expand your collection with a new title
+        </p>
+    </div>
+);
 
-/**
- * Styled card component for displaying books.
- * Adds hover effects (lift and shadow) for better interactivity.
- */
-const BookCard = styled(MuiCard)(({ theme }) => ({
-    height: '100%',
-    minHeight: '250px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    textAlign: 'center',
-    padding: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid',
-    borderColor: theme.palette.divider,
-    boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px',
-    transition: 'all 0.3s ease-in-out',
-    '&:hover': {
-        transform: 'translateY(-5px)',
-        boxShadow: 'hsla(220, 30%, 5%, 0.1) 0px 15px 25px 0px',
-        borderColor: theme.palette.primary.main,
-    },
-}));
-
-/**
- * Styled card component for the "Add New Book" action.
- * Uses dashed borders and transparency to distinguish it from content cards.
- */
-const AddBookCard = styled(BookCard)(({ theme }) => ({
-    backgroundColor: 'transparent',
-    borderStyle: 'dashed',
-    borderWidth: '2px',
-    borderColor: theme.palette.primary.dark,
-    color: theme.palette.primary.main,
-    '&:hover': {
-        transform: 'translateY(-5px)',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        borderColor: theme.palette.primary.main,
-    },
-}));
-
-/**
- * The Shelves page component.
- * Displays books in a specific shelf, allows adding new books or searching existing ones,
- * and provides functionality to remove books or view details.
- */
 export default function Shelves() {
     const { id } = useParams<{ id: string }>();
     const [shelfData, setShelfData] = useState<ShelfData | null>(null);
@@ -120,7 +150,6 @@ export default function Shelves() {
     const [openModal, setOpenModal] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
     const [createError, setCreateError] = useState<string>('');
-    // State for Autocomplete: can be an Author object or a string (if typing new)
     const [authorInput, setAuthorInput] = useState<string | { id: string; firstName: string; lastName: string } | null>(null);
 
     // --- State: Add Book Modal Tabs ---
@@ -137,16 +166,11 @@ export default function Shelves() {
     const [bookToDelete, setBookToDelete] = useState<ShelfBook | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    /**
-     * Fetches the books for the current shelf from the backend.
-     */
     const fetchShelfBooks = async () => {
         if (!id) return;
         try {
-            // Api Call
             const response = await axios.get(`/api/shelves/${id}/books`);
             const data = response.data;
-            // Response handling
             if (data && data.books) {
                 setShelfData(data);
             } else {
@@ -160,9 +184,6 @@ export default function Shelves() {
         }
     };
 
-    /**
-     * Initial data fetch on component mount.
-     */
     useEffect(() => {
         const fetchAuthors = async () => {
             try {
@@ -177,55 +198,33 @@ export default function Shelves() {
         fetchAuthors();
     }, [id]);
 
-    /**
-     * Opens the book details modal for the selected book.
-     * @param book - The book to display details for
-     */
     const handleBookClick = (book: ShelfBook) => {
         setSelectedBook(book);
         setDetailsOpen(true);
     };
 
-    /**
-     * Closes the book details modal.
-     */
     const handleCloseDetails = () => {
         setDetailsOpen(false);
         setSelectedBook(null);
     };
 
-    /**
-     * Navigates back to the dashboard.
-     */
     const handleBackToDashboard = () => {
         navigate('/dashboard');
     };
 
     // --- Modal Handlers ---
 
-    
-    /**
-     * Opens the add book modal.
-     */
     const handleOpenModal = () => {
         setOpenModal(true);
-        setTabValue(0); // Reset to first tab
+        setTabValue(0);
     };
 
-    /**
-     * Closes the add book modal and resets state.
-     */
     const handleCloseModal = () => {
         setOpenModal(false);
-        setCreateError(''); // Czyścimy błędy przy zamknięciu
-        setSelectedExistingBook(null); // Reset selection
+        setCreateError('');
+        setSelectedExistingBook(null);
     };
 
-    /**
-     * Handles tab changes in the add book modal.
-     * @param _event - The event (unused)
-     * @param newValue - The new tab index
-     */
     const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);
         setCreateError('');
@@ -233,10 +232,6 @@ export default function Shelves() {
 
     // --- Search Existing Book Logic ---
 
-    /**
-     * Searches for books in the library based on user input.
-     * @param query - The search query string
-     */
     const handleSearchBooks = async (query: string) => {
         if (!query) {
             setSearchBookOptions([]);
@@ -250,15 +245,10 @@ export default function Shelves() {
         }
     };
 
-    /**
-     * Adds an existing book to the shelf.
-     * Handles different ID types (local UUID, Google Book ID, ISBN).
-     */
     const handleAddExistingBook = async () => {
         if (!selectedExistingBook || !id) return;
         setIsCreating(true);
         try {
-            // Check if it's a "local" book (has a real UUID) or a "Google" book (empty/null ID)
             const hasValidId = selectedExistingBook.id && selectedExistingBook.id !== '00000000-0000-0000-0000-000000000000';
             const gId = selectedExistingBook.googleBookId || selectedExistingBook.GoogleBookId;
 
@@ -277,10 +267,8 @@ export default function Shelves() {
 
             setShelfData((prevData) => {
                 if (!prevData) return null;
-                // Add the selected book to the list (mapping to ShelfBook format roughly)
                 return { ...prevData };
             });
-            // Re-fetch to get the full book details (including new ID if created)
             fetchShelfBooks();
             handleCloseModal();
         } catch (err: any) {
@@ -294,13 +282,8 @@ export default function Shelves() {
 
     // --- Create New Book Logic ---
 
-    /**
-     * Handles the submission of the create new book form.
-     * Resolves author (create if new), creates book, adds to shelf.
-     * @param event - The form event
-     */
     const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // Zapobiega przeładowaniu strony
+        event.preventDefault();
         setIsCreating(true);
         setCreateError('');
 
@@ -308,24 +291,19 @@ export default function Shelves() {
         let authorIdToUse = '';
 
         try {
-            // 0. Resolve Author
             if (typeof authorInput === 'string') {
-                // User typed a new name -> Create Author
                 const nameParts = authorInput.trim().split(' ');
                 const firstName = nameParts[0] || 'Unknown';
                 const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Author';
-
                 const newAuthorPayload = { firstName, lastName };
                 const authorRes = await axios.post('/api/authors', newAuthorPayload);
                 authorIdToUse = authorRes.data.id;
             } else if (authorInput && 'id' in authorInput) {
-                // User selected existing author
                 authorIdToUse = authorInput.id;
             } else {
                 throw new Error("Please select or enter an author.");
             }
 
-            // Clean ISBN - remove hyphens
             const rawIsbn = formData.get('isbn') as string;
             const cleanIsbn = rawIsbn.replace(/-/g, '');
 
@@ -340,11 +318,9 @@ export default function Shelves() {
                 genreIds: []
             };
 
-            // 1. Create Book
             const bookResponse = await axios.post('/api/books', bookPayload);
             const createdBook = bookResponse.data;
 
-            // 2. Add to Shelf
             if (id) {
                 await axios.post(`/api/shelves/${id}/books`, { bookId: createdBook.id });
             }
@@ -368,20 +344,12 @@ export default function Shelves() {
 
     // --- Delete Book Logic ---
 
-    /**
-     * Initiates the delete confirmation for a book.
-     * @param event - The click event (to prevent opening details)
-     * @param book - The book to delete
-     */
     const handleRemoveClick = (event: React.MouseEvent, book: ShelfBook) => {
-        event.stopPropagation(); // Prevent opening details
+        event.stopPropagation();
         setBookToDelete(book);
         setDeleteConfirmOpen(true);
     };
 
-    /**
-     * Confirms and performs the book removal from the shelf.
-     */
     const handleConfirmDelete = async () => {
         if (!bookToDelete || !id) return;
         setIsDeleting(true);
@@ -396,17 +364,14 @@ export default function Shelves() {
                     books: prevData.books.filter(b => b.id !== bookToDelete.id)
                 };
             });
-            handleCancelDelete(); // Close only on success
+            handleCancelDelete();
         } catch (err: any) {
             console.error("Failed to remove book:", err);
             alert(`Failed to remove book: ${err.response?.data || err.message}`);
-            setIsDeleting(false); // Re-enable button
+            setIsDeleting(false);
         }
     };
 
-    /**
-     * Cancels the delete confirmation.
-     */
     const handleCancelDelete = () => {
         setDeleteConfirmOpen(false);
         setBookToDelete(null);
@@ -416,124 +381,92 @@ export default function Shelves() {
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
-            <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
-
-            <ShelvesContainer>
-                {/* --- Section: Header --- */}
-                <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto' }}>
+            
+            {/* Zastosowanie PageLayout dla spójnego wyglądu */}
+            <PageLayout>
+                
+                {/* --- Header Section --- */}
+                <div className="w-full max-w-7xl mx-auto mb-8 pl-2">
                     <Button
                         startIcon={<ArrowBackIcon />}
                         onClick={handleBackToDashboard}
-                        sx={{ mb: 2 }}
+                        sx={{ 
+                            mb: 3, 
+                            color: 'primary.light', // Tutaj zmieniasz kolor (np. 'text.primary', 'black', '#432816')
+                            '&:hover': { 
+                                color: 'white', // Kolor po najechaniu myszką
+                                backgroundColor: 'transparent' // Opcjonalnie usuwa tło przy hover
+                            } 
+                        }}
                     >
                         Back to Dashboard
                     </Button>
-                    <Typography
-                        component="h1"
-                        variant="h4"
-                        sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 2 }}
-                    >
-                        <MenuBookIcon fontSize="large" color="primary" />
-                        Books in {shelfData?.name || 'Shelf'}
-                    </Typography>
-                    {shelfData?.description && (
-                        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-                            {shelfData.description}
-                        </Typography>
-                    )}
-                </Box>
+                    
+                    <div className="flex items-center gap-3">
+                        <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-sm">
+                            <MenuBookIcon sx={{ fontSize: 36 }} className="text-primary-light" />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl sm:text-4xl font-bold text-primary-light tracking-tight drop-shadow-sm">
+                                {shelfData?.name || 'Shelf Loading...'}
+                            </h1>
+                            {shelfData?.description && (
+                                <p className="text-gray-700 font-medium text-sm sm:text-base mt-1">
+                                    {shelfData.description}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
-                {/* --- Section: Grid --- */}
-                <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
+                {/* --- Grid Section --- */}
+                <div className="w-full max-w-7xl mx-auto pb-10">
                     {isLoading && (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
-                            <CircularProgress />
-                        </Box>
+                        <div className="flex flex-col justify-center items-center mt-20 gap-4">
+                            <CircularProgress size={60} thickness={4} sx={{ color: 'white' }} />
+                        </div>
                     )}
-                    {error && <Alert severity="error" sx={{ mb: 4 }}>{error}</Alert>}
+
+                    {error && (
+                         <Alert severity="error" className="mb-8 shadow-md rounded-xl backdrop-blur-md bg-red-100/90">
+                            {error}
+                        </Alert>
+                    )}
 
                     {!isLoading && !error && shelfData && (
-                        <Grid container spacing={3}>
+                        /* CSS Grid layout zamiast MUI Grid */
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+                            
+                            {/* Add New Book Card */}
+                            <AddBookItem onClick={handleOpenModal} />
 
-                            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                                <AddBookCard onClick={handleOpenModal}>
-                                    <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                                        <AddIcon sx={{ fontSize: 60, opacity: 0.7 }} />
-                                        <Typography variant="h6" color="textPrimary" sx={{ opacity: 0.6 }} fontWeight="bold">Create New Book</Typography>
-                                        <Typography variant="body2" sx={{ opacity: 0.9 }}>Add your new favourite</Typography>
-                                    </CardContent>
-                                </AddBookCard>
-                            </Grid>
-
+                            {/* Books List */}
                             {shelfData.books.map((book) => (
-                                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={book.id}>
-                                    <BookCard onClick={() => handleBookClick(book)} sx={{ cursor: 'pointer', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                                        <CardMedia
-                                            component="img"
-                                            height="200"
-                                            image={book.coverUrl || 'https://via.placeholder.com/150'}
-                                            alt={book.title}
-                                            sx={{ objectFit: 'contain', backgroundColor: '#f5f5f5', pt: 2 }}
-                                        />
-                                        <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                                            <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold', fontSize: '1rem', lineHeight: 1.2, mb: 1 }}>
-                                                {book.title}
-                                            </Typography>
-                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                                                    {book.authors.join(', ')}
-                                                </Typography>
-                                                <IconButton
-                                                    size="small"
-                                                    color="error"
-                                                    onClick={(e: React.MouseEvent) => handleRemoveClick(e, book)}
-                                                    sx={{
-                                                        mt: -0.5,
-                                                        mr: -0.5,
-                                                        opacity: 0.6,
-                                                        '&:hover': { opacity: 1, backgroundColor: 'rgba(211, 47, 47, 0.1)' }
-                                                    }}
-                                                >
-                                                    <DeleteIcon fontSize="small" />
-                                                </IconButton>
-                                            </Box>
-
-                                            {/* Progress Bar */}
-                                            {book.pageCount > 0 && (
-                                                <Box sx={{ width: '100%', mr: 1, mb: 1 }}>
-                                                    <LinearProgress variant="determinate" value={(book.currentPage / book.pageCount) * 100} />
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        {Math.round((book.currentPage / book.pageCount) * 100)}% read
-                                                    </Typography>
-                                                </Box>
-                                            )}
-
-                                            <Typography
-                                                variant="body2"
-                                                color="text.secondary"
-                                                sx={{
-                                                    display: '-webkit-box',
-                                                    overflow: 'hidden',
-                                                    WebkitBoxOrient: 'vertical',
-                                                    WebkitLineClamp: 3, // Limit to 3 lines
-                                                    textOverflow: 'ellipsis'
-                                                }}
-                                            >
-                                                {book.description || 'No description available.'}
-                                            </Typography>
-                                        </CardContent>
-                                    </BookCard>
-                                </Grid>
+                                <BookItem 
+                                    key={book.id} 
+                                    book={book} 
+                                    onClick={() => handleBookClick(book)} 
+                                    onRemove={(e) => handleRemoveClick(e, book)}
+                                />
                             ))}
-                        </Grid>
-                    )
-                    }
-                </Box>
+                        </div>
+                    )}
+                </div>
 
                 {/* --- Dialog: Add a book --- */}
-                <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
+                <Dialog 
+                    open={openModal} 
+                    onClose={handleCloseModal} 
+                    maxWidth="sm" 
+                    fullWidth
+                    PaperProps={{
+                        style: { borderRadius: 24, padding: 12 }
+                    }}
+                >
                     <Box>
-                        <DialogTitle>Add Book to Shelf</DialogTitle>
+                        <DialogTitle sx={{ fontWeight: 'bold', fontSize: '1.5rem', pb: 1 }}>
+                            Add Book to Shelf
+                        </DialogTitle>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 3 }}>
                             <Tabs value={tabValue} onChange={handleTabChange}>
                                 <Tab label="Search Library" />
@@ -555,34 +488,34 @@ export default function Shelves() {
                                             id="search-books"
                                             options={searchBookOptions}
                                             getOptionLabel={(option) => `${option.title} (${option.isbn})`}
-                                            filterOptions={(x) => x} // Disable built-in filtering, rely on server
+                                            filterOptions={(x) => x} 
                                             onInputChange={(_e, newUrl) => handleSearchBooks(newUrl)}
                                             onChange={(_e, newValue) => setSelectedExistingBook(newValue)}
                                             renderOption={(props, option) => {
-                                            const { key, ...rest } = props; 
-                                            
-                                            return (
-                                                <li key={key} {...rest}>
-                                                    <Box>
-                                                        <Typography variant="body1" fontWeight="bold">{option.title}</Typography>
-                                                        <Typography variant="caption" color="text.secondary">
-                                                            ISBN: {option.isbn} | By {option.authors.join(', ')}
-                                                        </Typography>
-                                                    </Box>
-                                                </li>
-                                            );
-                                        }}
+                                                const { key, ...rest } = props; 
+                                                return (
+                                                    <li key={key} {...rest}>
+                                                        <Box>
+                                                            <Typography variant="body1" fontWeight="bold">{option.title}</Typography>
+                                                            <Typography variant="caption" color="text.secondary">
+                                                                ISBN: {option.isbn} | By {option.authors.join(', ')}
+                                                            </Typography>
+                                                        </Box>
+                                                    </li>
+                                                );
+                                            }}
                                             renderInput={(params) => (
                                                 <TextField {...params} label="Search by Title or ISBN" fullWidth />
                                             )}
                                         />
                                     </DialogContent>
-                                    <DialogActions sx={{ px: 3, pb: 3 }}>
-                                        <Button onClick={handleCloseModal} color="inherit">Cancel</Button>
+                                    <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+                                        <Button onClick={handleCloseModal} color="inherit" sx={{ borderRadius: 2 }}>Cancel</Button>
                                         <Button
                                             variant="contained"
                                             onClick={handleAddExistingBook}
                                             disabled={!selectedExistingBook || isCreating}
+                                            sx={{ borderRadius: 2, px: 3 }}
                                         >
                                             {isCreating ? 'Adding...' : 'Add to Shelf'}
                                         </Button>
@@ -632,13 +565,11 @@ export default function Shelves() {
                                         />
 
                                         <FormControl fullWidth margin="dense">
-                                            {/* <InputLabel id="author-select-label">Author</InputLabel> */}
                                             <Autocomplete
                                                 freeSolo
                                                 id="author-autocomplete"
                                                 options={authors}
                                                 getOptionLabel={(option) => {
-                                                    // option can be string (user typed) or object (selected)
                                                     if (typeof option === 'string') return option;
                                                     return `${option.firstName} ${option.lastName}`;
                                                 }}
@@ -656,37 +587,33 @@ export default function Shelves() {
                                                         {...params}
                                                         label="Author (Select or Type New)"
                                                         placeholder="J.K. Rowling"
-                                                        required={!authorInput} // simplistic validation
+                                                        required={!authorInput}
                                                     />
                                                 )}
                                             />
                                         </FormControl>
 
-                                        <Grid container spacing={2}>
-                                            <Grid size={{ xs: 6 }}>
-                                                <TextField
-                                                    margin="dense"
-                                                    id="pageCount"
-                                                    name="pageCount"
-                                                    label="Pages"
-                                                    type="number"
-                                                    fullWidth
-                                                    variant="outlined"
-                                                />
-                                            </Grid>
-                                            <Grid size={{ xs: 6 }}>
-                                                <TextField
-                                                    margin="dense"
-                                                    id="publishedDate"
-                                                    name="publishedDate"
-                                                    label="Published Date"
-                                                    type="date"
-                                                    fullWidth
-                                                    variant="outlined"
-                                                    InputLabelProps={{ shrink: true }}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <TextField
+                                                margin="dense"
+                                                id="pageCount"
+                                                name="pageCount"
+                                                label="Pages"
+                                                type="number"
+                                                fullWidth
+                                                variant="outlined"
+                                            />
+                                            <TextField
+                                                margin="dense"
+                                                id="publishedDate"
+                                                name="publishedDate"
+                                                label="Published Date"
+                                                type="date"
+                                                fullWidth
+                                                variant="outlined"
+                                                InputLabelProps={{ shrink: true }}
+                                            />
+                                        </div>
 
                                         <TextField
                                             margin="dense"
@@ -711,14 +638,15 @@ export default function Shelves() {
                                             placeholder="A young wizard's journey begins..."
                                         />
                                     </DialogContent>
-                                    <DialogActions sx={{ px: 3, pb: 3 }}>
-                                        <Button onClick={handleCloseModal} color="inherit">
+                                    <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+                                        <Button onClick={handleCloseModal} color="inherit" sx={{ borderRadius: 2 }}>
                                             Cancel
                                         </Button>
                                         <Button
                                             type="submit"
                                             variant="contained"
                                             disabled={isCreating}
+                                            sx={{ borderRadius: 2, px: 3 }}
                                         >
                                             {isCreating ? 'Creating...' : 'Create Book'}
                                         </Button>
@@ -729,39 +657,39 @@ export default function Shelves() {
                     </Box>
                 </Dialog>
 
+                {/* --- Dialog: Details --- */}
+                {id && (
+                    <BookDetailsDialog
+                        open={detailsOpen}
+                        onClose={handleCloseDetails}
+                        book={selectedBook}
+                        shelfId={id}
+                        onUpdate={fetchShelfBooks}
+                    />
+                )}
 
-
-            </ShelvesContainer>
-
-            {/* --- Dialog: Details --- */}
-            {id && (
-                <BookDetailsDialog
-                    open={detailsOpen}
-                    onClose={handleCloseDetails}
-                    book={selectedBook}
-                    shelfId={id}
-                    onUpdate={fetchShelfBooks}
-                />
-            )}
-
-            {/* --- Dialog: Delete Confirmation --- */}
-            <Dialog
-                open={deleteConfirmOpen}
-                onClose={handleCancelDelete}
-            >
-                <DialogTitle>Remove Book?</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to remove "{bookToDelete?.title}" from this shelf? This action cannot be undone.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCancelDelete} color="inherit" disabled={isDeleting}>Cancel</Button>
-                    <Button onClick={handleConfirmDelete} color="error" autoFocus disabled={isDeleting}>
-                        {isDeleting ? 'Removing...' : 'Remove'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                {/* --- Dialog: Delete Confirmation --- */}
+                <Dialog
+                    open={deleteConfirmOpen}
+                    onClose={handleCancelDelete}
+                    PaperProps={{
+                        style: { borderRadius: 24, padding: 12 }
+                    }}
+                >
+                    <DialogTitle sx={{ fontWeight: 'bold' }}>Remove Book?</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Are you sure you want to remove "{bookToDelete?.title}" from this shelf? This action cannot be undone.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions sx={{ px: 3, pb: 2 }}>
+                        <Button onClick={handleCancelDelete} color="inherit" disabled={isDeleting} sx={{ borderRadius: 2 }}>Cancel</Button>
+                        <Button onClick={handleConfirmDelete} color="error" variant="contained" autoFocus disabled={isDeleting} sx={{ borderRadius: 2 }}>
+                            {isDeleting ? 'Removing...' : 'Remove'}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </PageLayout>
         </ThemeProvider>
     );
 }

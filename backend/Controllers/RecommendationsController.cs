@@ -50,6 +50,9 @@ namespace backend.Controllers
                     return StatusCode(503, new { error = "Books recommendation service unavailable" });
                 }
 
+                // Enrich with covers from local DB if missing
+                await EnrichWithCovers(recommendations);
+
                 // Save recommendations to database
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // null if not authenticated
                 
@@ -115,7 +118,47 @@ namespace backend.Controllers
                 }).ToList()
             };
 
+            await EnrichWithCovers(response);
+
             return Ok(response);
+        }
+
+        private async Task EnrichWithCovers(RecommendationResponseDto response)
+        {
+            if (response?.Recommendations == null) return;
+
+            var allRecBooks = response.Recommendations
+                .SelectMany(r => r.Items)
+                .Where(b => string.IsNullOrEmpty(b.CoverUrl))
+                .ToList();
+
+            if (!allRecBooks.Any()) return;
+
+            var titles = allRecBooks.Select(b => b.Title).Distinct().ToList();
+
+            // Try to find matching books in local DB
+            var dbBooks = await _context.Books
+                .Where(b => titles.Contains(b.Title) && !string.IsNullOrEmpty(b.CoverUrl))
+                .Select(b => new { b.Title, b.CoverUrl })
+                .ToListAsync();
+
+            var coverMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            
+            foreach(var book in dbBooks) 
+            {
+                if (book.CoverUrl != null && !coverMap.ContainsKey(book.Title))
+                {
+                    coverMap[book.Title] = book.CoverUrl;
+                }
+            }
+
+            foreach (var book in allRecBooks)
+            {
+                if (coverMap.TryGetValue(book.Title, out var cover))
+                {
+                    book.CoverUrl = cover;
+                }
+            }
         }
 
         /// <summary>

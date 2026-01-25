@@ -5,94 +5,120 @@ import axios from '../api/axios';
 // MUI imports
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
 import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 import Divider from '@mui/material/Divider';
-import { styled, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+
+// Icons
 import PeopleIcon from '@mui/icons-material/People';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import SearchIcon from '@mui/icons-material/Search';
 
 // Custom imports
-import ColorModeSelect from '../customs/ColorModeSelect';
 import mainTheme from '../themes/mainTheme';
-
+import { PageLayout } from './layouts/PageLayout';
 
 /**
  * Data Transfer Object representing a user in the community.
  */
 interface UserCommunityDto {
-    /** Unique identifier for the user */
     id: string;
-    /** Publicly visible name */
     displayName: string;
-    /** Short user biography */
     bio?: string;
-    /** URL to the user's avatar image */
     profilePictureUrl?: string;
-    /** Total number of users following this user */
     followersCount: number;
-    /** Total number of users this user is following */
     followingCount: number;
-    /** Indicates if the currently logged-in user is following this user */
     isFollowing: boolean;
 }
 
 /**
- * Styled container for the entire page layout.
+ * Komponent karty użytkownika (Glassmorphism style - spójny z Dashboard/Recommendations)
  */
-const PageContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '100vh',
-    padding: theme.spacing(4),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(6),
-    },
-    '&::before': {
-        content: '""',
-        display: 'block',
-        position: 'absolute',
-        zIndex: -1,
-        inset: 0,
-        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-    },
-}));
+const UserCommunityCard = ({ user, onClick, onFollow }: { user: UserCommunityDto, onClick: () => void, onFollow: (e: React.MouseEvent) => void }) => (
+    <div
+        onClick={onClick}
+        className={`
+            group relative flex flex-col items-center p-6 cursor-pointer h-full
+            bg-white/70 backdrop-blur-md
+            border border-white/40 rounded-3xl
+            shadow-lg hover:shadow-2xl hover:shadow-primary-main/20 hover:-translate-y-2
+            transition-all duration-300 ease-out overflow-hidden
+        `}
+    >
+        {/* Dekoracyjne tło hover */}
+        <div className="absolute inset-0 bg-linear-to-br from-primary-light/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-/**
- * Styled card component for individual user profiles.
- */
-const UserCard = styled(MuiCard)(({ theme }) => ({
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid',
-    borderColor: theme.palette.divider,
-    boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px',
-    transition: 'all 0.3s ease-in-out',
-    '&:hover': {
-        transform: 'translateY(-3px)',
-        boxShadow: 'hsla(220, 30%, 5%, 0.1) 0px 15px 25px 0px',
-        borderColor: theme.palette.primary.main,
-        cursor: 'pointer'
-    },
-}));
+        {/* Avatar Section */}
+        <div className="relative z-10 mb-4">
+            <Avatar
+                src={user.profilePictureUrl}
+                alt={user.displayName}
+                sx={{ 
+                    width: 90, 
+                    height: 90, 
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    border: '3px solid rgba(255,255,255,0.8)' 
+                }}
+                className="group-hover:scale-105 transition-transform duration-300"
+            />
+        </div>
 
-/**
- * The Community page component.
- * Displays a grid of users and allows the current user to follow/unfollow them.
- */
+        {/* Content Section */}
+        <div className="relative z-10 flex flex-col items-center text-center w-full flex-grow">
+            <h3 className="text-xl font-bold text-gray-900 mb-1 truncate w-full px-2">
+                {user.displayName}
+            </h3>
+            
+            <p className="text-sm text-gray-600 font-medium line-clamp-2 mb-4 h-10 w-full px-2">
+                {user.bio || 'No bio available'}
+            </p>
+
+            {/* Stats Row */}
+            <div className="flex items-center justify-center gap-4 w-full mb-5 bg-white/40 rounded-xl py-2 mx-2">
+                <div className="text-center">
+                    <span className="block text-sm font-bold text-gray-900">{user.followersCount}</span>
+                    <span className="text-xs text-gray-500 uppercase tracking-wide">Followers</span>
+                </div>
+                <div className="h-8 w-px bg-gray-300/50"></div>
+                <div className="text-center">
+                    <span className="block text-sm font-bold text-gray-900">{user.followingCount}</span>
+                    <span className="text-xs text-gray-500 uppercase tracking-wide">Following</span>
+                </div>
+            </div>
+
+            {/* Action Button */}
+            <div className="mt-auto w-full px-2">
+                <Button
+                    variant={user.isFollowing ? "outlined" : "contained"}
+                    color={user.isFollowing ? "secondary" : "primary"}
+                    startIcon={user.isFollowing ? <PersonRemoveIcon /> : <PersonAddIcon />}
+                    onClick={onFollow}
+                    fullWidth
+                    sx={{ 
+                        borderRadius: 3, 
+                        fontWeight: 'bold', 
+                        textTransform: 'none',
+                        boxShadow: 'none',
+                        '&:hover': { boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }
+                    }}
+                >
+                    {user.isFollowing ? 'Unfollow' : 'Follow'}
+                </Button>
+            </div>
+        </div>
+    </div>
+);
+
 export default function Community() {
+    // --- State ---
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [users, setUsers] = useState<UserCommunityDto[]>([]);
@@ -151,6 +177,7 @@ export default function Community() {
             }
         } catch (err) {
             console.error('Error toggling follow:', err);
+            // Revert optimistic update ideally here, but keeping it simple for now
         }
     };
 
@@ -161,112 +188,112 @@ export default function Community() {
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
-            <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
-
-            <PageContainer>
-                {/* --- Section: Header --- */}
-                <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto', textAlign: 'center' }}>
-                    <Button
+            
+            <PageLayout>
+                
+                {/* --- Header Section --- */}
+                <div className="w-full max-w-7xl mx-auto mb-8 pl-2 animate-fade-in">
+                     <Button
                         startIcon={<ArrowBackIcon />}
                         onClick={() => navigate('/')}
-                        sx={{ mb: 2, display: 'inline-flex', alignSelf: 'flex-start' }}
+                        sx={{ mb: 3, color: 'primary.light', '&:hover': { color: 'primary.main' } }}
                     >
                         Back to Home
                     </Button>
-                    <Typography
-                        component="h1"
-                        variant="h4"
-                        sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2 }}
-                    >
-                        <PeopleIcon fontSize="large" color="primary" />
-                        Community
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                        Connect with other readers and discover new friends
-                    </Typography>
+                    
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div className="flex items-center gap-3">
+                            <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-sm">
+                                <PeopleIcon sx={{ fontSize: 36 }} className="text-primary-light" />
+                            </div>
+                            <div>
+                                <h1 className="text-3xl sm:text-4xl font-bold text-primary-light tracking-tight drop-shadow-sm">
+                                    Community
+                                </h1>
+                                <p className="text-primary-light font-medium text-sm sm:text-base backdrop-blur-xs rounded-4xl">
+                                    Connect with other readers
+                                </p>
+                            </div>
+                        </div>
 
-                    {/* Search Bar */}
-                    <Box sx={{ maxWidth: 500, mx: 'auto' }}>
-                        <TextField
-                            fullWidth
-                            label="Search users..."
-                            variant="outlined"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search by name or email"
-                            sx={{
-                                backgroundColor: 'background.paper',
-                            }}
-                        />
-                    </Box>
-                </Box>
+                        {/* Search Bar - Stylized */}
+                        <div className="w-full md:w-auto md:min-w-75">
+                             <TextField
+                                fullWidth
+                                placeholder="Search by name..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <SearchIcon color="action" />
+                                            </InputAdornment>
+                                        ),
+                                        sx: {
+                                            borderRadius: 4,
+                                            backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                                            backdropFilter: 'blur(10px)',
+                                            '&:hover': {
+                                                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                                            },
+                                            '&.Mui-focused': {
+                                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                            }
+                                        }
+                                    }
+                                }}
+                                variant="outlined"
+                                size="small"
+                            />
+                        </div>
+                    </div>
+                </div>
 
-                {/* --- Section: Main Content --- */}
-                <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
-
-                    {/* Loading State */}
+                {/* --- Content Section --- */}
+                <div className="w-full max-w-7xl mx-auto pb-10">
+                    
+                    {/* Loading */}
                     {isLoading && (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
-                            <CircularProgress />
-                        </Box>
+                        <div className="flex flex-col justify-center items-center mt-20 gap-4">
+                            <CircularProgress size={60} thickness={4} sx={{ color: 'white' }} />
+                            <p className="text-white font-medium text-lg drop-shadow-md">Loading community...</p>
+                        </div>
                     )}
 
-                    {/* Error State */}
-                    {error && <Alert severity="error" sx={{ mb: 4 }}>{error}</Alert>}
+                    {/* Error */}
+                    {error && (
+                        <Alert severity="error" className="mb-8 shadow-md rounded-xl backdrop-blur-md bg-red-100/90">
+                            {error}
+                        </Alert>
+                    )}
 
                     {/* Empty State */}
                     {!isLoading && !error && users.length === 0 && (
-                        <Typography variant="h6" align="center" color="text.secondary" sx={{ mt: 4 }}>
-                            No users found.
-                        </Typography>
+                        <div className="flex flex-col items-center justify-center p-12 text-center bg-white/40 backdrop-blur-md rounded-3xl border border-white/40 shadow-xl max-w-2xl mx-auto">
+                            <PeopleIcon sx={{ fontSize: 80, color: 'text.secondary', mb: 3, opacity: 0.5 }} />
+                            <h2 className="text-2xl font-bold text-primary-light mb-2">No users found</h2>
+                            <p className="text-gray-700 mb-0 max-w-md">
+                                Try searching for a different name or come back later!
+                            </p>
+                        </div>
                     )}
 
-                    {/* Users Grid */}
-                    <Grid container spacing={3}>
-                        {users.map((user) => (
-                            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={user.id}>
-                                <UserCard onClick={() => handleCardClick(user.id)}>
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
-                                        <Avatar
-                                            src={user.profilePictureUrl}
-                                            alt={user.displayName}
-                                            sx={{ width: 80, height: 80, mb: 2 }}
-                                        />
-                                        <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                                            {user.displayName}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 1 }}>
-                                            {user.bio || 'No bio available'}
-                                        </Typography>
-                                        <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-                                            <Box textAlign="center">
-                                                <Typography variant="subtitle2" fontWeight="bold">{user.followersCount}</Typography>
-                                                <Typography variant="caption" color="text.secondary">Followers</Typography>
-                                            </Box>
-                                            <Divider orientation="vertical" flexItem />
-                                            <Box textAlign="center">
-                                                <Typography variant="subtitle2" fontWeight="bold">{user.followingCount}</Typography>
-                                                <Typography variant="caption" color="text.secondary">Following</Typography>
-                                            </Box>
-                                        </Stack>
-                                    </Box>
-                                    <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'center' }}>
-                                        <Button
-                                            variant={user.isFollowing ? "outlined" : "contained"}
-                                            color={user.isFollowing ? "secondary" : "primary"}
-                                            startIcon={user.isFollowing ? <PersonRemoveIcon /> : <PersonAddIcon />}
-                                            onClick={(e) => handleFollowToggle(user, e)}
-                                            fullWidth
-                                        >
-                                            {user.isFollowing ? 'Unfollow' : 'Follow'}
-                                        </Button>
-                                    </Box>
-                                </UserCard>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Box>
-            </PageContainer>
+                    {/* Grid System (Tailwind) */}
+                    {!isLoading && !error && users.length > 0 && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {users.map((user) => (
+                                <UserCommunityCard 
+                                    key={user.id} 
+                                    user={user} 
+                                    onClick={() => handleCardClick(user.id)}
+                                    onFollow={(e) => handleFollowToggle(user, e)}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </PageLayout>
         </ThemeProvider>
     );
 }

@@ -11,6 +11,8 @@ namespace backend.DTOs
         public string? ProfilePictureUrl { get; set; }
         public int ShelvesCount { get; set; }
         public int UniqueBooksCount { get; set; }
+        public int FollowersCount { get; set; }
+        public int FollowingCount { get; set; }
         public DateTime CreatedAt { get; set; }
         public BookDto? FavoriteBook { get; set; }
     }

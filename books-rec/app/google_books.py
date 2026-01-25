@@ -92,6 +92,10 @@ class GoogleBooksClient:
         categories = volume_info.get("categories", [])
         genre = categories[0] if categories else "Fiction"
         
+        # Get Cover (thumbnail)
+        image_links = volume_info.get("imageLinks", {})
+        cover_url = image_links.get("thumbnail") or image_links.get("smallThumbnail")
+
         # Map common English genre names to Polish if needed
         if language == "pl":
             genre_map = {
@@ -113,6 +117,7 @@ class GoogleBooksClient:
             author=authors[0],  # Primary author
             description=description,
             genre=genre,
+            cover_url=cover_url,
             language=language,
             tags=[cat.lower() for cat in categories[:3]]
         )

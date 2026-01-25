@@ -13,6 +13,7 @@ class BookSnapshot:
     author: str
     genre: Optional[str]
     language: str
+    cover_url: Optional[str]
 
 
 class UserHistoryStore:
@@ -46,7 +47,8 @@ class UserHistoryStore:
                         title=book.title,
                         author=book.author,
                         genre=book.genre,
-                        language=language
+                        language=language,
+                        cover_url=book.cover_url
                     )
                 if book.rating is not None:
                     self._book_ratings.setdefault(key, {})[user_id] = book.rating
@@ -126,7 +128,8 @@ class UserHistoryStore:
                     "author": info.author,
                     "genre": info.genre,
                     "language": info.language,
-                    "score": score
+                    "score": score,
+                    "cover_url": info.cover_url
                 })
                 if len(results) >= limit:
                     break

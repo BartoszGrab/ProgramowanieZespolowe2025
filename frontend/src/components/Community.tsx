@@ -87,7 +87,7 @@ const UserCommunityCard = ({ user, onClick, onFollow }: { user: UserCommunityDto
                     <span className="block text-sm font-bold text-gray-900">{user.followersCount}</span>
                     <span className="text-xs text-gray-500 uppercase tracking-wide">Followers</span>
                 </div>
-                <div className="h-8 w-[1px] bg-gray-300/50"></div>
+                <div className="h-8 w-px bg-gray-300/50"></div>
                 <div className="text-center">
                     <span className="block text-sm font-bold text-gray-900">{user.followingCount}</span>
                     <span className="text-xs text-gray-500 uppercase tracking-wide">Following</span>

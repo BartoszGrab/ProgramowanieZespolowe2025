@@ -313,20 +313,20 @@ export default function Recommendations() {
                     <Button
                         startIcon={<ArrowBackIcon />}
                         onClick={() => navigate('/dashboard')}
-                        sx={{ mb: 3, color: 'text.secondary', '&:hover': { color: 'primary.main' } }}
+                        sx={{ mb: 3, color: 'primary.light', '&:hover': { color: 'primary.main' } }}
                     >
                         Back to Dashboard
                     </Button>
                     
                     <div className="flex items-center gap-3">
                         <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-sm">
-                            <AutoAwesomeIcon sx={{ fontSize: 36 }} className="text-gray-800" />
+                            <AutoAwesomeIcon sx={{ fontSize: 36 }} className="text-primary-light" />
                         </div>
                         <div>
-                            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight drop-shadow-sm">
+                            <h1 className="text-3xl sm:text-4xl font-bold text-primary-light tracking-tight drop-shadow-sm">
                                 Recommendations
                             </h1>
-                            <p className="text-gray-700 font-medium text-sm sm:text-base">
+                            <p className="text-primary-light font-medium text-sm sm:text-base">
                                 AI-powered suggestions based on your library
                             </p>
                         </div>
@@ -340,7 +340,7 @@ export default function Recommendations() {
                     {isLoading && (
                         <div className="flex flex-col justify-center items-center mt-20 gap-4">
                             <CircularProgress size={60} thickness={4} sx={{ color: 'white' }} />
-                            <p className="text-white font-medium text-lg drop-shadow-md">Analyzing your taste...</p>
+                            <p className="text-primary-light font-medium text-lg drop-shadow-md">Analyzing your taste...</p>
                         </div>
                     )}
 
@@ -355,8 +355,8 @@ export default function Recommendations() {
                     {!isLoading && !error && !hasBooks && (
                         <div className="flex flex-col items-center justify-center p-12 text-center bg-white/40 backdrop-blur-md rounded-3xl border border-white/40 shadow-xl max-w-2xl mx-auto">
                             <MenuBookIcon sx={{ fontSize: 80, color: 'text.secondary', mb: 3, opacity: 0.5 }} />
-                            <h2 className="text-2xl font-bold text-gray-800 mb-2">No books in your library yet</h2>
-                            <p className="text-gray-700 mb-6 max-w-md">
+                            <h2 className="text-2xl font-bold text-primary-light mb-2">No books in your library yet</h2>
+                            <p className="text-primary-light mb-6 max-w-md">
                                 Add some books to your shelves first, and we'll recommend similar titles you might enjoy!
                             </p>
                             <Button
@@ -382,7 +382,7 @@ export default function Recommendations() {
                         <div key={idx} className="mb-12 animate-fade-in" style={{ animationDelay: `${idx * 150}ms` }}>
                             {/* Category Title */}
                             <div className="flex items-center gap-3 mb-6 pl-2">
-                                <h2 className="text-2xl font-bold text-gray-900 drop-shadow-sm">
+                                <h2 className="text-2xl font-bold text-primary-light drop-shadow-sm">
                                     {category.category_title}
                                 </h2>
                                 <Chip 
@@ -430,7 +430,7 @@ export default function Recommendations() {
                                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                                     {selectedBook.title}
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="body2" color="primary.light">
                                     by {selectedBook.author}
                                 </Typography>
                             </Box>

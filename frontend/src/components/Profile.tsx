@@ -94,6 +94,8 @@ export default function Profile() {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [editBio, setEditBio] = useState('');
     const [editAvatarUrl, setEditAvatarUrl] = useState('');
+    const [followingCount, setFollowingCount] = useState(0);
+    const [followersCount, setFollowersCount] = useState(0);
     const [selectedBook, setSelectedBook] = useState<BookDto | null>(null);
     const [searchBooks, setSearchBooks] = useState<BookDto[]>([]);
     const [searching, setSearching] = useState(false);
@@ -117,6 +119,16 @@ export default function Profile() {
             setEditBio(response.data.bio || '');
             setEditAvatarUrl(response.data.profilePictureUrl || '');
             setSelectedBook(response.data.favoriteBook || null);
+            setFollowersCount(response.data.followersCount || null);
+            setFollowingCount(response.data.followingCount || null);
+            
+            if (followingCount) {
+                setProfile(prev => prev ? ({ ...prev, followingCount }) : null);
+            }
+
+            if (followersCount) {
+                setProfile(prev => prev ? ({ ...prev, followersCount }) : null);
+            }
 
         } catch (err) {
             console.error("Failed to fetch profile", err);
@@ -218,7 +230,7 @@ export default function Profile() {
                     <div className="w-full max-w-6xl mx-auto pb-10 space-y-8 animate-fade-in">
                         
                         {/* 1. Profile Header Card */}
-                        <div className="relative overflow-hidden bg-white/70 backdrop-blur-md border border-white/40 rounded-[2rem] shadow-xl p-8 md:p-10">
+                        <div className="relative overflow-hidden bg-white/70 backdrop-blur-md border border-white/40 rounded-4xl shadow-xl p-8 md:p-10">
                             {/* Gradient Background Decoration */}
                             <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-r from-primary-light/30 to-secondary-light/20 z-0" />
                             
@@ -226,7 +238,7 @@ export default function Profile() {
                                 
                                 {/* Avatar with border */}
                                 <div className="relative group">
-                                    <div className="absolute -inset-1 bg-linear-to-br from-primary-main to-secondary-main rounded-full opacity-70 blur-xs group-hover:opacity-100 transition duration-500"></div>
+                                    <div className="absolute -inset-1 bg-linear-to-br from-primary-main to-secondary-main rounded-full opacity-70 blur-xs group-hover:opacity-100 transition duration-500 ,"></div>
                                     <Avatar
                                         src={profile.profilePictureUrl}
                                         alt={profile.displayName}
@@ -260,18 +272,20 @@ export default function Profile() {
                                 </div>
 
                                 {/* Action Button */}
-                                <div className="md:self-center md:mb-4">
+                                <div className="md:self-center md:mb-15">
                                     {isOwnProfile ? (
                                         <Button
                                             variant="outlined"
                                             startIcon={<EditIcon />}
                                             onClick={() => setIsEditOpen(true)}
                                             sx={{ 
+                                                color: 'text.secondary',
                                                 borderRadius: 3, 
-                                                borderWidth: 2, 
+                                                borderWidth: 2,
+                                                borderColor: 'text.secondary', 
                                                 fontWeight: 'bold',
                                                 px: 3,
-                                                '&:hover': { borderWidth: 2 }
+                                                '&:hover': { borderWidth: 3 }
                                             }}
                                         >
                                             Edit Profile
@@ -323,7 +337,7 @@ export default function Profile() {
                                         <h2 className="text-xl font-bold text-gray-800">Top Pick</h2>
                                     </div>
                                     
-                                    <div className="flex-grow flex items-center justify-center">
+                                    <div className="grow flex items-center justify-center">
                                         {profile.favoriteBook ? (
                                             <div className="flex flex-col sm:flex-row gap-6 items-center w-full p-4 hover:bg-white/40 rounded-2xl transition-colors cursor-default">
                                                 {/* Cover with shadow effect */}

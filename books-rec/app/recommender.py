@@ -149,6 +149,7 @@ class RecommendationEngine:
                 author=r["author"],
                 description=r.get("description"),
                 genre=r.get("genre"),
+                cover_url=r.get("cover_url"),
                 language=r["language"],
                 match_score=round(r["score"], 2)
             )
@@ -194,6 +195,7 @@ class RecommendationEngine:
                 author=r["author"],
                 description=r.get("description"),
                 genre=r.get("genre"),
+                cover_url=r.get("cover_url"),
                 language=r["language"],
                 match_score=round(r["score"], 2)
             )
@@ -234,6 +236,7 @@ class RecommendationEngine:
                 author=r["author"],
                 description=None,
                 genre=r.get("genre"),
+                cover_url=r.get("cover_url"),
                 language=r["language"],
                 match_score=r["score"]
             )
@@ -271,6 +274,7 @@ class RecommendationEngine:
                 author=r["author"],
                 description=r.get("description"),
                 genre=r.get("genre"),
+                cover_url=r.get("cover_url"),
                 language=r["language"],
                 match_score=round(r["score"], 2)
             )
@@ -321,6 +325,7 @@ class RecommendationEngine:
                         author=r["author"],
                         description=r.get("description"),
                         genre=r.get("genre"),
+                        cover_url=r.get("cover_url"),
                         language=r["language"],
                         match_score=round(score, 2)
                     )

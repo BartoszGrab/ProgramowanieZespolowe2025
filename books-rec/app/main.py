@@ -181,12 +181,40 @@ async def reset_database():
         vector_db.delete_collection()
         vector_db._ensure_collection()
         
+        # Try to populate from Google Books first
+        from app.google_books import GoogleBooksClient
+        client = GoogleBooksClient()
+        try:
+            target_per_language = max(1, settings.DEFAULT_DB_BOOKS_TARGET // 2)
+            pl_books = await client.populate_database(
+                language="pl",
+                target_count=target_per_language
+            )
+            en_books = await client.populate_database(
+                language="en",
+                target_count=target_per_language
+            )
+            all_books = pl_books + en_books
+            
+            if all_books:
+                indexed = vector_db.index_books_batch(all_books)
+                return {
+                    "status": "success",
+                    "message": f"Database reset with {indexed} books from Google Books (with covers)"
+                }
+        except Exception as e:
+            print(f"Google Books API error during reset: {e}")
+            # Fallback to sample books continues below
+        finally:
+            await client.close()
+
+        # Fallback
         books = get_sample_books()
         indexed = vector_db.index_books_batch(books)
         
         return {
             "status": "success",
-            "message": f"Database reset with {indexed} sample books"
+            "message": f"Database reset with {indexed} sample books (Google Books failed)"
         }
     except Exception as e:
         raise HTTPException(

@@ -62,6 +62,7 @@ class VectorDBService:
                 "author": book.author,
                 "description": book.description,
                 "genre": book.genre,
+                "cover_url": book.cover_url,
                 "language": book.language,
                 "tags": book.tags
             }
@@ -101,6 +102,7 @@ class VectorDBService:
                     "author": book.author,
                     "description": book.description,
                     "genre": book.genre,
+                    "cover_url": book.cover_url,
                     "language": book.language,
                     "tags": book.tags
                 }
@@ -182,6 +184,7 @@ class VectorDBService:
                 "author": hit.payload.get("author", ""),
                 "description": hit.payload.get("description", ""),
                 "genre": hit.payload.get("genre", ""),
+                "cover_url": hit.payload.get("cover_url"),
                 "language": hit.payload.get("language", ""),
                 "tags": hit.payload.get("tags", []),
                 "score": hit.score

@@ -38,6 +38,7 @@ interface ShelfBookDto {
     authors?: string[];
     genres?: string[];
     averageRating?: number;
+    coverUrl?: string;
 }
 
 interface ShelfDto {
@@ -57,6 +58,7 @@ interface RecommendedBook {
     author: string;
     reason: string;
     match_score?: number;
+    cover_url?: string;
 }
 
 interface RecommendationCategory {
@@ -89,10 +91,18 @@ const RecommendedBookCard = ({ book, onClick }: { book: RecommendedBook; onClick
 
         {/* Content Container */}
         <div className="relative z-10 flex flex-col h-full">
-            
-            {/* Fake Cover / Icon */}
-            <div className="flex justify-center items-center h-32 mb-4 bg-gray-100/50 rounded-2xl group-hover:bg-white/60 transition-colors">
-                <MenuBookIcon sx={{ fontSize: 48 }} className="text-gray-400 group-hover:text-primary-main transition-colors" />
+
+            {/* Cover Image or Placeholder */}
+            <div className="flex justify-center items-center h-48 mb-4 bg-gray-100/50 rounded-2xl group-hover:bg-white/60 transition-colors overflow-hidden relative">
+                {book.cover_url ? (
+                    <img
+                        src={book.cover_url}
+                        alt={book.title}
+                        className="h-full w-auto object-contain shadow-md rounded-md transform group-hover:scale-105 transition-transform duration-300"
+                    />
+                ) : (
+                    <MenuBookIcon sx={{ fontSize: 64 }} className="text-gray-400 group-hover:text-primary-main transition-colors" />
+                )}
             </div>
 
             {/* Title & Author */}
@@ -115,11 +125,11 @@ const RecommendedBookCard = ({ book, onClick }: { book: RecommendedBook; onClick
             {/* Footer: Match Score & Action */}
             <div className="mt-auto pt-3 border-t border-gray-200/50 flex flex-col gap-2 items-center">
                 {book.match_score && (
-                     <span className="text-xs font-bold text-green-700 bg-green-100/80 px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-bold text-green-700 bg-green-100/80 px-2 py-0.5 rounded-full">
                         {Math.round(book.match_score * 100)}% match
-                     </span>
+                    </span>
                 )}
-                
+
                 <div className="flex items-center gap-1 text-primary-main text-sm font-bold opacity-80 group-hover:opacity-100 transition-opacity">
                     <AddCircleOutlineIcon fontSize="small" />
                     <span>Add to shelf</span>
@@ -204,7 +214,8 @@ export default function Recommendations() {
                 title: book.title,
                 author: book.authors?.join(', ') || 'Unknown',
                 genre: book.genres?.[0] || 'General',
-                rating: Math.round(book.averageRating || 4)
+                rating: Math.round(book.averageRating || 4),
+                cover_url: book.coverUrl
             }));
 
             // Step 4: Get recommendations
@@ -304,7 +315,7 @@ export default function Recommendations() {
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
-            
+
             {/* PageLayout zarządza tłem i paddingiem */}
             <PageLayout>
 
@@ -317,7 +328,7 @@ export default function Recommendations() {
                     >
                         Back to Home
                     </Button>
-                    
+
                     <div className="flex items-center gap-3">
                         <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-sm">
                             <AutoAwesomeIcon sx={{ fontSize: 36 }} className="text-primary-light" />
@@ -335,7 +346,7 @@ export default function Recommendations() {
 
                 {/* --- Content Section --- */}
                 <div className="w-full max-w-7xl mx-auto pb-10">
-                    
+
                     {/* Loading */}
                     {isLoading && (
                         <div className="flex flex-col justify-center items-center mt-20 gap-4">
@@ -385,25 +396,25 @@ export default function Recommendations() {
                                 <h2 className="text-2xl font-bold text-primary-light drop-shadow-sm">
                                     {category.category_title}
                                 </h2>
-                                <Chip 
-                                    label={category.type} 
-                                    size="small" 
-                                    sx={{ 
-                                        backgroundColor: 'rgba(255,255,255,0.5)', 
+                                <Chip
+                                    label={category.type}
+                                    size="small"
+                                    sx={{
+                                        backgroundColor: 'rgba(255,255,255,0.5)',
                                         backdropFilter: 'blur(4px)',
                                         fontWeight: 'bold',
                                         color: 'primary.dark'
-                                    }} 
+                                    }}
                                 />
                             </div>
 
                             {/* Grid System */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 {category.items.map((book, bIdx) => (
-                                    <RecommendedBookCard 
-                                        key={bIdx} 
-                                        book={book} 
-                                        onClick={() => handleBookClick(book)} 
+                                    <RecommendedBookCard
+                                        key={bIdx}
+                                        book={book}
+                                        onClick={() => handleBookClick(book)}
                                     />
                                 ))}
                             </div>
@@ -412,10 +423,10 @@ export default function Recommendations() {
                 </div>
 
                 {/* --- Dialog: Add to Shelf --- */}
-                <Dialog 
-                    open={addDialogOpen} 
-                    onClose={handleCloseDialog} 
-                    maxWidth="sm" 
+                <Dialog
+                    open={addDialogOpen}
+                    onClose={handleCloseDialog}
+                    maxWidth="sm"
                     fullWidth
                     PaperProps={{
                         style: { borderRadius: 24, padding: 12 }

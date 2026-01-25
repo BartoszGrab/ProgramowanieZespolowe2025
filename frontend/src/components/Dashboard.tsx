@@ -5,15 +5,10 @@ import axios from '../api/axios';
 
 // MUI imports
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
-import { styled, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
@@ -23,94 +18,89 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 // Custom imports
-import ColorModeSelect from '../customs/ColorModeSelect'; // possible TODO: color mode switch implementation
 import mainTheme from '../themes/mainTheme';
+import { PageLayout } from './layouts/PageLayout';
 
-/**
- * Data Transfer Object representing a book shelf.
- */
 interface Shelf {
-    /** Unique identifier for the shelf */
     id: string | number;
-    /** Display name of the shelf */
     name: string;
-    /** Optional description of the shelf's contents */
     description?: string;
-    /** Number of books contained in this shelf */
     bookCount?: number;
 }
 
 /**
- * Styled container for the dashboard layout.
- * Includes responsive padding and a radial gradient background.
+ * Komponent karty półki (Glassmorphism style)
+ * Zwiększyłem lekko opacity bg-white/70, żeby tekst był czytelniejszy na tle z obrazkiem
  */
-const DashboardContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '100vh',
-    padding: theme.spacing(4),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(6),
-    },
-    '&::before': {
-        content: '""',
-        display: 'block',
-        position: 'absolute',
-        zIndex: -1,
-        inset: 0,
-        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-    },
-}));
+const ShelfItem = ({ shelf, onClick }: { shelf: Shelf; onClick: () => void }) => (
+    <div
+        onClick={onClick}
+        className={`
+            group relative flex flex-col justify-between p-6 cursor-pointer min-h-65
+            bg-white/70 backdrop-blur-md
+            border border-white/40 rounded-3xl
+            shadow-lg hover:shadow-2xl hover:shadow-primary-main/20 hover:-translate-y-2
+            transition-all duration-300 ease-out overflow-hidden
+        `}
+    >
+        {/* Dekoracyjne tło hover */}
+        <div className="absolute inset-0 bg-linear-to-br from-primary-light/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        {/* Top: Icon & Name */}
+        <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-xl bg-primary-light/10 text-primary-dark group-hover:bg-primary-dark group-hover:text-white transition-colors duration-300 shadow-inner">
+                    <MenuBookIcon />
+                </div>
+                <h3 className="text-xl font-bold text-text-primary truncate pr-2">
+                    {shelf.name}
+                </h3>
+            </div>
+            
+            {shelf.description && (
+                <p className="text-sm text-gray-700 font-medium line-clamp-3 leading-relaxed opacity-90 mb-4">
+                    {shelf.description}
+                </p>
+            )}
+        </div>
+
+        {/* Bottom: Stats */}
+        <div className="relative z-10 mt-auto pt-4 border-t border-gray-200/50 flex justify-between items-center">
+            <span className="text-xs font-bold text-primary-dark bg-white/50 px-3 py-1 rounded-full shadow-sm">
+                {shelf.bookCount !== undefined ? shelf.bookCount == 1 ? `${shelf.bookCount} Book` : `${shelf.bookCount} Books` : 'Empty'}
+            </span>
+            <span className="opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300 text-primary-dark font-bold text-xl">
+                →
+            </span>
+        </div>
+    </div>
+);
 
 /**
- * Styled card component for displaying shelf summaries.
- * Adds hover effects (lift and shadow) for better interactivity.
+ * Komponent karty "Dodaj nową półkę"
  */
-const ShelfCard = styled(MuiCard)(({ theme }) => ({
-    height: '100%',
-    minHeight: '200px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    padding: theme.spacing(2),
-    cursor: 'pointer',
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid',
-    borderColor: theme.palette.divider,
-    boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px',
-    transition: 'all 0.3s ease-in-out',
-    '&:hover': {
-        transform: 'translateY(-5px)',
-        boxShadow: 'hsla(220, 30%, 5%, 0.1) 0px 15px 25px 0px',
-        borderColor: theme.palette.primary.main,
-    },
-}));
+const AddShelfItem = ({ onClick }: { onClick: () => void }) => (
+    <div
+        onClick={onClick}
+        className={`
+            group flex flex-col items-center justify-center text-center p-6 cursor-pointer min-h-65
+            bg-white/30 backdrop-blur-sm
+            border-2 border-dashed border-primary-main/40 rounded-3xl
+            hover:bg-white/45 hover:border-primary-main hover:shadow-xl hover:-translate-y-1
+            transition-all duration-300
+        `}
+    >
+        <div className="mb-3 p-4 rounded-full bg-white/60 group-hover:bg-primary-dark group-hover:text-white text-primary-dark transition-all duration-300 shadow-sm">
+            <AddIcon sx={{ fontSize: 32 }} />
+        </div>
+        <h3 className="text-lg font-bold text-primary-light mb-1">Create New Shelf</h3>
+        <p className="text-sm text-primary-light font-medium">Add a collection</p>
+    </div>
+);
 
-/**
- * Specialized card component for the "Add New Shelf" action.
- * Uses dashed borders and transparency to distinguish it from content cards.
- */
-const AddShelfCard = styled(ShelfCard)(({ theme }) => ({
-    backgroundColor: 'transparent',
-    borderStyle: 'dashed',
-    borderWidth: '2px',
-    borderColor: theme.palette.primary.dark,
-    color: theme.palette.primary.main,
-    '&:hover': {
-        transform: 'translateY(-5px)',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        borderColor: theme.palette.primary.main,
-    },
-}));
-
-/**
- * The Dashboard page component.
- * Displays the user's library shelves and provides functionality to create new ones.
- */
 export default function Dashboard() {
     // --- State: Data Fetching ---
     const [shelves, setShelves] = useState<Shelf[]>([]);
@@ -124,9 +114,6 @@ export default function Dashboard() {
     
     const navigate = useNavigate();
     
-    /**
-     * Fetches the list of shelves from the backend on component mount.
-     */
     useEffect(() => {
         const fetchShelves = async () => {
             try {
@@ -142,28 +129,18 @@ export default function Dashboard() {
         fetchShelves();
     }, []);
 
-    /**
-     * Navigates to the detailed view of a specific shelf.
-     * @param shelfId - The ID of the shelf to view
-     */
     const handleShelfClick = (shelfId: string | number) => {
         navigate(`/shelves/${shelfId}`);
     };
 
-    // --- Modal Handlers ---
     const handleOpenModal = () => setOpenModal(true);
-
     const handleCloseModal = () => {
         setOpenModal(false);
-        setCreateError(''); // Clear errors when closing
+        setCreateError('');
     };
 
-    /**
-     * Handles the submission of the "Create Shelf" form.
-     * Sends data to the API and updates local state upon success.
-     */
     const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // Prevent page reload
+        event.preventDefault();
         setIsCreating(true);
         setCreateError('');
 
@@ -174,19 +151,12 @@ export default function Dashboard() {
         };
 
         try {
-            // Api call to create the new shelf
             const response = await axios.post('/api/shelves', newShelfData);
-
-            // Update local state with the newly created shelf
-            const createdShelf = response.data;
-
-            setShelves((prevShelves) => [...prevShelves, createdShelf]);
-
-            // Close the modal
+            setShelves((prevShelves) => [...prevShelves, response.data]);
             handleCloseModal();
         } catch (err: any) {
             console.error('Failed to create shelf:', err);
-            setCreateError(err.response?.data?.message || 'Failed to create shelf. Try again.');
+            setCreateError(err.response?.data?.message || 'Failed to create shelf.');
         } finally {
             setIsCreating(false);
         }
@@ -195,83 +165,79 @@ export default function Dashboard() {
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
-            <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
-
-            <DashboardContainer>
+            
+            {/* PageLayout zarządza tłem i paddingiem pod Navbar */}
+            <PageLayout>
+                
                 {/* --- Section: Header --- */}
-                <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto' }}>
-                    <Typography
-                        component="h1"
-                        variant="h4"
-                        sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 2 }}
-                    >
-                        <AutoStoriesIcon fontSize="large" color="primary" />
-                        My Library
-                    </Typography>
-                </Box>
+                <div className="flex items-center gap-3 mb-8 animate-fade-in pl-2">
+                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-sm">
+                         <AutoStoriesIcon sx={{ fontSize: 36 }} className="text-primary-light" />
+                    </div>
+                    <div>
+                        <h1 className="text-3xl sm:text-4xl font-bold text-primary-light tracking-tight drop-shadow-sm">
+                            My Library
+                        </h1>
+                        <p className="text-primary-light font-medium text-sm sm:text-base">
+                            Manage your collections
+                        </p>
+                    </div>
+                </div>
 
-                {/* --- Section: Shelves Grid --- */}
-                <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
+                {/* --- Section: Content --- */}
+                <div className="w-full pb-10">
                     {isLoading && (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
-                            <CircularProgress />
-                        </Box>
+                        <div className="flex justify-center mt-20">
+                            <CircularProgress size={60} thickness={4} sx={{ color: 'white' }} />
+                        </div>
                     )}
-                    {error && <Alert severity="error" sx={{ mb: 4 }}>{error}</Alert>}
+                    
+                    {error && (
+                        <Alert severity="error" className="mb-8 shadow-md rounded-xl backdrop-blur-md bg-red-100/90">
+                            {error}
+                        </Alert>
+                    )}
 
                     {!isLoading && !error && (
-                        <Grid container spacing={3}>
+                        /* Grid System */
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                             
                             {/* Add New Shelf Card */}
-                            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                                <AddShelfCard onClick={handleOpenModal}>
-                                    <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                                        <AddIcon sx={{ fontSize: 60, opacity: 0.7 }} />
-                                        <Typography variant="h6" color="textPrimary" sx={{ opacity: 0.6 }} fontWeight="bold">Create New Shelf</Typography>
-                                        <Typography variant="body2" sx={{ opacity: 0.9 }}>Add a collection</Typography>
-                                    </CardContent>
-                                </AddShelfCard>
-                            </Grid>
+                            <AddShelfItem onClick={handleOpenModal} />
 
                             {/* Existing Shelves List */}
                             {Array.isArray(shelves) && shelves.map((shelf) => (
-                                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={shelf.id}>
-                                    <ShelfCard onClick={() => handleShelfClick(shelf.id)}>
-                                        <CardContent>
-                                            <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                                {shelf.name}
-                                            </Typography>
-                                            {shelf.description && (
-                                                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                                    {shelf.description}
-                                                </Typography>
-                                            )}
-                                            <Box sx={{ mt: 2, py: 0.5, px: 1.5, bgcolor: 'action.hover', borderRadius: 1, display: 'inline-block' }}>
-                                                <Typography variant="caption" fontWeight="bold" color="primary">
-                                                    {shelf.bookCount !== undefined ? `${shelf.bookCount} Books` : 'View Books'}
-                                                </Typography>
-                                            </Box>
-                                        </CardContent>
-                                    </ShelfCard>
-                                </Grid>
+                                <ShelfItem 
+                                    key={shelf.id} 
+                                    shelf={shelf} 
+                                    onClick={() => handleShelfClick(shelf.id)} 
+                                />
                             ))}
-                        </Grid>
+                        </div>
                     )}
-                </Box>
+                </div>
 
                 {/* --- Dialog: Create Shelf --- */}
-                <Dialog open={openModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
+                <Dialog 
+                    open={openModal} 
+                    onClose={handleCloseModal} 
+                    maxWidth="sm" 
+                    fullWidth
+                    PaperProps={{
+                        style: { borderRadius: 24, padding: 12 }
+                    }}
+                >
                     <Box component="form" onSubmit={handleCreateSubmit}>
-                        <DialogTitle>Create New Shelf</DialogTitle>
+                        <DialogTitle sx={{ fontWeight: 'bold', fontSize: '1.5rem', pb: 1 }}>
+                            Create New Shelf
+                        </DialogTitle>
                         <DialogContent>
-                            <DialogContentText sx={{ mb: 2 }}>
-                                Organize your books by creating a new shelf. Give it a catchy name!
+                            <DialogContentText sx={{ mb: 3 }}>
+                                Give your new collection a home. What kind of books will live here?
                             </DialogContentText>
 
                             {createError && (
-                                <Alert severity="error" sx={{ mb: 2 }}>
-                                    {createError}
-                                </Alert>
+                                <Alert severity="error" sx={{ mb: 2 }}>{createError}</Alert>
                             )}
 
                             <TextField
@@ -284,7 +250,8 @@ export default function Dashboard() {
                                 type="text"
                                 fullWidth
                                 variant="outlined"
-                                placeholder="e.g., Fantasy Favorites"
+                                placeholder="e.g., Summer Reads 2024"
+                                sx={{ mb: 3 }}
                             />
                             <TextField
                                 margin="dense"
@@ -296,17 +263,19 @@ export default function Dashboard() {
                                 multiline
                                 rows={3}
                                 variant="outlined"
-                                placeholder="What kind of books will be here?"
+                                placeholder="A place for mysteries and thrillers..."
                             />
                         </DialogContent>
-                        <DialogActions sx={{ px: 3, pb: 3 }}>
-                            <Button onClick={handleCloseModal} color="inherit">
+                        <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+                            <Button onClick={handleCloseModal} color="inherit" sx={{ borderRadius: 2, px: 3 }}>
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
                                 variant="contained"
                                 disabled={isCreating}
+                                disableElevation
+                                sx={{ borderRadius: 2, px: 4, py: 1, fontWeight: 'bold' }}
                             >
                                 {isCreating ? 'Creating...' : 'Create Shelf'}
                             </Button>
@@ -314,7 +283,7 @@ export default function Dashboard() {
                     </Box>
                 </Dialog>
 
-            </DashboardContainer>
+            </PageLayout>
         </ThemeProvider>
     );
 }

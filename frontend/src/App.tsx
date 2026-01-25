@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import mainTheme from './themes/mainTheme';
 import { Navigation } from './customs/Navigation';
 
+
 import Home from './components/Home';
 import Register from './components/Register'
 import Login from './components/Login'
@@ -13,6 +14,7 @@ import Shelves from './components/Shelves'
 import Profile from './components/Profile'
 import Recommendations from './components/Recommendations'
 import Community from './components/Community'
+import { AuthProvider } from './context/AuthContext';
 
 
 /**
@@ -23,9 +25,11 @@ function App() {
   return (
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
+      <AuthProvider>
       <BrowserRouter>
       {/* --- Navigation Component --- */}
         <Navigation />
+        {/* <Box sx={{ height: 'calc(64px + 2rem)' }} /> */}
         {/* --- Application Routes --- */}
         <Routes>
           <Route path="/" element={<Home />} />
@@ -40,6 +44,7 @@ function App() {
           <Route path="/community" element={<Community />} />
         </Routes>
       </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 

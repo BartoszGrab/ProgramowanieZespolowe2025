@@ -4,12 +4,9 @@ import { useNavigate } from 'react-router-dom';
 // MUI imports
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid'; // Grid v2 (MUI v6)
 import CssBaseline from '@mui/material/CssBaseline';
-import { styled, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
@@ -17,81 +14,53 @@ import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PeopleIcon from '@mui/icons-material/People';
 
-// Custom imports
-import ColorModeSelect from '../customs/ColorModeSelect';
 import mainTheme from '../themes/mainTheme';
+import { PageLayout } from '../components/layouts/PageLayout'; 
 
+// Nowoczesna karta "Action Card"
+const ActionCard = ({ icon: Icon, title, subtitle, onClick, delay }: any) => (
+    <div 
+        onClick={onClick}
+        className={`
+            group relative h-full min-h-55px flex flex-col justify-center items-start text-left p-8 cursor-pointer
+            bg-white/70 backdrop-blur-md
+            border border-primary-light/30 rounded-3xl
+            shadow-sm hover:shadow-2xl hover:shadow-primary-main/10 hover:-translate-y-1
+            transition-all duration-500 ease-out overflow-hidden
+        `}
+        style={{ animationDelay: delay }}
+    >
+        {/* Dekoracyjne tło hover (subtelny gradient) */}
+        <div className="absolute inset-0 bg-linear-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-/**
- * Styled container for the home page layout.
- * Includes responsive padding and a radial gradient background.
- */
-const HomeContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '100vh',
-    padding: theme.spacing(4),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(6),
-    },
-    '&::before': {
-        content: '""',
-        display: 'block',
-        position: 'absolute',
-        zIndex: -1,
-        inset: 0,
-        backgroundImage: 'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-    },
-}));
+        {/* Ikona w "bąbelku" */}
+        <div className="relative z-10 mb-6 p-4 rounded-2xl bg-primary-light/20 text-primary-dark group-hover:scale-110 group-hover:bg-primary-dark group-hover:text-white transition-all duration-300">
+            <Icon sx={{ fontSize: 32 }} />
+        </div>
 
-/**
- * Styled card component for navigation actions.
- * Adds hover effects (lift and shadow) to indicate interactivity.
- */
-const ActionCard = styled(MuiCard)(({ theme }) => ({
-    height: '100%',
-    minHeight: '200px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    padding: theme.spacing(2),
-    cursor: 'pointer',
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid',
-    borderColor: theme.palette.divider,
-    boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px',
-    transition: 'all 0.3s ease-in-out',
-    '&:hover': {
-        transform: 'translateY(-5px)',
-        boxShadow: 'hsla(220, 30%, 5%, 0.1) 0px 15px 25px 0px',
-        borderColor: theme.palette.primary.main,
-    },
-}));
+        {/* Tekst */}
+        <h3 className="relative z-10 text-xl font-bold text-text-primary mb-2 group-hover:brightness-75 group-hover:text-primary-dark transition-colors">
+            {title}
+        </h3>
+        <p className="relative z-10 text-sm text-text-secondary opacity-80 leading-relaxed">
+            {subtitle}
+        </p>
 
-/**
- * The Home page component.
- * Serves as the landing page, displaying welcome information and navigation options
- * based on the user's authentication status.
- */
+        {/* Strzałka dekoracyjna, która pojawia się przy hover */}
+        <div className="absolute bottom-6 right-6 opacity-0 transform translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary-main font-bold text-xl">
+            →
+        </div>
+    </div>
+);
+
 export default function Home() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    /**
-     * Checks authentication status on component mount.
-     */
     useEffect(() => {
-        // Check if user is logged in based on auth token
-        //setIsLoggedIn(true); // For testing purposes, assume logged in
         setIsLoggedIn(!!localStorage.getItem('authToken'));
     }, []);
 
-    /**
-     * Navigates to the specified route.
-     * @param path - The route path to navigate to
-     */
     const handleCardClick = (path: string) => {
         navigate(path);
     };
@@ -99,104 +68,82 @@ export default function Home() {
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
-            <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 10 }} />
-
-            <HomeContainer>
-                {/* --- Section: App Description --- */}
-                <Box sx={{ mb: 4, width: '100%', maxWidth: '1200px', mx: 'auto', textAlign: 'center' }}>
+            
+            <PageLayout>
+                {/* --- Hero Section --- */}
+                <Box className="mb-20 mt-8 w-full text-center flex flex-col items-center relative z-10">
+                    {/* Główny Tytuł z Gradientem */}
                     <Typography
                         component="h1"
-                        variant="h4"
-                        sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2 }}
+                        variant="h2"
+                        className="mb-6 tracking-tight drop-shadow-sm"
+                        sx={{ fontSize: { xs: '2.5rem', md: '3.75rem' } }}
                     >
-                        <AutoStoriesIcon fontSize="large" color="primary" />
-                        Welcome to Your Virtual Book Collection 📚
+                        <span className="text-teal-50/80 font-medium">Welcome to  </span>
+                        <br className="sm:hidden" />
+                        <span className="font-medium text-transparent bg-clip-text bg-linear-to-r from-primary-main to-primary-light/90">
+                            Your Virtual Library
+                        </span> 📚
                     </Typography>
-                    <Typography variant="h6" color="text.secondary">
-                        Create your own shelves that are collections of books and place books on them. Organize your reading journey effortlessly!
+
+                    <Typography variant="h6" className="text-teal-50 max-w-2xl leading-relaxed text-lg font-light">
+                        Create your own shelves, collect books, and organize your reading journey effortlessly in a beautiful space.
                     </Typography>
                 </Box>
 
-                {/* --- Section: Action Cards --- */}
-                <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
-                    <Grid container spacing={3} justifyContent="center">
+                {/* --- Cards Grid --- */}
+                <Box className="max-w-5xl mx-auto">
+                    <Grid container spacing={4} justifyContent="center">
                         {isLoggedIn ? (
                             <>
-                                {/* Logged In: Dashboard, Recommendations, Community */}
                                 <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                    <ActionCard onClick={() => handleCardClick('/dashboard')}>
-                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                                            <DashboardIcon sx={{ fontSize: 60, color: 'primary.main' }} />
-                                            <Typography variant="h6" color="textPrimary" sx={{ fontWeight: 'bold' }}>
-                                                Go to Dashboard
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                                                Manage your shelves and books
-                                            </Typography>
-                                        </CardContent>
-                                    </ActionCard>
+                                    <ActionCard 
+                                        icon={DashboardIcon}
+                                        title="Dashboard"
+                                        subtitle="Manage your shelves and track reading progress."
+                                        onClick={() => handleCardClick('/dashboard')}
+                                    />
                                 </Grid>
                                 <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                    <ActionCard onClick={() => handleCardClick('/recommendations')}>
-                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                                            <LibraryBooksIcon sx={{ fontSize: 60, color: 'primary.main' }} />
-                                            <Typography variant="h6" color="textPrimary" sx={{ fontWeight: 'bold' }}>
-                                                Get Recommendations
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                                                Discover books tailored to your taste
-                                            </Typography>
-                                        </CardContent>
-                                    </ActionCard>
+                                    <ActionCard 
+                                        icon={LibraryBooksIcon}
+                                        title="Recommendations"
+                                        subtitle="Get AI-powered book suggestions just for you."
+                                        onClick={() => handleCardClick('/recommendations')}
+                                    />
                                 </Grid>
                                 <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                    <ActionCard onClick={() => handleCardClick('/community')}>
-                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                                            <PeopleIcon sx={{ fontSize: 60, color: 'primary.main' }} />
-                                            <Typography variant="h6" color="textPrimary" sx={{ fontWeight: 'bold' }}>
-                                                Community
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                                                Find and follow other book lovers
-                                            </Typography>
-                                        </CardContent>
-                                    </ActionCard>
+                                    <ActionCard 
+                                        icon={PeopleIcon}
+                                        title="Community"
+                                        subtitle="Connect with other readers and share reviews."
+                                        onClick={() => handleCardClick('/community')}
+                                    />
                                 </Grid>
                             </>
                         ) : (
                             <>
-                                {/* Not Logged In: Login and Register */}
-                                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                    <ActionCard onClick={() => handleCardClick('/login')}>
-                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                                            <LoginIcon sx={{ fontSize: 60, color: 'primary.main' }} />
-                                            <Typography variant="h6" color="textPrimary" sx={{ fontWeight: 'bold' }}>
-                                                Login
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                                                Access your account
-                                            </Typography>
-                                        </CardContent>
-                                    </ActionCard>
+                                <Grid size={{ xs: 12, sm: 6, md: 5 }}>
+                                    <ActionCard 
+                                        icon={LoginIcon}
+                                        title="Login"
+                                        subtitle="Access your existing collection <3."
+                                        onClick={() => handleCardClick('/login')}
+                                    />
                                 </Grid>
-                                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                                    <ActionCard onClick={() => handleCardClick('/register')}>
-                                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                                            <PersonAddIcon sx={{ fontSize: 60, color: 'primary.main' }} />
-                                            <Typography variant="h6" color="textPrimary" sx={{ fontWeight: 'bold' }}>
-                                                Register
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                                                Create an account
-                                            </Typography>
-                                        </CardContent>
-                                    </ActionCard>
+                                <Grid size={{ xs: 12, sm: 6, md: 5 }}>
+                                    <ActionCard 
+                                        icon={PersonAddIcon}
+                                        title="Register"
+                                        subtitle="Start your journey today. It's free!"
+                                        onClick={() => handleCardClick('/register')}
+                                    />
                                 </Grid>
                             </>
                         )}
                     </Grid>
                 </Box>
-            </HomeContainer>
+            </PageLayout>
         </ThemeProvider>
     );
 }

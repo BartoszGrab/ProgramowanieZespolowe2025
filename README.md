@@ -49,10 +49,10 @@ sudo docker run -d -p 6333:6333 --name qdrant qdrant/qdrant
 
 # Start books-rec microservice
 cd ../books-rec
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-.venv/bin/pip install pydantic-settings
-.venv/bin/python -m uvicorn app.main:app --port 8000
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python run_app.py
 ```
 
 **Endpoints:**

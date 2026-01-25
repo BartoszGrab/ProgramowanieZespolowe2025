@@ -35,6 +35,7 @@ function App() {
           <Route path="/shelves/:id" element={<Shelves />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/my-profile" element={<Profile />} />
+          <Route path="/user/:id" element={<Profile />} />
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/community" element={<Community />} />
         </Routes>

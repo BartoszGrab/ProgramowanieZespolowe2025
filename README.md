@@ -74,6 +74,27 @@ curl -X POST https://localhost:7200/api/recommendations \
   }'
 ```
 
+### e) Generator Użytkowników
+Projekt zawiera narzędzie CLI do generowania losowych użytkowników w celach testowych (z avatarami i przypisanymi książkami).
+
+**Lokalizacja:** `backend/UserGenerator`
+
+**Użycie:**
+1. Przejdź do katalogu backendu:
+   ```bash
+   cd backend
+   ```
+2. Uruchom generator (tworzy N profili):
+   ```bash
+   dotnet run --project UserGenerator -- generate 10
+   ```
+3. Wyczyść wygenerowanych użytkowników:
+   ```bash
+   dotnet run --project UserGenerator -- clean
+   ```
+
+**Uwaga:** Narzędzie korzysta z plików tekstowych w `backend/UserGenerator/dictionaries` do generowania nazw.
+
 ---
 
 ## 3. Frontend (React + Vite)

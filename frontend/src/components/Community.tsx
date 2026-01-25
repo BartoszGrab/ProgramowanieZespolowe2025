@@ -204,20 +204,20 @@ export default function Community() {
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div className="flex items-center gap-3">
                             <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-sm">
-                                <PeopleIcon sx={{ fontSize: 36 }} className="text-gray-800" />
+                                <PeopleIcon sx={{ fontSize: 36 }} className="text-primary-light" />
                             </div>
                             <div>
-                                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight drop-shadow-sm">
+                                <h1 className="text-3xl sm:text-4xl font-bold text-primary-light tracking-tight drop-shadow-sm">
                                     Community
                                 </h1>
-                                <p className="text-gray-700 font-medium text-sm sm:text-base">
+                                <p className="text-primary-light font-medium text-sm sm:text-base backdrop-blur-xs rounded-4xl">
                                     Connect with other readers
                                 </p>
                             </div>
                         </div>
 
                         {/* Search Bar - Stylized */}
-                        <div className="w-full md:w-auto md:min-w-[300px]">
+                        <div className="w-full md:w-auto md:min-w-75">
                              <TextField
                                 fullWidth
                                 placeholder="Search by name..."
@@ -272,7 +272,7 @@ export default function Community() {
                     {!isLoading && !error && users.length === 0 && (
                         <div className="flex flex-col items-center justify-center p-12 text-center bg-white/40 backdrop-blur-md rounded-3xl border border-white/40 shadow-xl max-w-2xl mx-auto">
                             <PeopleIcon sx={{ fontSize: 80, color: 'text.secondary', mb: 3, opacity: 0.5 }} />
-                            <h2 className="text-2xl font-bold text-gray-800 mb-2">No users found</h2>
+                            <h2 className="text-2xl font-bold text-primary-light mb-2">No users found</h2>
                             <p className="text-gray-700 mb-0 max-w-md">
                                 Try searching for a different name or come back later!
                             </p>

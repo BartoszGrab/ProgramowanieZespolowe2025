@@ -337,7 +337,7 @@ export default function Recommendations() {
                             <h1 className="text-3xl sm:text-4xl font-bold text-primary-light tracking-tight drop-shadow-sm">
                                 Recommendations
                             </h1>
-                            <p className="text-primary-light font-medium text-sm sm:text-base">
+                            <p className="text-primary-light font-medium text-sm sm:text-base backdrop-blur-xs rounded-4xl">
                                 AI-powered suggestions based on your library
                             </p>
                         </div>

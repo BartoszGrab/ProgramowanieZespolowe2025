@@ -3,15 +3,10 @@ Netflix-style Book Recommendation Engine.
 Generates categorized recommendations like "Because you read X", "Top in Genre", etc.
 """
 
-<<<<<<< HEAD
-from typing import List, Dict, Any, Optional, Set
-from collections import Counter
-=======
 from typing import List, Set
 from collections import Counter
 import random
 import uuid
->>>>>>> dev
 
 from app.models import (
     BookInput, RecommendationRequest, RecommendationResponse,
@@ -20,10 +15,7 @@ from app.models import (
 from app.vector_db import vector_db
 from app.embeddings import embedding_service
 from app.config import settings
-<<<<<<< HEAD
-=======
 from app.user_history import user_history_store
->>>>>>> dev
 
 
 class RecommendationEngine:
@@ -40,15 +32,6 @@ class RecommendationEngine:
         Generate Netflix-style categorized recommendations.
         
         Creates multiple "shelves" (categories) of recommendations:
-<<<<<<< HEAD
-        1. "Because you read [Last Book]" - similar to most recent read
-        2. "More from [Author]" - if user read multiple by same author
-        3. "Top [Genre]" - based on user's preferred genres
-        4. "Discoveries" - serendipity picks slightly outside comfort zone
-        """
-        history = request.history
-        language = request.preferred_language
-=======
         1. "Because you read [Book]" - similar to a random read
         2. "Readers who added [Book] also added" - collaborative picks
         3. "More from [Author]" - if user read multiple by same author
@@ -58,7 +41,6 @@ class RecommendationEngine:
         history = request.history
         language = request.preferred_language
         user_id = request.user_id or f"anon-{uuid.uuid4()}"
->>>>>>> dev
         
         # Get titles to exclude (already read)
         read_titles = {book.title for book in history}
@@ -66,26 +48,14 @@ class RecommendationEngine:
         categories: List[RecommendationCategory] = []
         used_titles: Set[str] = set(read_titles)
         
-<<<<<<< HEAD
-        # 1. "Because you read [Last Book]"
-        last_book = history[-1]
-        similar_category = self._get_similar_to_book(
-            last_book, language, used_titles
-=======
         # 1. "Because you read [Book]"
         seed_book = self._pick_seed_book(history)
         similar_category = self._get_similar_to_book(
             seed_book, language, used_titles
->>>>>>> dev
         )
         if similar_category.items:
             categories.append(similar_category)
             used_titles.update(item.title for item in similar_category.items)
-<<<<<<< HEAD
-        
-        # 2. "More from [Author]" - if author appears multiple times
-        author_counts = Counter(book.author for book in history)
-=======
 
         # 1b. "Readers who added [Book] also added"
         people_also_category = self._get_people_also_added(
@@ -100,7 +70,6 @@ class RecommendationEngine:
             book.author for book in history
             if not self._is_unknown_author(book.author)
         )
->>>>>>> dev
         for author, count in author_counts.most_common(2):
             if count >= 1:  # Show even for single book by author
                 author_category = self._get_by_author(
@@ -130,9 +99,6 @@ class RecommendationEngine:
         if discovery_category.items:
             categories.append(discovery_category)
         
-<<<<<<< HEAD
-        return RecommendationResponse(recommendations=categories)
-=======
         user_history_store.record_history(user_id, history, language)
         return RecommendationResponse(recommendations=categories)
 
@@ -154,7 +120,6 @@ class RecommendationEngine:
             "brak",
             "n/a"
         }
->>>>>>> dev
     
     def _get_similar_to_book(
         self,
@@ -210,15 +175,12 @@ class RecommendationEngine:
         exclude_titles: Set[str]
     ) -> RecommendationCategory:
         """Get more books by a specific author."""
-<<<<<<< HEAD
-=======
         if self._is_unknown_author(author):
             return RecommendationCategory(
                 category_title="",
                 type="author_based",
                 items=[]
             )
->>>>>>> dev
         results = vector_db.search_by_author(
             author=author,
             language=language,
@@ -250,8 +212,6 @@ class RecommendationEngine:
             type="author_based",
             items=items
         )
-<<<<<<< HEAD
-=======
 
     def _get_people_also_added(
         self,
@@ -290,7 +250,6 @@ class RecommendationEngine:
             type="people_also_added",
             items=items
         )
->>>>>>> dev
     
     def _get_by_genre(
         self,

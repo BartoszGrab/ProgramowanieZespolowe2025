@@ -19,15 +19,12 @@ class Settings(BaseSettings):
     # Recommendation settings
     MAX_RECOMMENDATIONS_PER_CATEGORY: int = 5
     SIMILARITY_THRESHOLD: float = 0.3
-<<<<<<< HEAD
-=======
     COOCCURRENCE_WEIGHT: float = 0.7
     RATING_WEIGHT: float = 0.3
     PEOPLE_ALSO_MIN_AVG_RATING: float = 3.0
 
     # Database initialization
     DEFAULT_DB_BOOKS_TARGET: int = 10000
->>>>>>> dev
 
 
 settings = Settings()

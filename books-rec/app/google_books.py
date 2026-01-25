@@ -23,12 +23,8 @@ class GoogleBooksClient:
         self,
         query: str,
         language: str = "pl",
-<<<<<<< HEAD
-        max_results: int = 20
-=======
         max_results: int = 20,
         start_index: int = 0
->>>>>>> dev
     ) -> List[BookInDB]:
         """
         Search for books using Google Books API.
@@ -49,10 +45,7 @@ class GoogleBooksClient:
             "q": query,
             "langRestrict": lang_restrict,
             "maxResults": min(max_results, 40),  # API limit is 40
-<<<<<<< HEAD
-=======
             "startIndex": max(start_index, 0),
->>>>>>> dev
             "printType": "books",
             "orderBy": "relevance"
         }
@@ -148,12 +141,8 @@ class GoogleBooksClient:
         self,
         authors: List[str] = None,
         language: str = "pl",
-<<<<<<< HEAD
-        books_per_author: int = 10
-=======
         books_per_author: int = 10,
         target_count: Optional[int] = None
->>>>>>> dev
     ) -> List[BookInDB]:
         """
         Fetch books by popular authors to populate the database.
@@ -162,10 +151,7 @@ class GoogleBooksClient:
             authors: List of authors to search. Defaults to popular authors.
             language: Target language
             books_per_author: Number of books per author
-<<<<<<< HEAD
-=======
             target_count: Target number of books to fetch (best effort)
->>>>>>> dev
         
         Returns:
             All fetched books (without duplicates)
@@ -211,22 +197,6 @@ class GoogleBooksClient:
                 ]
         
         all_books: Dict[str, BookInDB] = {}  # Use title as key to avoid duplicates
-<<<<<<< HEAD
-        
-        for author in authors:
-            books = await self.search_by_author(
-                author=author,
-                language=language,
-                max_results=books_per_author
-            )
-            
-            for book in books:
-                if book.title not in all_books:
-                    all_books[book.title] = book
-            
-            print(f"   📖 {author}: {len(books)} books")
-        
-=======
 
         if target_count is None:
             for author in authors:
@@ -292,7 +262,6 @@ class GoogleBooksClient:
             if len(all_books) >= target_count:
                 break
 
->>>>>>> dev
         return list(all_books.values())
     
     async def close(self):

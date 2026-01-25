@@ -23,7 +23,8 @@ class GoogleBooksClient:
         self,
         query: str,
         language: str = "pl",
-        max_results: int = 20
+        max_results: int = 20,
+        start_index: int = 0
     ) -> List[BookInDB]:
         """
         Search for books using Google Books API.
@@ -44,6 +45,7 @@ class GoogleBooksClient:
             "q": query,
             "langRestrict": lang_restrict,
             "maxResults": min(max_results, 40),  # API limit is 40
+            "startIndex": max(start_index, 0),
             "printType": "books",
             "orderBy": "relevance"
         }
@@ -139,7 +141,8 @@ class GoogleBooksClient:
         self,
         authors: List[str] = None,
         language: str = "pl",
-        books_per_author: int = 10
+        books_per_author: int = 10,
+        target_count: Optional[int] = None
     ) -> List[BookInDB]:
         """
         Fetch books by popular authors to populate the database.
@@ -148,6 +151,7 @@ class GoogleBooksClient:
             authors: List of authors to search. Defaults to popular authors.
             language: Target language
             books_per_author: Number of books per author
+            target_count: Target number of books to fetch (best effort)
         
         Returns:
             All fetched books (without duplicates)
@@ -193,20 +197,71 @@ class GoogleBooksClient:
                 ]
         
         all_books: Dict[str, BookInDB] = {}  # Use title as key to avoid duplicates
-        
-        for author in authors:
-            books = await self.search_by_author(
-                author=author,
-                language=language,
-                max_results=books_per_author
-            )
+
+        if target_count is None:
+            for author in authors:
+                books = await self.search_by_author(
+                    author=author,
+                    language=language,
+                    max_results=books_per_author
+                )
+                
+                for book in books:
+                    if book.title not in all_books:
+                        all_books[book.title] = book
+                
+                print(f"   📖 {author}: {len(books)} books")
             
-            for book in books:
-                if book.title not in all_books:
-                    all_books[book.title] = book
-            
-            print(f"   📖 {author}: {len(books)} books")
-        
+            return list(all_books.values())
+
+        if language == "pl":
+            genres = [
+                "Fantasy", "Sci-Fi", "Kryminał", "Thriller", "Romans",
+                "Biografia", "Historia", "Horror", "Powieść"
+            ]
+        else:
+            genres = [
+                "Fantasy", "Science Fiction", "Mystery", "Thriller", "Romance",
+                "Biography", "History", "Horror", "Fiction"
+            ]
+
+        queries = [f"inauthor:{author}" for author in authors]
+        queries.extend([f"subject:{genre}" for genre in genres])
+
+        for query in queries:
+            start_index = 0
+            while len(all_books) < target_count:
+                remaining = target_count - len(all_books)
+                page_size = min(40, remaining)
+                books = await self.search_books(
+                    query=query,
+                    language=language,
+                    max_results=page_size,
+                    start_index=start_index
+                )
+
+                if not books:
+                    break
+
+                new_count = 0
+                for book in books:
+                    if book.title not in all_books:
+                        all_books[book.title] = book
+                        new_count += 1
+
+                print(f"   📖 {query}: +{new_count} (total {len(all_books)})")
+
+                if new_count == 0:
+                    break
+
+                if len(books) < page_size:
+                    break
+
+                start_index += page_size
+
+            if len(all_books) >= target_count:
+                break
+
         return list(all_books.values())
     
     async def close(self):

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../api/axios';
+
+// MUI imports (Functional components kept for complex interactions like Modals/Inputs)
 import {
     Typography,
     Avatar,
-    Paper,
     TextField,
     Button,
-    Stack,
     Alert,
     Dialog,
     DialogTitle,
@@ -15,13 +15,23 @@ import {
     DialogActions,
     Autocomplete,
     Box,
-    Divider
+    CircularProgress
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import { styled } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+
+// Icons
 import EditIcon from '@mui/icons-material/Edit';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import BookIcon from '@mui/icons-material/Book';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
+// Custom imports
+import mainTheme from '../themes/mainTheme';
+import { PageLayout } from './layouts/PageLayout';
+import { useNavigate } from 'react-router-dom';
 
 // --- Types ---
 
@@ -54,39 +64,28 @@ interface UpdateProfileDto {
     googleBookId?: string;
 }
 
-// --- Styled Components ---
+// --- Components ---
 
-const ProfileContainer = styled(Container)(({ theme }) => ({
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(8),
-}));
-
-const StatCard = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(3),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-    transition: 'transform 0.2s',
-    '&:hover': {
-        transform: 'translateY(-4px)',
-    }
-}));
-
-const BookCover = styled('img')({
-    width: '80px',
-    height: '120px',
-    objectFit: 'cover',
-    borderRadius: '4px',
-    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-});
+/**
+ * Reusable Stat Card Component (Tailwind + Glassmorphism)
+ */
+const StatItem = ({ icon: Icon, count, label, colorClass }: any) => (
+    <div className={`
+        flex flex-col items-center justify-center p-6 h-full
+        bg-white/70 backdrop-blur-md rounded-3xl border border-white/40 shadow-lg
+        hover:shadow-xl hover:-translate-y-1 transition-all duration-300
+    `}>
+        <div className={`p-3 rounded-full ${colorClass} bg-opacity-10 mb-2`}>
+            <Icon className={colorClass} sx={{ fontSize: 32 }} />
+        </div>
+        <span className="text-3xl font-extrabold text-gray-800">{count}</span>
+        <span className="text-sm font-bold text-gray-500 uppercase tracking-wide">{label}</span>
+    </div>
+);
 
 export default function Profile() {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -186,187 +185,274 @@ export default function Profile() {
         }
     };
 
-    if (isLoading) return <Typography sx={{ mt: 8, textAlign: 'center' }}>Loading...</Typography>;
-    if (error || !profile) return <Container maxWidth="md"><Alert severity="error" sx={{ mt: 4 }}>{error || "Profile not found"}</Alert></Container>;
-
     return (
-        <ProfileContainer maxWidth="lg">
-            <Paper elevation={0} sx={{ p: 4, mb: 4, borderRadius: 4, border: '1px solid', borderColor: 'divider' }}>
-                <Grid container spacing={4} alignItems="center">
-                    <Grid size={{ xs: 12, md: 3 }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <Avatar
-                            src={profile.profilePictureUrl}
-                            alt={profile.displayName}
-                            sx={{ width: 160, height: 160, mb: 2, boxShadow: 3, border: '4px solid white' }}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, md: 9 }}>
-                        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="flex-start" spacing={2}>
-                            <Box>
-                                <Typography variant="h3" fontWeight={800} gutterBottom>
-                                    {profile.displayName}
-                                </Typography>
-                                <Typography variant="body1" color="text.secondary" sx={{ mb: 2, maxWidth: '600px' }}>
-                                    {profile.bio || "No bio yet."}
-                                </Typography>
-                                <Typography variant="caption" color="text.secondary">
-                                    Joined {new Date(profile.createdAt).toLocaleDateString()}
-                                </Typography>
-                            </Box>
+        <ThemeProvider theme={mainTheme}>
+            <PageLayout>
+                {/* --- Top Navigation --- */}
+                <div className="w-full max-w-6xl mx-auto mb-6 pl-2 animate-fade-in">
+                    <Button
+                        startIcon={<ArrowBackIcon />}
+                        onClick={() => navigate(-1)}
+                        sx={{ mb: 2, color: 'text.secondary', '&:hover': { color: 'primary.main' } }}
+                    >
+                        Go Back
+                    </Button>
+                </div>
 
-                            <Box>
-                                {isOwnProfile ? (
-                                    <Button
-                                        variant="outlined"
-                                        startIcon={<EditIcon />}
-                                        onClick={() => setIsEditOpen(true)}
-                                    >
-                                        Edit Profile
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant={profile.isFollowing ? "outlined" : "contained"}
-                                        color={profile.isFollowing ? "secondary" : "primary"}
-                                        startIcon={profile.isFollowing ? <PersonRemoveIcon /> : <PersonAddIcon />}
-                                        onClick={handleFollowToggle}
-                                    >
-                                        {profile.isFollowing ? "Unfollow" : "Follow"}
-                                    </Button>
-                                )}
-                            </Box>
-                        </Stack>
+                {/* --- Loading & Error States --- */}
+                {isLoading && (
+                    <div className="flex flex-col justify-center items-center mt-20 gap-4">
+                        <CircularProgress size={60} thickness={4} sx={{ color: 'white' }} />
+                        <p className="text-white font-medium text-lg drop-shadow-md">Loading Profile...</p>
+                    </div>
+                )}
 
-                        <Stack direction="row" spacing={4} sx={{ mt: 4 }}>
-                            <Box textAlign="center">
-                                <Typography variant="h6" fontWeight="bold">{profile.followersCount}</Typography>
-                                <Typography variant="caption" color="text.secondary">Followers</Typography>
-                            </Box>
-                            <Box textAlign="center">
-                                <Typography variant="h6" fontWeight="bold">{profile.followingCount}</Typography>
-                                <Typography variant="caption" color="text.secondary">Following</Typography>
-                            </Box>
-                        </Stack>
-                    </Grid>
-                </Grid>
-            </Paper>
+                {error && !isLoading && (
+                     <Alert severity="error" className="max-w-4xl mx-auto mb-8 shadow-md rounded-xl backdrop-blur-md bg-red-100/90">
+                        {error}
+                    </Alert>
+                )}
 
-            <Grid container spacing={3}>
-                <Grid size={{ xs: 12, md: 4 }}>
-                    <Stack spacing={3} height="100%">
-                        <StatCard>
-                            <Typography variant="h2" color="primary.main" fontWeight={800}>
-                                {profile.shelvesCount}
-                            </Typography>
-                            <Typography variant="subtitle1" fontWeight={600}>Shelves</Typography>
-                        </StatCard>
-                        <StatCard>
-                            <Typography variant="h2" color="secondary.main" fontWeight={800}>
-                                {profile.uniqueBooksCount}
-                            </Typography>
-                            <Typography variant="subtitle1" fontWeight={600}>Books Collected</Typography>
-                        </StatCard>
-                    </Stack>
-                </Grid>
+                {/* --- Main Profile Content --- */}
+                {!isLoading && profile && (
+                    <div className="w-full max-w-6xl mx-auto pb-10 space-y-8 animate-fade-in">
+                        
+                        {/* 1. Profile Header Card */}
+                        <div className="relative overflow-hidden bg-white/70 backdrop-blur-md border border-white/40 rounded-[2rem] shadow-xl p-8 md:p-10">
+                            {/* Gradient Background Decoration */}
+                            <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-r from-primary-light/30 to-secondary-light/20 z-0" />
+                            
+                            <div className="relative z-10 flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-10 pt-4">
+                                
+                                {/* Avatar with border */}
+                                <div className="relative group">
+                                    <div className="absolute -inset-1 bg-linear-to-br from-primary-main to-secondary-main rounded-full opacity-70 blur-xs group-hover:opacity-100 transition duration-500"></div>
+                                    <Avatar
+                                        src={profile.profilePictureUrl}
+                                        alt={profile.displayName}
+                                        sx={{ 
+                                            width: 140, 
+                                            height: 140, 
+                                            border: '4px solid white',
+                                            boxShadow: '0 4px 14px rgba(0,0,0,0.1)'
+                                        }}
+                                        className="relative"
+                                    />
+                                </div>
 
-                <Grid size={{ xs: 12, md: 8 }}>
-                    <Paper elevation={0} sx={{ p: 3, height: '100%', borderRadius: 4, border: '1px solid', borderColor: 'divider' }}>
-                        <Typography variant="h6" fontWeight="bold" gutterBottom>
-                            Favorite Book
-                        </Typography>
-                        <Divider sx={{ mb: 2 }} />
+                                {/* User Info */}
+                                <div className="flex-1 text-center md:text-left mb-2">
+                                    <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-2">
+                                        {profile.displayName}
+                                    </h1>
+                                    <p className="text-gray-600 font-medium text-lg max-w-2xl leading-relaxed mb-4">
+                                        {profile.bio || "This user prefers to keep an air of mystery."}
+                                    </p>
+                                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-gray-500 font-medium">
+                                        <span className="bg-white/50 px-3 py-1 rounded-full border border-gray-200">
+                                            Joined {new Date(profile.createdAt).toLocaleDateString()}
+                                        </span>
+                                        <div className="flex gap-4 px-2">
+                                            <span><strong className="text-gray-900">{profile.followersCount}</strong> Followers</span>
+                                            <span><strong className="text-gray-900">{profile.followingCount}</strong> Following</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        {profile.favoriteBook ? (
-                            <Stack direction="row" spacing={3}>
-                                <BookCover src={profile.favoriteBook.coverUrl || '/placeholder-book.png'} alt={profile.favoriteBook.title} />
-                                <Box>
-                                    <Typography variant="h5" fontWeight="bold" gutterBottom>
-                                        {profile.favoriteBook.title}
-                                    </Typography>
-                                    <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-                                        {profile.favoriteBook.authors.join(', ')}
-                                    </Typography>
-                                </Box>
-                            </Stack>
-                        ) : (
-                            <Box sx={{ py: 4, textAlign: 'center' }}>
-                                <Typography color="text.secondary">No favorite book selected.</Typography>
-                            </Box>
-                        )}
-                    </Paper>
-                </Grid>
-            </Grid>
+                                {/* Action Button */}
+                                <div className="md:self-center md:mb-4">
+                                    {isOwnProfile ? (
+                                        <Button
+                                            variant="outlined"
+                                            startIcon={<EditIcon />}
+                                            onClick={() => setIsEditOpen(true)}
+                                            sx={{ 
+                                                borderRadius: 3, 
+                                                borderWidth: 2, 
+                                                fontWeight: 'bold',
+                                                px: 3,
+                                                '&:hover': { borderWidth: 2 }
+                                            }}
+                                        >
+                                            Edit Profile
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant={profile.isFollowing ? "outlined" : "contained"}
+                                            color={profile.isFollowing ? "secondary" : "primary"}
+                                            startIcon={profile.isFollowing ? <PersonRemoveIcon /> : <PersonAddIcon />}
+                                            onClick={handleFollowToggle}
+                                            sx={{ 
+                                                borderRadius: 3, 
+                                                fontWeight: 'bold', 
+                                                px: 4, 
+                                                boxShadow: profile.isFollowing ? 'none' : '0 4px 14px rgba(221, 152, 10, 0.4)' 
+                                            }}
+                                        >
+                                            {profile.isFollowing ? "Unfollow" : "Follow"}
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
 
-            {/* Edit Modal */}
-            <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>Edit Profile</DialogTitle>
-                <DialogContent>
-                    <Stack spacing={3} sx={{ mt: 1 }}>
-                        <TextField
-                            label="Avatar URL"
-                            fullWidth
-                            value={editAvatarUrl}
-                            onChange={(e) => setEditAvatarUrl(e.target.value)}
-                        />
-                        <TextField
-                            label="Bio"
-                            fullWidth
-                            multiline
-                            rows={3}
-                            value={editBio}
-                            onChange={(e) => setEditBio(e.target.value)}
-                        />
-
-                        <Autocomplete
-                            options={searchBooks}
-                            loading={searching}
-                            getOptionLabel={(option) => option.title}
-                            filterOptions={(x) => x}
-                            onInputChange={(_, value) => handleSearchBooks(value)}
-                            value={selectedBook}
-                            onChange={(_, newValue) => setSelectedBook(newValue)}
-                            isOptionEqualToValue={(option, value) => option.id === value.id}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Search Favorite Book"
-                                    placeholder="Type to search..."
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        endAdornment: (
-                                            <>
-                                                {searching ? <Box sx={{ mr: 2 }}>Loading...</Box> : null}
-                                                {params.InputProps.endAdornment}
-                                            </>
-                                        ),
-                                    }}
+                        {/* 2. Grid Layout for Stats & Favorite Book */}
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                            
+                            {/* Left Column: Stats (4 columns) */}
+                            <div className="md:col-span-4 flex flex-col gap-6">
+                                <StatItem 
+                                    icon={AutoStoriesIcon} 
+                                    count={profile.shelvesCount} 
+                                    label="Shelves Created" 
+                                    colorClass="text-primary-main"
                                 />
-                            )}
-                            renderOption={(props, option) => (
-                                <li {...props} key={option.id}>
-                                    <Stack direction="row" spacing={2} alignItems="center">
-                                        {option.coverUrl &&
-                                            <img src={option.coverUrl} style={{ width: 30, height: 45, objectFit: 'cover' }} alt="" />
-                                        }
-                                        <Box>
-                                            <Typography variant="body2" fontWeight="bold">
-                                                {option.title}
-                                            </Typography>
-                                            <Typography variant="caption" color="text.secondary">
-                                                {option.authors.join(', ')}
-                                            </Typography>
-                                        </Box>
-                                    </Stack>
-                                </li>
-                            )}
-                        />
-                    </Stack>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setIsEditOpen(false)}>Cancel</Button>
-                    <Button onClick={handleSaveProfile} variant="contained">Save</Button>
-                </DialogActions>
-            </Dialog>
+                                <StatItem 
+                                    icon={BookIcon} 
+                                    count={profile.uniqueBooksCount} 
+                                    label="Books Collected" 
+                                    colorClass="text-secondary-main"
+                                />
+                            </div>
 
-        </ProfileContainer>
+                            {/* Right Column: Favorite Book (8 columns) */}
+                            <div className="md:col-span-8">
+                                <div className="h-full bg-white/70 backdrop-blur-md border border-white/40 rounded-[2rem] shadow-lg p-6 flex flex-col">
+                                    <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200/50">
+                                        <EmojiEventsIcon className="text-yellow-500" />
+                                        <h2 className="text-xl font-bold text-gray-800">Top Pick</h2>
+                                    </div>
+                                    
+                                    <div className="flex-grow flex items-center justify-center">
+                                        {profile.favoriteBook ? (
+                                            <div className="flex flex-col sm:flex-row gap-6 items-center w-full p-4 hover:bg-white/40 rounded-2xl transition-colors cursor-default">
+                                                {/* Cover with shadow effect */}
+                                                <div className="relative shrink-0">
+                                                    <div className="absolute inset-0 bg-gray-900 rounded-lg blur-md opacity-20 translate-y-2"></div>
+                                                    <img 
+                                                        src={profile.favoriteBook.coverUrl || '/placeholder-book.png'} 
+                                                        alt={profile.favoriteBook.title}
+                                                        className="relative w-32 md:w-40 h-auto rounded-lg shadow-md object-cover transform hover:scale-105 transition duration-500"
+                                                    />
+                                                </div>
+                                                
+                                                <div className="text-center sm:text-left">
+                                                    <h3 className="text-2xl font-bold text-gray-900 leading-tight mb-2">
+                                                        {profile.favoriteBook.title}
+                                                    </h3>
+                                                    <p className="text-lg text-primary-dark font-medium mb-3">
+                                                        by {profile.favoriteBook.authors.join(', ')}
+                                                    </p>
+                                                    <div className="inline-block bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full">
+                                                        FAVORITE
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center text-gray-400 py-12">
+                                                <AutoStoriesIcon sx={{ fontSize: 60, opacity: 0.3, mb: 2 }} />
+                                                <p className="font-medium">No favorite book selected yet.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* --- Edit Modal (MUI Dialog kept for complex logic) --- */}
+                <Dialog 
+                    open={isEditOpen} 
+                    onClose={() => setIsEditOpen(false)} 
+                    maxWidth="sm" 
+                    fullWidth
+                    PaperProps={{
+                        style: { borderRadius: 24, padding: 12 }
+                    }}
+                >
+                    <DialogTitle sx={{ fontWeight: 'bold', fontSize: '1.5rem' }}>Edit Profile</DialogTitle>
+                    <DialogContent>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 1 }}>
+                            <TextField
+                                label="Profile Picture URL"
+                                fullWidth
+                                variant="outlined"
+                                value={editAvatarUrl}
+                                onChange={(e) => setEditAvatarUrl(e.target.value)}
+                                helperText="Paste a direct link to an image"
+                            />
+                            
+                            <TextField
+                                label="Bio"
+                                fullWidth
+                                multiline
+                                rows={3}
+                                variant="outlined"
+                                value={editBio}
+                                onChange={(e) => setEditBio(e.target.value)}
+                                placeholder="Tell us about your reading habits..."
+                            />
+
+                            <Autocomplete
+                                options={searchBooks}
+                                loading={searching}
+                                getOptionLabel={(option) => option.title}
+                                filterOptions={(x) => x}
+                                onInputChange={(_, value) => handleSearchBooks(value)}
+                                value={selectedBook}
+                                onChange={(_, newValue) => setSelectedBook(newValue)}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Search Favorite Book"
+                                        placeholder="Type to search..."
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            endAdornment: (
+                                                <>
+                                                    {searching ? <CircularProgress color="inherit" size={20} /> : null}
+                                                    {params.InputProps.endAdornment}
+                                                </>
+                                            ),
+                                        }}
+                                    />
+                                )}
+                                renderOption={(props, option) => {
+                                    const { key, ...rest } = props;
+                                    return (
+                                        <li key={key} {...rest}>
+                                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                                                {option.coverUrl && (
+                                                    <img src={option.coverUrl} style={{ width: 40, borderRadius: 4 }} alt="" />
+                                                )}
+                                                <Box>
+                                                    <Typography variant="body2" fontWeight="bold">
+                                                        {option.title}
+                                                    </Typography>
+                                                    <Typography variant="caption" color="text.secondary">
+                                                        {option.authors.join(', ')}
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
+                                        </li>
+                                    );
+                                }}
+                            />
+                        </Box>
+                    </DialogContent>
+                    <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+                        <Button onClick={() => setIsEditOpen(false)} color="inherit" sx={{ borderRadius: 2 }}>
+                            Cancel
+                        </Button>
+                        <Button onClick={handleSaveProfile} variant="contained" sx={{ borderRadius: 2, px: 3 }}>
+                            Save Changes
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+            </PageLayout>
+        </ThemeProvider>
     );
 }

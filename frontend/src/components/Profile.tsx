@@ -94,8 +94,6 @@ export default function Profile() {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [editBio, setEditBio] = useState('');
     const [editAvatarUrl, setEditAvatarUrl] = useState('');
-    const [followingCount, setFollowingCount] = useState(0);
-    const [followersCount, setFollowersCount] = useState(0);
     const [selectedBook, setSelectedBook] = useState<BookDto | null>(null);
     const [searchBooks, setSearchBooks] = useState<BookDto[]>([]);
     const [searching, setSearching] = useState(false);
@@ -119,16 +117,6 @@ export default function Profile() {
             setEditBio(response.data.bio || '');
             setEditAvatarUrl(response.data.profilePictureUrl || '');
             setSelectedBook(response.data.favoriteBook || null);
-            setFollowersCount(response.data.followersCount || null);
-            setFollowingCount(response.data.followingCount || null);
-            
-            if (followingCount) {
-                setProfile(prev => prev ? ({ ...prev, followingCount }) : null);
-            }
-
-            if (followersCount) {
-                setProfile(prev => prev ? ({ ...prev, followersCount }) : null);
-            }
 
         } catch (err) {
             console.error("Failed to fetch profile", err);
@@ -220,7 +208,7 @@ export default function Profile() {
                 )}
 
                 {error && !isLoading && (
-                     <Alert severity="error" className="max-w-4xl mx-auto mb-8 shadow-md rounded-xl backdrop-blur-md bg-red-100/90">
+                    <Alert severity="error" className="max-w-4xl mx-auto mb-8 shadow-md rounded-xl backdrop-blur-md bg-red-100/90">
                         {error}
                     </Alert>
                 )}
@@ -228,23 +216,23 @@ export default function Profile() {
                 {/* --- Main Profile Content --- */}
                 {!isLoading && profile && (
                     <div className="w-full max-w-6xl mx-auto pb-10 space-y-8 animate-fade-in">
-                        
+
                         {/* 1. Profile Header Card */}
                         <div className="relative overflow-hidden bg-white/70 backdrop-blur-md border border-white/40 rounded-4xl shadow-xl p-8 md:p-10">
                             {/* Gradient Background Decoration */}
                             <div className="absolute top-0 left-0 w-full h-32 bg-linear-to-r from-primary-light/30 to-secondary-light/20 z-0" />
-                            
+
                             <div className="relative z-10 flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-10 pt-4">
-                                
+
                                 {/* Avatar with border */}
                                 <div className="relative group">
                                     <div className="absolute -inset-1 bg-linear-to-br from-primary-main to-secondary-main rounded-full opacity-70 blur-xs group-hover:opacity-100 transition duration-500 ,"></div>
                                     <Avatar
                                         src={profile.profilePictureUrl}
                                         alt={profile.displayName}
-                                        sx={{ 
-                                            width: 140, 
-                                            height: 140, 
+                                        sx={{
+                                            width: 140,
+                                            height: 140,
                                             border: '4px solid white',
                                             boxShadow: '0 4px 14px rgba(0,0,0,0.1)'
                                         }}
@@ -278,11 +266,11 @@ export default function Profile() {
                                             variant="outlined"
                                             startIcon={<EditIcon />}
                                             onClick={() => setIsEditOpen(true)}
-                                            sx={{ 
+                                            sx={{
                                                 color: 'text.secondary',
-                                                borderRadius: 3, 
+                                                borderRadius: 3,
                                                 borderWidth: 2,
-                                                borderColor: 'text.secondary', 
+                                                borderColor: 'text.secondary',
                                                 fontWeight: 'bold',
                                                 px: 3,
                                                 '&:hover': { borderWidth: 3 }
@@ -296,11 +284,11 @@ export default function Profile() {
                                             color={profile.isFollowing ? "secondary" : "primary"}
                                             startIcon={profile.isFollowing ? <PersonRemoveIcon /> : <PersonAddIcon />}
                                             onClick={handleFollowToggle}
-                                            sx={{ 
-                                                borderRadius: 3, 
-                                                fontWeight: 'bold', 
-                                                px: 4, 
-                                                boxShadow: profile.isFollowing ? 'none' : '0 4px 14px rgba(221, 152, 10, 0.4)' 
+                                            sx={{
+                                                borderRadius: 3,
+                                                fontWeight: 'bold',
+                                                px: 4,
+                                                boxShadow: profile.isFollowing ? 'none' : '0 4px 14px rgba(221, 152, 10, 0.4)'
                                             }}
                                         >
                                             {profile.isFollowing ? "Unfollow" : "Follow"}
@@ -312,19 +300,19 @@ export default function Profile() {
 
                         {/* 2. Grid Layout for Stats & Favorite Book */}
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                            
+
                             {/* Left Column: Stats (4 columns) */}
                             <div className="md:col-span-4 flex flex-col gap-6">
-                                <StatItem 
-                                    icon={AutoStoriesIcon} 
-                                    count={profile.shelvesCount} 
-                                    label="Shelves Created" 
+                                <StatItem
+                                    icon={AutoStoriesIcon}
+                                    count={profile.shelvesCount}
+                                    label="Shelves Created"
                                     colorClass="text-primary-main"
                                 />
-                                <StatItem 
-                                    icon={BookIcon} 
-                                    count={profile.uniqueBooksCount} 
-                                    label="Books Collected" 
+                                <StatItem
+                                    icon={BookIcon}
+                                    count={profile.uniqueBooksCount}
+                                    label="Books Collected"
                                     colorClass="text-secondary-main"
                                 />
                             </div>
@@ -336,20 +324,20 @@ export default function Profile() {
                                         <EmojiEventsIcon className="text-yellow-500" />
                                         <h2 className="text-xl font-bold text-gray-800">Top Pick</h2>
                                     </div>
-                                    
+
                                     <div className="grow flex items-center justify-center">
                                         {profile.favoriteBook ? (
                                             <div className="flex flex-col sm:flex-row gap-6 items-center w-full p-4 hover:bg-white/40 rounded-2xl transition-colors cursor-default">
                                                 {/* Cover with shadow effect */}
                                                 <div className="relative shrink-0">
                                                     <div className="absolute inset-0 bg-gray-900 rounded-lg blur-md opacity-20 translate-y-2"></div>
-                                                    <img 
-                                                        src={profile.favoriteBook.coverUrl || '/placeholder-book.png'} 
+                                                    <img
+                                                        src={profile.favoriteBook.coverUrl || '/placeholder-book.png'}
                                                         alt={profile.favoriteBook.title}
                                                         className="relative w-32 md:w-40 h-auto rounded-lg shadow-md object-cover transform hover:scale-105 transition duration-500"
                                                     />
                                                 </div>
-                                                
+
                                                 <div className="text-center sm:text-left">
                                                     <h3 className="text-2xl font-bold text-gray-900 leading-tight mb-2">
                                                         {profile.favoriteBook.title}
@@ -376,10 +364,10 @@ export default function Profile() {
                 )}
 
                 {/* --- Edit Modal (MUI Dialog kept for complex logic) --- */}
-                <Dialog 
-                    open={isEditOpen} 
-                    onClose={() => setIsEditOpen(false)} 
-                    maxWidth="sm" 
+                <Dialog
+                    open={isEditOpen}
+                    onClose={() => setIsEditOpen(false)}
+                    maxWidth="sm"
                     fullWidth
                     PaperProps={{
                         style: { borderRadius: 24, padding: 12 }
@@ -396,7 +384,7 @@ export default function Profile() {
                                 onChange={(e) => setEditAvatarUrl(e.target.value)}
                                 helperText="Paste a direct link to an image"
                             />
-                            
+
                             <TextField
                                 label="Bio"
                                 fullWidth

@@ -33,6 +33,8 @@ namespace backend.Controllers
                 .Include(u => u.FavoriteBook)
                 .ThenInclude(b => b.BookAuthors)
                 .ThenInclude(ba => ba.Author)
+                .Include(u => u.Followers)
+                .Include(u => u.Following)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null) return NotFound("User not found");
@@ -70,6 +72,8 @@ namespace backend.Controllers
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 ShelvesCount = shelvesCount,
                 UniqueBooksCount = uniqueBooksCount,
+                FollowersCount = user.Followers.Count,
+                FollowingCount = user.Following.Count,
                 CreatedAt = user.CreatedAt,
                 FavoriteBook = favoriteBookDto
             });

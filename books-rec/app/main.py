@@ -15,6 +15,10 @@ from app.models import (
 from app.recommender import recommendation_engine
 from app.vector_db import vector_db
 from app.sample_books import get_sample_books
+<<<<<<< HEAD
+=======
+from app.config import settings
+>>>>>>> dev
 
 
 @asynccontextmanager
@@ -32,9 +36,21 @@ async def lifespan(app: FastAPI):
             
             client = GoogleBooksClient()
             try:
+<<<<<<< HEAD
                 # Fetch books by popular authors (10 per author = ~150 books per language)
                 pl_books = await client.populate_database(language="pl", books_per_author=10)
                 en_books = await client.populate_database(language="en", books_per_author=10)
+=======
+                target_per_language = max(1, settings.DEFAULT_DB_BOOKS_TARGET // 2)
+                pl_books = await client.populate_database(
+                    language="pl",
+                    target_count=target_per_language
+                )
+                en_books = await client.populate_database(
+                    language="en",
+                    target_count=target_per_language
+                )
+>>>>>>> dev
                 all_books = pl_books + en_books
                 
                 if all_books:
@@ -110,6 +126,10 @@ async def get_recommendations(request: RecommendationRequest):
     
     **Categories returned:**
     - "Because you read [Book]" - similar to last read
+<<<<<<< HEAD
+=======
+    - "Readers who added [Book] also added" - collaborative picks
+>>>>>>> dev
     - "More from [Author]" - other books by favorite authors
     - "Top [Genre]" - best in preferred genres
     - "Discoveries" - serendipity picks
@@ -299,4 +319,7 @@ async def populate_from_google_books(
             }
     finally:
         await client.close()
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev

@@ -32,7 +32,14 @@ class RecommendedBook(BaseModel):
 class RecommendationCategory(BaseModel):
     """A Netflix-style recommendation category (shelf)."""
     category_title: str = Field(..., description="e.g., 'Ponieważ lubisz Andrzeja Sapkowskiego'")
+<<<<<<< HEAD
     type: str = Field(..., description="Category type: content_similarity, genre_top, serendipity")
+=======
+    type: str = Field(
+        ...,
+        description="Category type: content_similarity, author_based, genre_top, serendipity, people_also_added"
+    )
+>>>>>>> dev
     items: List[RecommendedBook] = Field(default_factory=list)
 
 

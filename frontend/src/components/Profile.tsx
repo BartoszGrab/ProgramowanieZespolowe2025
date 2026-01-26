@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../api/axios';
 
-// MUI imports (Functional components kept for complex interactions like Modals/Inputs)
+// MUI imports 
 import {
     Typography,
     Avatar,
@@ -67,7 +67,8 @@ interface UpdateProfileDto {
 // --- Components ---
 
 /**
- * Reusable Stat Card Component (Tailwind + Glassmorphism)
+ * Reusable Stat Card Component (Tailwind + Glassmorphism).
+ * Displays a single statistic with an icon.
  */
 const StatItem = ({ icon: Icon, count, label, colorClass }: any) => (
     <div className={`
@@ -83,6 +84,10 @@ const StatItem = ({ icon: Icon, count, label, colorClass }: any) => (
     </div>
 );
 
+/**
+ * Profile Page Component.
+ * Handles viewing user details, statistics, favorite book, and editing profile information.
+ */
 export default function Profile() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -105,6 +110,11 @@ export default function Profile() {
         fetchProfile();
     }, [id]);
 
+    // --- API Handlers ---
+
+    /**
+     * Fetches the user profile data from the API.
+     */
     const fetchProfile = async () => {
         setIsLoading(true);
         setError(null);
@@ -126,6 +136,9 @@ export default function Profile() {
         }
     };
 
+    /**
+     * Toggles the follow status of the displayed user.
+     */
     const handleFollowToggle = async () => {
         if (!profile) return;
 
@@ -142,6 +155,10 @@ export default function Profile() {
         }
     };
 
+    /**
+     * Searches for books to select as a favorite.
+     * @param query - The search string
+     */
     const handleSearchBooks = async (query: string) => {
         if (!query) {
             setSearchBooks([]);
@@ -158,14 +175,22 @@ export default function Profile() {
         }
     };
 
+    /**
+     * Submits the profile changes (Avatar, Bio, Favorite Book).
+     * Handles the logic for "external" books (Google Books) that don't have a DB UUID yet.
+     */
     const handleSaveProfile = async () => {
         try {
+            // 1. Update Avatar (separate endpoint) if changed
             if (editAvatarUrl !== profile?.profilePictureUrl) {
                 await axios.put('/api/users/me/avatar', { profilePictureUrl: editAvatarUrl });
             }
 
+            // 2. Prepare Profile Update DTO
             let favBookId = selectedBook?.id;
+
             // Check if selected book is external (Google Book) - indicated by Empty GUID
+            // This tells the backend to fetch details from Google API and create the book entry
             if (selectedBook && selectedBook.id === '00000000-0000-0000-0000-000000000000') {
                 favBookId = undefined; // Do not send invalid GUID
             }
@@ -178,6 +203,7 @@ export default function Profile() {
 
             await axios.put('/api/users/me/profile', updateDto);
 
+            // 3. Refresh and Close
             setIsEditOpen(false);
             fetchProfile();
         } catch (err) {
@@ -363,7 +389,7 @@ export default function Profile() {
                     </div>
                 )}
 
-                {/* --- Edit Modal (MUI Dialog kept for complex logic) --- */}
+                {/* --- Edit Modal (MUI Dialog) --- */}
                 <Dialog
                     open={isEditOpen}
                     onClose={() => setIsEditOpen(false)}

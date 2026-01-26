@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid'; // Grid v2 (MUI v6)
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import LoginIcon from '@mui/icons-material/Login';

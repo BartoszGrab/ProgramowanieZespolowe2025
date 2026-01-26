@@ -1,0 +1,10 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src"],
+  "entryPointStrategy": "expand",
+  "out": "docs",
+  "name": "Virtual Book Collection API",
+  "includeVersion": true,
+  "darkHighlightTheme": "dark-plus",
+  "exclude": ["**/*.test.tsx", "**/*.spec.tsx", "**/node_modules/**"]
+}

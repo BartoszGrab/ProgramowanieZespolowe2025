@@ -17,7 +17,18 @@ import PeopleIcon from '@mui/icons-material/People';
 import mainTheme from '../themes/mainTheme';
 import { PageLayout } from '../components/layouts/PageLayout'; 
 
-// Nowoczesna karta "Action Card"
+
+/**
+ * A reusable interactive card component used for main navigation actions.
+ * * @remarks
+ * Implements a **Glassmorphism** design (`bg-white/70`, `backdrop-blur`) with complex
+ * CSS transitions for hover states (scale, shadow, and decorative elements).
+ * * * @param props.icon - The MUI Icon component constructor to render.
+ * @param props.title - The primary header text.
+ * @param props.subtitle - The secondary description text.
+ * @param props.onClick - Navigation handler.
+ * @param props.delay - CSS animation delay for staggered entrance effects.
+ */
 const ActionCard = ({ icon: Icon, title, subtitle, onClick, delay }: any) => (
     <div 
         onClick={onClick}
@@ -30,15 +41,15 @@ const ActionCard = ({ icon: Icon, title, subtitle, onClick, delay }: any) => (
         `}
         style={{ animationDelay: delay }}
     >
-        {/* Dekoracyjne tło hover (subtelny gradient) */}
+        {/* Hover Effect: Decorative gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-        {/* Ikona w "bąbelku" */}
+        {/* Icon in a "bubble" */}
         <div className="relative z-10 mb-6 p-4 rounded-2xl bg-primary-light/20 text-primary-dark group-hover:scale-110 group-hover:bg-primary-dark group-hover:text-white transition-all duration-300">
             <Icon sx={{ fontSize: 32 }} />
         </div>
 
-        {/* Tekst */}
+        {/* Text */}
         <h3 className="relative z-10 text-xl font-bold text-text-primary mb-2 group-hover:brightness-75 group-hover:text-primary-dark transition-colors">
             {title}
         </h3>
@@ -46,17 +57,32 @@ const ActionCard = ({ icon: Icon, title, subtitle, onClick, delay }: any) => (
             {subtitle}
         </p>
 
-        {/* Strzałka dekoracyjna, która pojawia się przy hover */}
+        {/* Decorative arrow that appears on hover */}
         <div className="absolute bottom-6 right-6 opacity-0 transform translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary-main font-bold text-xl">
             →
         </div>
     </div>
 );
 
+/**
+ * The Landing Page / Home component.
+ * * @remarks
+ * Acts as the entry point logic for the application.
+ * * Responsibilities:
+ * 1. **Authentication Check**: Verifies `localStorage` on mount to determine if the user is logged in.
+ * 2. **Conditional Rendering**:
+ * - **Guest**: Shows "Login" and "Register" cards.
+ * - **User**: Shows "Dashboard", "Recommendations", and "Community" cards.
+ * 3. **Hero Section**: Displays the welcome message and application value proposition.
+ */
 export default function Home() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const navigate = useNavigate();
 
+    /**
+     * Effect: Auth Check.
+     * Determines UI state based on the presence of an auth token.
+     */
     useEffect(() => {
         setIsLoggedIn(!!localStorage.getItem('authToken'));
     }, []);
@@ -72,7 +98,7 @@ export default function Home() {
             <PageLayout>
                 {/* --- Hero Section --- */}
                 <Box className="mb-20 mt-8 w-full text-center flex flex-col items-center relative z-10">
-                    {/* Główny Tytuł z Gradientem */}
+                    {/* Main Title with Gradient */}
                     <Typography
                         component="h1"
                         variant="h2"

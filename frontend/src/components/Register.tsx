@@ -21,7 +21,6 @@ import { styled, ThemeProvider } from '@mui/material/styles';
 
 // Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
-import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
 import mainTheme from '../themes/mainTheme';
 import { PageLayout } from './layouts/PageLayout';
 

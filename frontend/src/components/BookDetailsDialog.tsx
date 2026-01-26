@@ -18,6 +18,10 @@ import {
     Alert
 } from '@mui/material';
 
+
+/**
+ * Props definition for the {@link BookDetailsDialog} component.
+ */
 interface BookDetailsDialogProps {
     /**
      * Controls the visibility of the dialog
@@ -30,7 +34,8 @@ interface BookDetailsDialogProps {
     onClose: () => void;
 
     /**
-     *  The book objcet to display details for
+     * The book object to display details for.
+     * If null, the dialog will not render content.
      */
     book: ShelfBook | null;
     
@@ -46,8 +51,14 @@ interface BookDetailsDialogProps {
 }
 
 /**
- * @returns The dialog window presenting book object's details
- * and allowing progress updates and reviews.
+ * A modal dialog component that presents detailed information about a specific book.
+ * * @remarks
+ * This component provides two main interactive features:
+ * 1. **Reading Progress Tracker**: Allows the user to update the current page number.
+ * 2. **Review System**: Displays a list of existing reviews and allows the current user to submit or edit their own review.
+ * * It manages its own state for fetching reviews and handling form submissions.
+ * * @param props - The properties defined in {@link BookDetailsDialogProps}.
+ * @returns The rendered Dialog component or null if no book is provided.
  */
 export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelfId }: BookDetailsDialogProps) {
     // --- State: Reading Progress ---
@@ -63,7 +74,9 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
     const [error, setError] = useState('');
 
     /**
-     *  Effect: When the book changes, initialize state and fetch reviews
+     * Effect: Synchronization.
+     * When the `book` prop changes, it resets local state, updates the current page,
+     * and triggers data fetching for reviews.
      */
     useEffect(() => {
         if (book) {
@@ -73,8 +86,9 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
         }
     }, [book]);
 
-    /**
-     * Fetches all available reviews for the current book
+   /**
+     * Fetches all available reviews for the current book from the backend.
+     * Updates the `reviews` state and handles loading indicators.
      */
     const fetchReviews = async () => {
         if (!book) return;
@@ -84,15 +98,16 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
             setReviews(res.data);
         } catch (err) {
             console.error("Failed to fetch reviews", err);
-            // Logging essential for debugging, without disrupting user experience
         } finally {
             setLoadingReviews(false);
         }
     };
 
-    /**
-     * Fetches the current user's review for the book, if it exists.
-     * Handles the case where no review exists gracefully.
+   /**
+     * Fetches the current user's specific review for this book.
+     * * @remarks
+     * If the API returns a 404 error, it interprets this as "User has not reviewed yet"
+     * and resets the form to a clean state rather than throwing an error to the UI.
      */
     const fetchMyReview = async () => {
         if (!book) return;
@@ -106,6 +121,15 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
         }
     };
 
+    /**
+     * Input handler for the page number field.
+     * * @remarks
+     * Includes validation logic:
+     * - Allows empty string (clearing input).
+     * - Ensures the value is a positive integer.
+     * - Caps the value at `book.pageCount` to prevent impossible progress.
+     * * @param e - The change event from the input field.
+     */
     const handlePagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!book) return;
         const val = e.target.value;
@@ -124,7 +148,8 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
     };
 
     /**
-     * Handles updating the reading progress of the book.
+     * Sends the updated reading progress (current page) to the backend.
+     * On success, it calls `onUpdate()` to refresh the parent view.
      */
     const handleUpdateProgress = async () => {
         if (!book) return;
@@ -143,8 +168,10 @@ export default function BookDetailsDialog({ open, onClose, book, onUpdate, shelf
     };
 
     /**
-     * Handles submitting or updating the user's review for the book.
-     * Validates input and manages submission state.
+     * Handles the submission of a user review.
+     * * @remarks
+     * Performs validation to ensure a rating is selected.
+     * Updates the local review list and the user's specific review data upon success.
      */
     const handleSubmitReview = async () => {
         if (!book) return;

@@ -27,7 +27,8 @@ import mainTheme from '../themes/mainTheme';
 import { PageLayout } from './layouts/PageLayout';
 
 /**
- * Data Transfer Object representing a user in the community.
+ * Data Transfer Object representing a user profile within the community features.
+ * Contains display information and social stats.
  */
 interface UserCommunityDto {
     id: string;
@@ -40,7 +41,13 @@ interface UserCommunityDto {
 }
 
 /**
- * Komponent karty użytkownika (Glassmorphism style - spójny z Dashboard/Recommendations)
+ * A presentational component representing a single user card.
+ * * @remarks
+ * Uses a glassmorphism design style (`bg-white/70`, `backdrop-blur`) to match the 
+ * application's dashboard and recommendation themes.
+ * * @param props.user - The user data to display.
+ * @param props.onClick - Handler for navigating to the user's profile.
+ * @param props.onFollow - Handler for the follow/unfollow action button.
  */
 const UserCommunityCard = ({ user, onClick, onFollow }: { user: UserCommunityDto, onClick: () => void, onFollow: (e: React.MouseEvent) => void }) => (
     <div
@@ -53,7 +60,7 @@ const UserCommunityCard = ({ user, onClick, onFollow }: { user: UserCommunityDto
             transition-all duration-300 ease-out overflow-hidden
         `}
     >
-        {/* Dekoracyjne tło hover */}
+        {/* Decoration background */}
         <div className="absolute inset-0 bg-linear-to-br from-primary-light/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Avatar Section */}
@@ -117,6 +124,10 @@ const UserCommunityCard = ({ user, onClick, onFollow }: { user: UserCommunityDto
     </div>
 );
 
+/**
+ * The main Community page component.
+ * Displays a searchable grid of users and allows navigation to profiles and follow actions.
+ */
 export default function Community() {
     // --- State ---
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -126,6 +137,10 @@ export default function Community() {
     const navigate = useNavigate();
 
     // Debounce search input
+    /**
+     * Effect: Search Debounce.
+     * Delays the API call until the user stops typing for 500ms to reduce server load.
+     */
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             fetchUsers(searchQuery);
@@ -136,6 +151,8 @@ export default function Community() {
 
     /**
      * Retrieves the list of all community members or search results from the backend.
+     * Handles loading states and error reporting.
+     * * @param query - Optional search string to filter users by name.
      */
     const fetchUsers = async (query = '') => {
         setIsLoading(true);
@@ -154,6 +171,12 @@ export default function Community() {
 
     /**
      * Toggles the follow status for a specific user.
+     * * @remarks
+     * Implements Optimistic UI: The local state is updated immediately to reflect the change
+     * (incrementing/decrementing counts and toggling button state) before the API request completes.
+     * This provides a snappier user experience.
+     * * @param user - The user object to follow/unfollow.
+     * @param event - The mouse event, stopped to prevent card navigation.
      */
     const handleFollowToggle = async (user: UserCommunityDto, event: React.MouseEvent) => {
         event.stopPropagation(); // Prevent navigation when clicking follow button
@@ -177,7 +200,6 @@ export default function Community() {
             }
         } catch (err) {
             console.error('Error toggling follow:', err);
-            // Revert optimistic update ideally here, but keeping it simple for now
         }
     };
 

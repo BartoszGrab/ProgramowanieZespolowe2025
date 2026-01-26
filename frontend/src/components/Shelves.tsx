@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../api/axios';
 
-// MUI imports (zachowane dla funkcjonalności modali i formularzy)
+// MUI imports
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -35,7 +35,11 @@ import type { ShelfData, ShelfBook } from '../types/book';
 import BookDetailsDialog from './BookDetailsDialog';
 
 /**
- * Komponent karty książki (Glassmorphism + Tailwind)
+ * BookItem Component
+ * * Displays a single book card with Glassmorphism effects and Tailwind styling.
+ * * @param book - The book data object to display
+ * @param onClick - Handler for clicking the card (opens details)
+ * @param onRemove - Handler for the delete button click
  */
 const BookItem = ({ book, onClick, onRemove }: { book: ShelfBook, onClick: () => void, onRemove: (e: React.MouseEvent) => void }) => (
     <div
@@ -48,7 +52,7 @@ const BookItem = ({ book, onClick, onRemove }: { book: ShelfBook, onClick: () =>
             transition-all duration-300 ease-out overflow-hidden
         `}
     >
-        {/* Dekoracyjne tło hover */}
+        {/* Decorative hover background */}
         <div className="absolute inset-0 bg-linear-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Cover Image Area */}
@@ -115,7 +119,8 @@ const BookItem = ({ book, onClick, onRemove }: { book: ShelfBook, onClick: () =>
 );
 
 /**
- * Komponent karty "Dodaj książkę"
+ * AddBookItem Component
+ * * A card that acts as a button to trigger the "Add Book" modal.
  */
 const AddBookItem = ({ onClick }: { onClick: () => void }) => (
     <div
@@ -138,6 +143,10 @@ const AddBookItem = ({ onClick }: { onClick: () => void }) => (
     </div>
 );
 
+/**
+ * Shelves Page Component
+ * * Manages the view of a specific shelf, allowing users to add, remove, and view details of books.
+ */
 export default function Shelves() {
     const { id } = useParams<{ id: string }>();
     const [shelfData, setShelfData] = useState<ShelfData | null>(null);
@@ -166,6 +175,9 @@ export default function Shelves() {
     const [bookToDelete, setBookToDelete] = useState<ShelfBook | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    /**
+     * Fetches the books associated with the current shelf ID.
+     */
     const fetchShelfBooks = async () => {
         if (!id) return;
         try {
@@ -184,6 +196,9 @@ export default function Shelves() {
         }
     };
 
+    /**
+     * Initial data fetch: Shelf Books and List of Authors (for the creation form).
+     */
     useEffect(() => {
         const fetchAuthors = async () => {
             try {
@@ -197,6 +212,8 @@ export default function Shelves() {
         fetchShelfBooks();
         fetchAuthors();
     }, [id]);
+
+    // --- Event Handlers: Navigation & Details ---
 
     const handleBookClick = (book: ShelfBook) => {
         setSelectedBook(book);
@@ -232,6 +249,9 @@ export default function Shelves() {
 
     // --- Search Existing Book Logic ---
 
+    /**
+     * Searches for books in the global library database.
+     */
     const handleSearchBooks = async (query: string) => {
         if (!query) {
             setSearchBookOptions([]);
@@ -245,6 +265,10 @@ export default function Shelves() {
         }
     };
 
+    /**
+     * Adds an existing book (selected from search) to the current shelf.
+     * Handles ID, GoogleBookID, or ISBN linking.
+     */
     const handleAddExistingBook = async () => {
         if (!selectedExistingBook || !id) return;
         setIsCreating(true);
@@ -282,6 +306,13 @@ export default function Shelves() {
 
     // --- Create New Book Logic ---
 
+    /**
+     * Handles the creation of a completely new book.
+     * 1. Checks if the author is new (string) or existing (object).
+     * 2. Creates the author if necessary.
+     * 3. Creates the book record.
+     * 4. Adds the newly created book to the current shelf.
+     */
     const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsCreating(true);
@@ -291,6 +322,7 @@ export default function Shelves() {
         let authorIdToUse = '';
 
         try {
+            // Determine if we need to create a new author first
             if (typeof authorInput === 'string') {
                 const nameParts = authorInput.trim().split(' ');
                 const firstName = nameParts[0] || 'Unknown';
@@ -304,6 +336,7 @@ export default function Shelves() {
                 throw new Error("Please select or enter an author.");
             }
 
+            // Sanitize ISBN
             const rawIsbn = formData.get('isbn') as string;
             const cleanIsbn = rawIsbn.replace(/-/g, '');
 
@@ -318,13 +351,16 @@ export default function Shelves() {
                 genreIds: []
             };
 
+            // Create the book
             const bookResponse = await axios.post('/api/books', bookPayload);
             const createdBook = bookResponse.data;
 
+            // Link to Shelf
             if (id) {
                 await axios.post(`/api/shelves/${id}/books`, { bookId: createdBook.id });
             }
 
+            // Update local state to reflect the new book immediately
             setShelfData((prevData) => {
                 if (!prevData) return null;
                 return {

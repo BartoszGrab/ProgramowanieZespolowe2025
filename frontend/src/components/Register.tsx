@@ -45,31 +45,12 @@ const Card = styled(MuiCard)(({ theme }) => ({
     },
 }));
 
-/**
- * Styled container for the registration page layout.
- * Includes responsive padding and a radial gradient background.
- */
-// const SignUpContainer = styled(Stack)(({ theme }) => ({
-//     paddingTop: '64px',
-//     minHeight: '100%',
-//     padding: theme.spacing(2),
-//     [theme.breakpoints.up('sm')]: {
-//         padding: theme.spacing(4),
-//     },
-//     '&::before': {
-//         content: '""',
-//         display: 'block',
-//         position: 'absolute',
-//         zIndex: -1,
-//         inset: 0,
-//         backgroundImage: 'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
-//         backgroundRepeat: 'no-repeat',
-//     },
-// }));
 
 /**
  * The Register page component.
  * Handles new user registration with form validation and API integration.
+ * * @remarks
+ * Validates password complexity (unique chars, length) and ensures passwords match before sending data.
  */
 export default function Register() {
     // --- State: Form Validation ---
@@ -90,16 +71,15 @@ export default function Register() {
     // Email validation regex
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    /**
+/**
      * Validates the registration form inputs.
      * Checks for:
      * - Empty fields
      * - Password matching
-     * - Password complexity (length, unique chars)
+     * - Password complexity (length > 8, unique chars >= 4)
      * - Email format
-     * - Display name length
-     * 
-     * @returns {boolean} True if the form is valid, false otherwise.
+     * - Display name length (3-30 chars)
+     * * @returns {boolean} True if the form is valid, false otherwise.
      */
     const validate = () => {
         const email = document.getElementById('email') as HTMLInputElement;
@@ -177,7 +157,7 @@ export default function Register() {
         return isValid;
     };
 
-    /**
+ /**
      * Handles the form submission.
      * Validates input, sends registration data to the API, and redirects on success.
      * @param e - The form event
@@ -227,14 +207,11 @@ export default function Register() {
     };
 
 
-
-
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
             <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
             { /** --- Sing up Form --- */ }
-            {/* <SignUpContainer direction="column" justifyContent="space-between"> */}
             <PageLayout>
                 <Card variant="outlined">
                     <Typography
@@ -333,26 +310,6 @@ export default function Register() {
                         <Typography sx={{ color: 'text.secondary' }}>or</Typography>
                     </Divider>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <Button
-                            disabled={isLoading}
-                            fullWidth
-                            sx={{ color: mainTheme.palette.secondary.dark }}
-                            variant="outlined"
-                            onClick={() => alert('Sign up with Google')}
-                            startIcon={<GoogleIcon />}
-                        >
-                            Sign up with Google
-                        </Button>
-                        <Button
-                            disabled={isLoading}
-                            fullWidth
-                            sx={{ color: mainTheme.palette.secondary.dark }}
-                            variant="outlined"
-                            onClick={() => alert('Sign up with Facebook')}
-                            startIcon={<FacebookIcon />}
-                        >
-                            Sign up with Facebook
-                        </Button>
                     </Box>
                 </Card>
             {/* </SignUpContainer> */}

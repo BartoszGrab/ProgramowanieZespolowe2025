@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
 
 // MUI imports
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
@@ -12,7 +10,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-import Divider from '@mui/material/Divider';
 import { ThemeProvider } from '@mui/material/styles';
 
 // Icons

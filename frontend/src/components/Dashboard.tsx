@@ -25,16 +25,27 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import mainTheme from '../themes/mainTheme';
 import { PageLayout } from './layouts/PageLayout';
 
+/**
+ * Represents a user-defined collection of books (a Shelf).
+ */
 interface Shelf {
+    /** Unique identifier for the shelf. */
     id: string | number;
+    /** The display name of the shelf. */
     name: string;
+    /** Optional description or purpose of the shelf. */
     description?: string;
+    /** The total number of books currently assigned to this shelf. */
     bookCount?: number;
 }
 
 /**
- * Komponent karty półki (Glassmorphism style)
- * Zwiększyłem lekko opacity bg-white/70, żeby tekst był czytelniejszy na tle z obrazkiem
+ * A presentational component representing a single shelf card.
+ * * @remarks
+ * Uses a **Glassmorphism** visual style (`backdrop-blur`, semi-transparent white backgrounds)
+ * to blend seamlessly with the `PageLayout` background.
+ * * @param props.shelf - The data object containing shelf details.
+ * @param props.onClick - Handler triggered when the user selects the card.
  */
 const ShelfItem = ({ shelf, onClick }: { shelf: Shelf; onClick: () => void }) => (
     <div
@@ -47,7 +58,7 @@ const ShelfItem = ({ shelf, onClick }: { shelf: Shelf; onClick: () => void }) =>
             transition-all duration-300 ease-out overflow-hidden
         `}
     >
-        {/* Dekoracyjne tło hover */}
+        {/* Hover Effect: Decorative gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-br from-primary-light/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Top: Icon & Name */}
@@ -68,7 +79,7 @@ const ShelfItem = ({ shelf, onClick }: { shelf: Shelf; onClick: () => void }) =>
             )}
         </div>
 
-        {/* Bottom: Stats */}
+        {/* Bottom Section: Statistics & Action Indicator */}
         <div className="relative z-10 mt-auto pt-4 border-t border-gray-200/50 flex justify-between items-center">
             <span className="text-xs font-bold text-primary-dark bg-white/50 px-3 py-1 rounded-full shadow-sm">
                 {shelf.bookCount !== undefined ? shelf.bookCount == 1 ? `${shelf.bookCount} Book` : `${shelf.bookCount} Books` : 'Empty'}
@@ -81,7 +92,9 @@ const ShelfItem = ({ shelf, onClick }: { shelf: Shelf; onClick: () => void }) =>
 );
 
 /**
- * Komponent karty "Dodaj nową półkę"
+ * A specialized action card that triggers the "Create Shelf" modal.
+ * Designed to look distinct from standard shelf items (dashed border, lighter background).
+ * * @param props.onClick - Handler to open the creation dialog.
  */
 const AddShelfItem = ({ onClick }: { onClick: () => void }) => (
     <div
@@ -102,6 +115,14 @@ const AddShelfItem = ({ onClick }: { onClick: () => void }) => (
     </div>
 );
 
+/**
+ * The main Dashboard view acting as the entry point for the user's library.
+ * * @remarks
+ * Responsibilities:
+ * 1. Fetches and displays the list of user shelves.
+ * 2. Provides the UI and Logic for creating new shelves via a Modal.
+ * 3. Handles navigation to specific shelf details.
+ */
 export default function Dashboard() {
     // --- State: Data Fetching ---
     const [shelves, setShelves] = useState<Shelf[]>([]);
@@ -115,6 +136,10 @@ export default function Dashboard() {
     
     const navigate = useNavigate();
     
+    /**
+     * Effect: Fetch Initial Data.
+     * Retrieving the list of shelves from the API on component mount.
+     */
     useEffect(() => {
         const fetchShelves = async () => {
             try {
@@ -130,16 +155,31 @@ export default function Dashboard() {
         fetchShelves();
     }, []);
 
+    /**
+     * Navigates to the detailed view of a selected shelf.
+     * @param shelfId - The ID of the shelf to view.
+     */
     const handleShelfClick = (shelfId: string | number) => {
         navigate(`/shelves/${shelfId}`);
     };
 
+    // --- Modal Handlers ---
     const handleOpenModal = () => setOpenModal(true);
     const handleCloseModal = () => {
         setOpenModal(false);
         setCreateError('');
     };
 
+    /**
+     * Handles the creation of a new shelf.
+     * * @remarks
+     * 1. Prevents default form submission.
+     * 2. Extracts data from `FormData`.
+     * 3. Sends POST request to API.
+     * 4. On success: Updates local state (optimistic-like addition) and closes modal.
+     * 5. On failure: Sets an error message to be displayed within the modal.
+     * * @param event - The form submission event.
+     */
     const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsCreating(true);
@@ -167,7 +207,7 @@ export default function Dashboard() {
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
             
-            {/* PageLayout zarządza tłem i paddingiem pod Navbar */}
+            {/* PageLayout handles the background layering and fixed Navbar padding */}
             <PageLayout>
                 
                 {/* --- Section: Header --- */}

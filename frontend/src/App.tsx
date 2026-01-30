@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import mainTheme from './themes/mainTheme';
 import { Navigation } from './customs/Navigation';
 
-
+// Component imports
 import Home from './components/Home';
 import Register from './components/Register'
 import Login from './components/Login'
@@ -23,31 +23,49 @@ import { AuthProvider } from './context/AuthContext';
  */
 function App() {
   return (
+    // Inject the custom theme (colors, typography) into the component tree.
     <ThemeProvider theme={mainTheme}>
+      {/* Normalize CSS across browsers and apply the theme's background color. */}
       <CssBaseline />
+      
+      {/* Provide global authentication state (user, login/logout functions) to all child components. */}
       <AuthProvider>
-      <BrowserRouter>
-      {/* --- Navigation Component --- */}
-        <Navigation />
-        {/* <Box sx={{ height: 'calc(64px + 2rem)' }} /> */}
-        {/* --- Application Routes --- */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/shelves/:id" element={<Shelves />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/my-profile" element={<Profile />} />
-          <Route path="/user/:id" element={<Profile />} />
-          <Route path="/recommendations" element={<Recommendations />} />
-          <Route path="/community" element={<Community />} />
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+        
+        {/* --- Navigation Component --- */}
+        {/* Rendered outside of Routes so it remains visible on every page. */}
+          <Navigation />
+          
+          {/* <Box sx={{ height: 'calc(64px + 2rem)' }} /> */}
+          
+          {/* --- Application Routes --- */}
+          {/* Defines the mapping between URL paths and the components to render. */}
+          <Routes>
+            {/* Public landing and authentication pages */}
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            
+            {/* Protected/User specific pages */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            
+            {/* Dynamic route: ':id' captures the specific shelf ID from the URL */}
+            <Route path="/shelves/:id" element={<Shelves />} />
+            
+            {/* Profile Routes: Multiple paths mapping to the same component 
+                to handle "My Profile" vs "Viewing another user" scenarios. */}
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/my-profile" element={<Profile />} />
+            <Route path="/user/:id" element={<Profile />} />
+            
+            {/* Feature pages */}
+            <Route path="/recommendations" element={<Recommendations />} />
+            <Route path="/community" element={<Community />} />
+          </Routes>
+        </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
   );
-
 }
 
 export default App;

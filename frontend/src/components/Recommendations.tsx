@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
 
-// MUI imports (zachowane dla funkcjonalności formularzy i ikon)
+// MUI imports 
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
@@ -32,6 +32,9 @@ import Typography from '@mui/material/Typography';
 
 // --- Interfaces ---
 
+/**
+ * Represents a book object as returned by the Shelf API.
+ */
 interface ShelfBookDto {
     id: string;
     title: string;
@@ -41,6 +44,9 @@ interface ShelfBookDto {
     coverUrl?: string;
 }
 
+/**
+ * Represents the detailed structure of a Shelf, including its books.
+ */
 interface ShelfDto {
     id: string | number;
     name: string;
@@ -48,11 +54,17 @@ interface ShelfDto {
     books: ShelfBookDto[];
 }
 
+/**
+ * Represents the basic structure of a Shelf (used for dropdowns).
+ */
 interface Shelf {
     id: string | number;
     name: string;
 }
 
+/**
+ * Represents a single book recommendation returned by the AI service.
+ */
 interface RecommendedBook {
     title: string;
     author: string;
@@ -61,19 +73,28 @@ interface RecommendedBook {
     cover_url?: string;
 }
 
+/**
+ * Represents a category/group of recommendations (e.g., "Because you like Sci-Fi").
+ */
 interface RecommendationCategory {
     category_title: string;
     type: string;
     items: RecommendedBook[];
 }
 
+/**
+ * The payload structure expected from the recommendations API.
+ */
 interface RecommendationResponse {
     recommendations: RecommendationCategory[];
 }
 
 /**
- * Komponent karty rekomendowanej książki (Glassmorphism style)
- * Stylizowany Tailwindem, spójny z Dashboard.tsx
+ * RecommendedBookCard Component
+ * * Displays a single book recommendation using a Glassmorphism style.
+ * It is styled with Tailwind CSS to match the Dashboard aesthetic.
+ * * @param book - The recommended book data object
+ * @param onClick - Handler for when the card is clicked (to open add dialog)
  */
 const RecommendedBookCard = ({ book, onClick }: { book: RecommendedBook; onClick: () => void }) => (
     <div
@@ -86,7 +107,7 @@ const RecommendedBookCard = ({ book, onClick }: { book: RecommendedBook; onClick
             transition-all duration-300 ease-out overflow-hidden
         `}
     >
-        {/* Dekoracyjne tło hover */}
+        {/* Decorative hover background */}
         <div className="absolute inset-0 bg-linear-to-br from-primary-light/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Content Container */}
@@ -115,7 +136,7 @@ const RecommendedBookCard = ({ book, onClick }: { book: RecommendedBook; onClick
                 </p>
             </div>
 
-            {/* Reason */}
+            {/* Reason for recommendation */}
             <div className="mb-4 text-center px-1">
                 <p className="text-xs text-gray-500 italic line-clamp-3 leading-relaxed">
                     "{book.reason}"
@@ -139,6 +160,11 @@ const RecommendedBookCard = ({ book, onClick }: { book: RecommendedBook; onClick
     </div>
 );
 
+/**
+ * Recommendations Page Component
+ * * Fetches user's reading history from their shelves, sends it to the recommendation service,
+ * and displays categorized book suggestions. Allows adding suggested books to shelves.
+ */
 export default function Recommendations() {
     // --- State: Data Fetching ---
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -158,12 +184,16 @@ export default function Recommendations() {
 
     /**
      * Initial data fetch on component mount.
+     * Triggers both shelf list loading and the recommendation generation process.
      */
     useEffect(() => {
         fetchRecommendations();
         fetchShelves();
     }, []);
 
+    /**
+     * Fetches the list of shelves to populate the "Add to Shelf" dropdown.
+     */
     const fetchShelves = async () => {
         try {
             const response = await axios.get<Shelf[]>('/api/shelves');
@@ -173,6 +203,12 @@ export default function Recommendations() {
         }
     };
 
+    /**
+     * Main logic for generating recommendations.
+     * 1. Fetches all shelves.
+     * 2. Iterates through shelves to fetch books (building the history).
+     * 3. Sends the history to the /api/recommendations endpoint.
+     */
     const fetchRecommendations = async () => {
         setIsLoading(true);
         setError(null);
@@ -188,7 +224,7 @@ export default function Recommendations() {
                 return;
             }
 
-            // Step 2: Get books from each shelf
+            // Step 2: Get books from each shelf to build user history
             const allBooks: ShelfBookDto[] = [];
             for (const shelf of shelvesData) {
                 try {
@@ -218,7 +254,7 @@ export default function Recommendations() {
                 cover_url: book.coverUrl
             }));
 
-            // Step 4: Get recommendations
+            // Step 4: Get recommendations from the API service
             const recResponse = await axios.post<RecommendationResponse>('/api/recommendations', {
                 preferredLanguage: 'pl',
                 history: history
@@ -240,6 +276,9 @@ export default function Recommendations() {
         }
     };
 
+    /**
+     * Opens the dialog to add a specific recommended book to a shelf.
+     */
     const handleBookClick = (book: RecommendedBook) => {
         setSelectedBook(book);
         setSelectedShelfId('');
@@ -248,6 +287,9 @@ export default function Recommendations() {
         setAddDialogOpen(true);
     };
 
+    /**
+     * Closes the dialog and resets dialog state.
+     */
     const handleCloseDialog = () => {
         setAddDialogOpen(false);
         setSelectedBook(null);
@@ -255,6 +297,11 @@ export default function Recommendations() {
         setAddSuccess(null);
     };
 
+    /**
+     * Logic to add the selected recommended book to a user's shelf.
+     * Since recommendations only provide title/author, this function first
+     * searches the internal DB (or external API) to get a valid Book ID/ISBN.
+     */
     const handleAddToShelf = async () => {
         if (!selectedBook || !selectedShelfId) return;
 
@@ -263,11 +310,13 @@ export default function Recommendations() {
         setAddSuccess(null);
 
         try {
+            // Search for the book to get technical details (ID/ISBN)
             const searchQuery = `${selectedBook.title} ${selectedBook.author}`;
             const searchResponse = await axios.get(`/api/books?search=${encodeURIComponent(searchQuery)}`);
 
             let bookToAdd = null;
 
+            // Attempt to find the exact match in search results
             if (searchResponse.data && searchResponse.data.length > 0) {
                 bookToAdd = searchResponse.data.find((b: any) =>
                     b.title.toLowerCase().includes(selectedBook.title.toLowerCase()) ||
@@ -280,6 +329,7 @@ export default function Recommendations() {
                 return;
             }
 
+            // Determine the correct identifier to use for the POST request
             const hasValidId = bookToAdd.id && bookToAdd.id !== '00000000-0000-0000-0000-000000000000';
             const gId = bookToAdd.googleBookId || bookToAdd.GoogleBookId;
 
@@ -295,10 +345,12 @@ export default function Recommendations() {
                 return;
             }
 
+            // API Call to add book to shelf
             await axios.post(`/api/shelves/${selectedShelfId}/books`, payload);
 
             setAddSuccess(`"${selectedBook.title}" has been added to your shelf!`);
 
+            // Auto-close dialog after success
             setTimeout(() => {
                 handleCloseDialog();
             }, 1500);
@@ -316,7 +368,7 @@ export default function Recommendations() {
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
 
-            {/* PageLayout zarządza tłem i paddingiem */}
+            {/* PageLayout */}
             <PageLayout>
 
                 {/* --- Header Section --- */}

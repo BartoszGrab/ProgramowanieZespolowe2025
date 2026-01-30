@@ -20,7 +20,6 @@ import { styled, ThemeProvider } from '@mui/material/styles';
 
 // Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
-import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
 import mainTheme from '../themes/mainTheme';
 import { PageLayout } from './layouts/PageLayout';
 import { useAuth } from '../context/AuthContext';
@@ -44,32 +43,12 @@ const Card = styled(MuiCard)(({ theme }) => ({
   },
 }));
 
-// /**
-//  * Styled container for the login page layout.
-//  * Includes responsive padding and a radial gradient background.
-//  */
-// const SignInContainer = styled(Stack)(({ theme }) => ({
-//   paddingTop: '64px',
-//   minHeight: '100%',
-//   padding: theme.spacing(2),
-//   [theme.breakpoints.up('sm')]: {
-//     padding: theme.spacing(4),
-//   },
-//   '&::before': {
-//     content: '""',
-//     display: 'block',
-//     position: 'absolute',
-//     zIndex: -1,
-//     inset: 0,
-//     backgroundImage:
-//       'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
-//     backgroundRepeat: 'no-repeat',
-//   },
-// }));
 
 /**
  * The Login page component.
  * Handles user authentication via email/password and provides options for social login.
+ * * @remarks
+ * Uses `AuthContext` to update the global application state upon successful login.
  */
 export default function Login() {
     // --- State: Form Validation ---
@@ -80,7 +59,6 @@ export default function Login() {
 
   // --- Hooks ---
   const navigate = useNavigate();
-
   const { login } = useAuth();
 
   // --- State: Submission Status ---
@@ -90,7 +68,7 @@ export default function Login() {
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 
-  /**
+/**
    * Validates the login form inputs.
    * Checks for empty fields and valid email format.
    * @returns {boolean} True if the form is valid, false otherwise.
@@ -128,11 +106,11 @@ export default function Login() {
     return isValid;
   };
 
-  /**
+ /**
    * Handles the form submission.
    * Validates input, sends credentials to the API, and manages authentication state.
-   * @param e - The form event
-   */ 
+   * * @param e - The form event
+   */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -141,12 +119,15 @@ export default function Login() {
       e.preventDefault();
       return;
     }
+
     const data = new FormData(e.currentTarget);
     const formData = {
       email: data.get('email') as string,
       password: data.get('password') as string,
     };
+
     setIsLoading(true);
+
     try {
 
       // Api call to login endpoint
@@ -173,7 +154,6 @@ export default function Login() {
 
       {/* --- Sign In Form --- */}
     <PageLayout>
-      {/* <SignInContainer direction="column" justifyContent="space-between"> */}
         <Card variant="outlined">
           <Typography
             component="h1"
@@ -239,26 +219,6 @@ export default function Login() {
             <Typography sx={{ color: 'text.secondary' }}>or</Typography>
           </Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button
-              disabled={isLoading}
-              fullWidth
-              sx={{ color: mainTheme.palette.secondary.dark }}
-              variant="outlined"
-              onClick={() => alert('Sign in with Google')}
-              startIcon={<GoogleIcon />}
-            >
-              Sign in with Google
-            </Button>
-            <Button
-              disabled={isLoading}
-              fullWidth
-              sx={{ color: mainTheme.palette.secondary.dark }}
-              variant="outlined"
-              onClick={() => alert('Sign in with Facebook')}
-              startIcon={<FacebookIcon />}
-            >
-              Sign in with Facebook
-            </Button>
           </Box>
           <Typography sx={{ textAlign: 'center' }}>
             Don't have an account?{' '}

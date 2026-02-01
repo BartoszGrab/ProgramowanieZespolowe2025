@@ -10,21 +10,40 @@ using System.Security.Claims;
 
 namespace backend.Controllers
 {
+    /// <summary>
+    /// Controller for managing user shelves and shelf contents (books).
+    /// Requires authentication and exposes endpoints to list, view, create shelves and to add/remove/update books on shelves.
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ShelvesController : ControllerBase
     {
+        /// <summary>
+        /// Database context for accessing shelves, books and related entities.
+        /// </summary>
         private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Service used to fetch book metadata from Google Books when creating books from external data.
+        /// </summary>
         private readonly IGoogleBooksService _googleBooksService; // Changed from UserManager to IGoogleBooksService
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShelvesController"/> class.
+        /// </summary>
+        /// <param name="context">Application database context.</param>
+        /// <param name="googleBooksService">Service to query Google Books for external book data.</param>
         public ShelvesController(ApplicationDbContext context, IGoogleBooksService googleBooksService) // Changed constructor signature
         {
             _context = context;
             _googleBooksService = googleBooksService;
         }
 
-        // GET: api/shelves (Get MY shelves)
+        /// <summary>
+        /// Retrieves all shelves belonging to the current authenticated user.
+        /// </summary>
+        /// <returns>200 OK with a list of <see cref="ShelfDto"/> items.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShelfDto>>> GetMyShelves()
         {
@@ -43,7 +62,13 @@ namespace backend.Controllers
             return Ok(shelves);
         }
 
-        // GET: api/shelves/{id}/books
+        /// <summary>
+        /// Retrieves detailed information and books for a specific shelf.
+        /// </summary>
+        /// <param name="id">Identifier of the shelf.</param>
+        /// <returns>
+        /// 200 OK with <see cref="ShelfDto"/> when found and owned by the current user; 403 Forbidden when not owned; 404 NotFound when the shelf does not exist.
+        /// </returns>
         [HttpGet("{id}/books")]
         public async Task<ActionResult<ShelfDto>> GetShelfBooks(Guid id)
         {
@@ -92,6 +117,11 @@ namespace backend.Controllers
             return Ok(shelfDto);
         }
 
+        /// <summary>
+        /// Creates a new shelf for the current authenticated user.
+        /// </summary>
+        /// <param name="dto">DTO containing shelf creation details (e.g., name).</param>
+        /// <returns>200 OK with the created <see cref="ShelfDto"/> or 400 Bad Request on validation errors.</returns>
         [HttpPost]
         public async Task<ActionResult<ShelfDto>> CreateShelf([FromBody] CreateShelfDto dto)
         {
@@ -121,7 +151,14 @@ namespace backend.Controllers
             return Ok(shelfDto);
         }
 
-        // POST: api/shelves/{shelfId}/books (Dodaj książkę do półki)
+        /// <summary>
+        /// Adds a book to a user's shelf. The book can be provided by internal BookId, GoogleBookId or ISBN.
+        /// </summary>
+        /// <param name="shelfId">Identifier of the shelf to add the book to.</param>
+        /// <param name="dto">DTO specifying BookId, GoogleBookId or ISBN.</param>
+        /// <returns>
+        /// 200 OK when the book is added; 400 Bad Request for invalid input or duplicates; 404 NotFound when book/shelf cannot be found.
+        /// </returns>
         [HttpPost("{shelfId}/books")]
         public async Task<ActionResult> AddBookToShelf(Guid shelfId, [FromBody] AddBookToShelfDto dto)
         {
@@ -205,7 +242,12 @@ namespace backend.Controllers
             return Ok(new { message = "Książka dodana do półki", bookId = targetBookId });
         }
 
-        // DELETE: api/shelves/{shelfId}/books/{bookId}
+        /// <summary>
+        /// Removes a book from a user's shelf.
+        /// </summary>
+        /// <param name="shelfId">Shelf identifier.</param>
+        /// <param name="bookId">Book identifier to remove.</param>
+        /// <returns>200 OK when removed; 404 NotFound when the book is not on the shelf or shelf doesn't belong to the user.</returns>
         [HttpDelete("{shelfId}/books/{bookId}")]
         public async Task<ActionResult> RemoveBookFromShelf(Guid shelfId, Guid bookId)
         {
@@ -226,7 +268,13 @@ namespace backend.Controllers
             return Ok(new { message = "Książka usunięta z półki." });
         }
 
-        // PUT: api/shelves/{shelfId}/books/{bookId}/progress
+        /// <summary>
+        /// Updates reading progress for a book on a shelf.
+        /// </summary>
+        /// <param name="shelfId">Shelf identifier.</param>
+        /// <param name="bookId">Book identifier on the shelf.</param>
+        /// <param name="dto">DTO containing the current page number.</param>
+        /// <returns>200 OK when updated; 400 Bad Request when progress is invalid; 404 NotFound when not found.</returns>
         [HttpPut("{shelfId}/books/{bookId}/progress")]
         public async Task<ActionResult> UpdateBookProgress(Guid shelfId, Guid bookId, [FromBody] UpdateShelfBookProgressDto dto)
         {
@@ -247,6 +295,11 @@ namespace backend.Controllers
 
             return Ok(new { message = "Postęp zaktualizowany." });
         }
+        /// <summary>
+        /// Creates a new <see cref="Book"/> entity from a Google Books payload and persists it to the database.
+        /// </summary>
+        /// <param name="gBook">Google Books representation used to populate fields such as authors and genres.</param>
+        /// <returns>Identifier of the newly created book.</returns>
         private async Task<Guid> CreateBookFromGoogleBook(backend.Services.GoogleBook gBook)
         {
             var newBook = new Book
@@ -258,7 +311,6 @@ namespace backend.Controllers
                 PageCount = gBook.PageCount ?? 0,
                 PublishedDate = DateTime.TryParse(gBook.PublishedDate, out var d) ? d.ToUniversalTime() : null
             };
-
             // Handle Authors
             foreach (var authorName in gBook.Authors ?? new List<string>())
             {

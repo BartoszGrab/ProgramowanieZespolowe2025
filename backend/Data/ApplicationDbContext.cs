@@ -4,29 +4,101 @@ using backend.Models;
 
 namespace backend.Data
 {
+    /// <summary>
+    /// Entity Framework Core database context for the application.
+    /// Extends <see cref="IdentityDbContext{ApplicationUser}"/> with application-specific DbSets.
+    /// </summary>
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="ApplicationDbContext"/> using the specified options.
+        /// </summary>
+        /// <param name="options">The options used to configure the database context.</param>
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
+        /// <summary>
+        /// Refresh tokens for JWT refresh flows.
+        /// </summary>
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        /// <summary>
+        /// Books stored in the local catalog.
+        /// </summary>
         public DbSet<Book> Books { get; set; }
+
+        /// <summary>
+        /// Authors of books.
+        /// </summary>
         public DbSet<Author> Authors { get; set; }
+
+        /// <summary>
+        /// Genres or categories associated with books.
+        /// </summary>
         public DbSet<Genre> Genres { get; set; }
+
+        /// <summary>
+        /// Join table between books and authors.
+        /// </summary>
         public DbSet<BookAuthor> BookAuthors { get; set; }
+
+        /// <summary>
+        /// Join table between books and genres.
+        /// </summary>
         public DbSet<BookGenre> BookGenres { get; set; }
+
+        /// <summary>
+        /// User-written reviews for books.
+        /// </summary>
         public DbSet<Review> Reviews { get; set; }
+
+        /// <summary>
+        /// User-created shelves.
+        /// </summary>
         public DbSet<Shelf> Shelves { get; set; }
+
+        /// <summary>
+        /// Books on user shelves (join table with additional metadata).
+        /// </summary>
         public DbSet<ShelfBook> ShelfBooks { get; set; }
+
+        /// <summary>
+        /// Social posts created by users.
+        /// </summary>
         public DbSet<Post> Posts { get; set; }
+
+        /// <summary>
+        /// Comments attached to posts.
+        /// </summary>
         public DbSet<Comment> Comments { get; set; }
+
+        /// <summary>
+        /// Likes on posts (user-post relationship).
+        /// </summary>
         public DbSet<Like> Likes { get; set; }
+
+        /// <summary>
+        /// User follow relationships (self-referencing).
+        /// </summary>
         public DbSet<UserFollow> UserFollows { get; set; }
+
+        /// <summary>
+        /// Notifications for user activity.
+        /// </summary>
         public DbSet<Notification> Notifications { get; set; }
+
+        /// <summary>
+        /// Recommendations generated for users by the recommendations service.
+        /// </summary>
         public DbSet<UserRecommendation> UserRecommendations { get; set; }
 
 
+        /// <summary>
+        /// Performs EF Core model configuration: sets table naming conventions and configures relationship mappings.
+        /// </summary>
+        /// <remarks>
+        /// Table names are normalized to lowercase to fit PostgreSQL conventions. Composite keys and relationships
+        /// for join tables (BookAuthor, BookGenre, ShelfBook) and other relations are configured here.
+        /// </remarks>
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

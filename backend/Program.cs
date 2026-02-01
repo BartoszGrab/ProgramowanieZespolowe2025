@@ -1,3 +1,8 @@
+/// <summary>
+/// Application startup and configuration for the backend API.
+/// Configures services such as Entity Framework Core, ASP.NET Identity, JWT authentication,
+/// CORS policy, and custom services. Also builds and runs the HTTP request pipeline.
+/// </summary>
 using backend.Data;
 using backend.Models;
 using backend.Services;

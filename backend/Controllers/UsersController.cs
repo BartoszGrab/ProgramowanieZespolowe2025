@@ -9,15 +9,36 @@ using System.Security.Claims;
 
 namespace backend.Controllers
 {
+    /// <summary>
+    /// Controller for user-related operations: profile retrieval and updates, community browsing and social actions (follow/unfollow).
+    /// Most endpoints require authentication.
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
+        /// <summary>
+        /// ASP.NET Identity user manager used for user operations.
+        /// </summary>
         private readonly UserManager<ApplicationUser> _userManager;
+
+        /// <summary>
+        /// Application database context used to query shelves, books and user relationships.
+        /// </summary>
         private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Service used to fetch book metadata from Google Books when importing a user's favorite book.
+        /// </summary>
         private readonly backend.Services.IGoogleBooksService _googleBooksService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UsersController"/> class.
+        /// </summary>
+        /// <param name="userManager">User manager for identity operations.</param>
+        /// <param name="context">Application database context.</param>
+        /// <param name="googleBooksService">Service to fetch Google Books data.</param>
         public UsersController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, backend.Services.IGoogleBooksService googleBooksService)
         {
             _userManager = userManager;
@@ -25,6 +46,10 @@ namespace backend.Controllers
             _googleBooksService = googleBooksService;
         }
 
+        /// <summary>
+        /// Retrieves profile information for the current authenticated user, including shelves and favorite book details when available.
+        /// </summary>
+        /// <returns>200 OK with <see cref="UserProfileDto"/> when user exists; 404 NotFound if user not found.</returns>
         [HttpGet("me")]
         public async Task<ActionResult<UserProfileDto>> GetMyProfile()
         {
@@ -79,6 +104,11 @@ namespace backend.Controllers
             });
         }
 
+        /// <summary>
+        /// Updates the current user's profile information such as bio and favorite book (by GoogleBookId or FavoriteBookId).
+        /// </summary>
+        /// <param name="dto">Profile update DTO with optional favorite book identifiers.</param>
+        /// <returns>200 OK on success; 400 Bad Request for invalid input; 404 NotFound when user can't be found.</returns>
         [HttpPut("me/profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileDto dto)
         {
@@ -187,6 +217,11 @@ namespace backend.Controllers
             return BadRequest("Failed to update profile");
         }
 
+        /// <summary>
+        /// Updates the current user's avatar (profile picture URL).
+        /// </summary>
+        /// <param name="dto">DTO containing the new profile picture URL.</param>
+        /// <returns>200 OK with the updated URL on success; 404 NotFound when user not found.</returns>
         [HttpPut("me/avatar")]
         public async Task<IActionResult> UpdateAvatar([FromBody] UpdateAvatarDto dto)
         {
@@ -206,6 +241,10 @@ namespace backend.Controllers
             return BadRequest("Failed to update avatar");
         }
 
+        /// <summary>
+        /// Retrieves a list of community users for browsing. The current user is excluded from results.
+        /// </summary>
+        /// <returns>200 OK with a list of <see cref="UserCommunityDto"/> items.</returns>
         [HttpGet]
         public async Task<ActionResult<List<UserCommunityDto>>> GetUsers()
         {
@@ -233,6 +272,11 @@ namespace backend.Controllers
             return Ok(userDtos);
         }
 
+        /// <summary>
+        /// Searches users by username, display name, or email (case-insensitive). Limited to 20 results.
+        /// </summary>
+        /// <param name="q">Search query string.</param>
+        /// <returns>200 OK with matching <see cref="UserCommunityDto"/> items.</returns>
         [HttpGet("search")]
         public async Task<ActionResult<List<UserCommunityDto>>> SearchUsers([FromQuery] string q)
         {
@@ -266,6 +310,11 @@ namespace backend.Controllers
             return Ok(userDtos);
         }
 
+        /// <summary>
+        /// Retrieves public details for the specified user including their statistics and favorite book.
+        /// </summary>
+        /// <param name="id">Identifier of the user to retrieve.</param>
+        /// <returns>200 OK with <see cref="UserDetailDto"/> when found; 404 NotFound when user does not exist.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDetailDto>> GetUser(string id)
         {
@@ -320,6 +369,11 @@ namespace backend.Controllers
             });
         }
 
+        /// <summary>
+        /// Follows the user with the specified id. The caller cannot follow themselves.
+        /// </summary>
+        /// <param name="id">Identifier of the user to follow.</param>
+        /// <returns>200 OK on success; 400 Bad Request when following self or already following; 404 NotFound when target user does not exist.</returns>
         [HttpPost("{id}/follow")]
         public async Task<IActionResult> FollowUser(string id)
         {
@@ -346,6 +400,11 @@ namespace backend.Controllers
             return Ok(new { message = "Followed successfully" });
         }
 
+        /// <summary>
+        /// Unfollows the specified user for the current authenticated user.
+        /// </summary>
+        /// <param name="id">Identifier of the user to unfollow.</param>
+        /// <returns>200 OK on success; 400 Bad Request when not currently following the user.</returns>
         [HttpDelete("{id}/follow")]
         public async Task<IActionResult> UnfollowUser(string id)
         {

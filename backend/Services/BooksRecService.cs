@@ -6,7 +6,16 @@ namespace backend.Services
     /// <summary>
     /// HTTP client service for communicating with the books-rec microservice.
     /// </summary>
-    public class BooksRecService
+    public interface IBooksRecService
+    {
+        Task<RecommendationResponseDto?> GetRecommendationsAsync(RecommendationRequestDto request);
+        Task<BooksRecHealthDto?> CheckHealthAsync();
+    }
+
+    /// <summary>
+    /// HTTP client service for communicating with the books-rec microservice.
+    /// </summary>
+    public class BooksRecService : IBooksRecService
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<BooksRecService> _logger;

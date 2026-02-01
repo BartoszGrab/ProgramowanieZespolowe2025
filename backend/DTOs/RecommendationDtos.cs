@@ -22,6 +22,9 @@ namespace backend.DTOs
         [JsonPropertyName("rating")]
         [Range(1, 5)]
         public int? Rating { get; set; }
+
+        [JsonPropertyName("cover_url")]
+        public string? CoverUrl { get; set; }
     }
 
     /// <summary>
@@ -63,6 +66,9 @@ namespace backend.DTOs
 
         [JsonPropertyName("match_score")]
         public double MatchScore { get; set; }
+
+        [JsonPropertyName("cover_url")]
+        public string? CoverUrl { get; set; }
     }
 
     /// <summary>

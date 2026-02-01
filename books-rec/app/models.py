@@ -9,6 +9,7 @@ class BookInput(BaseModel):
     author: str = Field(..., description="Author name")
     genre: Optional[str] = Field(None, description="Book genre (e.g., Fantasy, Sci-Fi)")
     rating: Optional[int] = Field(None, ge=1, le=5, description="User rating 1-5")
+    cover_url: Optional[str] = Field(None, description="URL to book cover image")
 
 
 class RecommendationRequest(BaseModel):
@@ -25,6 +26,7 @@ class RecommendedBook(BaseModel):
     author: str
     description: Optional[str] = None
     genre: Optional[str] = None
+    cover_url: Optional[str] = None
     language: str
     match_score: float = Field(..., ge=0.0, le=1.0)
 
@@ -32,7 +34,10 @@ class RecommendedBook(BaseModel):
 class RecommendationCategory(BaseModel):
     """A Netflix-style recommendation category (shelf)."""
     category_title: str = Field(..., description="e.g., 'Ponieważ lubisz Andrzeja Sapkowskiego'")
-    type: str = Field(..., description="Category type: content_similarity, genre_top, serendipity")
+    type: str = Field(
+        ...,
+        description="Category type: content_similarity, author_based, genre_top, serendipity, people_also_added"
+    )
     items: List[RecommendedBook] = Field(default_factory=list)
 
 
@@ -49,5 +54,6 @@ class BookInDB(BaseModel):
     author: str
     description: str
     genre: str
+    cover_url: Optional[str] = None
     language: str  # 'pl' or 'en'
     tags: List[str] = Field(default_factory=list)

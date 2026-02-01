@@ -1,0 +1,170 @@
+﻿using backend.Data;
+using backend.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace UserGenerator
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Usage: dotnet run -- generate <N> | clean");
+                return;
+            }
+
+            var configPath = Directory.GetParent(AppContext.BaseDirectory)?.FullName ?? AppContext.BaseDirectory;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(configPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            IConfiguration configuration = builder.Build();
+
+            var connectionString = configuration.GetConnectionString("DefaultConnection") 
+                                   ?? "Host=localhost;Port=5432;Database=booksocial;Username=postgres;Password=admin";
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseNpgsql(connectionString);
+
+            using var context = new ApplicationDbContext(optionsBuilder.Options);
+
+            var command = args[0].ToLower();
+
+            try 
+            {
+                if (command == "clean")
+                {
+                    CleanUsers(context);
+                }
+                else if (command == "generate")
+                {
+                    if (args.Length < 2 || !int.TryParse(args[1], out int n))
+                    {
+                        Console.WriteLine("Usage: generate <N>");
+                        return;
+                    }
+                    GenerateUsers(context, n);
+                }
+                else
+                {
+                    Console.WriteLine("Unknown command.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("Inner error: " + ex.InnerException.Message);
+                }
+                Console.WriteLine("\nPlease ensure the database is running (e.g. docker-compose up -d db) and accessible.");
+            }
+        }
+
+        static void CleanUsers(ApplicationDbContext context)
+        {
+            Console.WriteLine("Cleaning generated users...");
+            var users = context.Users.Where(u => u.IsGenerated).ToList();
+            if (users.Count == 0)
+            {
+                Console.WriteLine("No generated users found.");
+                return;
+            }
+
+            // Remove Follows where generated user is involved
+            var userIds = users.Select(u => u.Id).ToList();
+            var follows = context.UserFollows.Where(f => userIds.Contains(f.ObserverId) || userIds.Contains(f.TargetId)).ToList();
+            if (follows.Any())
+            {
+                context.UserFollows.RemoveRange(follows);
+                Console.WriteLine($"Removed {follows.Count} follow relationships.");
+            }
+
+            context.Users.RemoveRange(users);
+            context.SaveChanges();
+            Console.WriteLine($"Removed {users.Count} generated users.");
+        }
+
+        static void GenerateUsers(ApplicationDbContext context, int count)
+        {
+            Console.WriteLine($"Generating {count} users...");
+
+            var baseDir = AppContext.BaseDirectory;
+            var firstNames = File.ReadAllLines(Path.Combine(baseDir, "dictionaries", "firstnames.txt"));
+            var lastNames = File.ReadAllLines(Path.Combine(baseDir, "dictionaries", "lastnames.txt"));
+            var rand = new Random();
+
+            // Get Books for favorites
+            var bookIds = context.Books.Where(b => b.CoverUrl != null).Select(b => b.Id).ToList();
+
+            var users = new List<ApplicationUser>();
+
+            for (int i = 0; i < count; i++)
+            {
+                var fn = firstNames[rand.Next(firstNames.Length)];
+                var ln = lastNames[rand.Next(lastNames.Length)];
+                var name = $"{fn} {ln}";
+                var username = $"{fn}.{ln}_{Guid.NewGuid().ToString().Substring(0, 5)}";
+                
+                var user = new ApplicationUser
+                {
+                    UserName = username,
+                    Email = $"{username}@example.com",
+                    DisplayName = name,
+                    IsGenerated = true,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rand.Next(1, 365)),
+                    Bio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    ProfilePictureUrl = $"https://ui-avatars.com/api/?name={fn}+{ln}&background=random",
+                    FavoriteBookId = bookIds.Count > 0 ? bookIds[rand.Next(bookIds.Count)] : null
+                };
+
+                // Create a default shelf
+                var shelf = new Shelf
+                {
+                    Name = "Want to Read",
+                    User = user
+                };
+
+                // Add 10-20 random books to the shelf
+                if (bookIds.Count > 0)
+                {
+                    int booksToAdd = rand.Next(10, 21); // 10 to 20
+                    var selectedBooks = new HashSet<Guid>();
+                    while (selectedBooks.Count < booksToAdd && selectedBooks.Count < bookIds.Count)
+                    {
+                        selectedBooks.Add(bookIds[rand.Next(bookIds.Count)]);
+                    }
+
+                    foreach (var bookId in selectedBooks)
+                    {
+                        shelf.ShelfBooks.Add(new ShelfBook
+                        {
+                            BookId = bookId,
+                            Shelf = shelf
+                        });
+                    }
+                }
+
+                user.Shelves.Add(shelf);
+                
+                // Note: Password hash is missing. These users can't login easily unless we set a hash.
+                // But for "community viewing" it's fine.
+                // If login is needed, use UserManager to create them (which is slower).
+                // Or set a dummy hash.
+                
+                users.Add(user);
+            }
+
+            context.Users.AddRange(users);
+            context.SaveChanges();
+            Console.WriteLine($"Successfully generated {count} users.");
+        }
+    }
+}

@@ -5,6 +5,7 @@ using Moq;
 using Xunit;
 using backend.Controllers;
 using backend.Services;
+using backend.DTOs;
 
 namespace backend.Tests.Controllers
 {
@@ -26,7 +27,7 @@ namespace backend.Tests.Controllers
         {
             var svcMock = new Mock<IGoogleBooksService>();
             svcMock.Setup(s => s.GetByIsbnAsync("9788328706765", It.IsAny<CancellationToken>()))
-                   .ReturnsAsync((BookDto?)null);
+                   .ReturnsAsync((GoogleBook?)null);
 
             var ctrl = new GoogleBooksController(svcMock.Object);
 
@@ -36,17 +37,18 @@ namespace backend.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetByIsbn_ReturnsOk_WithBookDto()
+        public async Task GetByIsbn_ReturnsOk_WithBook()
         {
-            var book = new BookDto(
+            var book = new GoogleBook(
+                Id: "123",
                 Isbn: "9788328706765",
                 Title: "Example",
-                Authors: new System.Collections.Generic.List<string> { "Autor" },
+                Authors: new List<string> { "Autor" },
                 Publisher: "Wydawnictwo",
                 PublishedDate: "2020",
                 Description: "Desc",
                 PageCount: 123,
-                Categories: new System.Collections.Generic.List<string> { "Fiction" },
+                Categories: new List<string> { "Fiction" },
                 Thumbnail: "http://img"
             );
 
@@ -59,19 +61,10 @@ namespace backend.Tests.Controllers
             var result = await ctrl.GetByIsbn("9788328706765", CancellationToken.None);
 
             var ok = Assert.IsType<OkObjectResult>(result);
-            var returned = Assert.IsType<BookDto>(ok.Value);
+            var returned = Assert.IsType<GoogleBook>(ok.Value);
             Assert.Equal(book.Isbn, returned.Isbn);
             Assert.Equal(book.Title, returned.Title);
         }
-        [Fact]
-        public async Task GoogleBooksApi_ShouldRespond()
-        {
-            using var client = new HttpClient();
-            var url = "https://www.googleapis.com/books/v1/volumes?q=isbn:9788328706765";
 
-            var response = await client.GetAsync(url);
-
-            Assert.True(response.IsSuccessStatusCode);
-        }
     }
 }

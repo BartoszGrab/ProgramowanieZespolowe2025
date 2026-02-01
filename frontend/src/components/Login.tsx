@@ -15,12 +15,15 @@ import FormControl from '@mui/material/FormControl';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled, ThemeProvider } from '@mui/material/styles';
+
+// Custom imports
 import ColorModeSelect from '../customs/ColorModeSelect';
 import { GoogleIcon, FacebookIcon } from '../customs/CustomIcons';
 import mainTheme from '../themes/mainTheme';
+import { PageLayout } from './layouts/PageLayout';
+import { useAuth } from '../context/AuthContext';
 
 /**
  * Styled card component for the login form.
@@ -41,28 +44,28 @@ const Card = styled(MuiCard)(({ theme }) => ({
   },
 }));
 
-/**
- * Styled container for the login page layout.
- * Includes responsive padding and a radial gradient background.
- */
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  paddingTop: '64px',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
-    backgroundRepeat: 'no-repeat',
-  },
-}));
+// /**
+//  * Styled container for the login page layout.
+//  * Includes responsive padding and a radial gradient background.
+//  */
+// const SignInContainer = styled(Stack)(({ theme }) => ({
+//   paddingTop: '64px',
+//   minHeight: '100%',
+//   padding: theme.spacing(2),
+//   [theme.breakpoints.up('sm')]: {
+//     padding: theme.spacing(4),
+//   },
+//   '&::before': {
+//     content: '""',
+//     display: 'block',
+//     position: 'absolute',
+//     zIndex: -1,
+//     inset: 0,
+//     backgroundImage:
+//       'radial-gradient(ellipse at 50% 50%, #be6a0440 0%, #ffe7b8ff 100%)',
+//     backgroundRepeat: 'no-repeat',
+//   },
+// }));
 
 /**
  * The Login page component.
@@ -77,6 +80,8 @@ export default function Login() {
 
   // --- Hooks ---
   const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   // --- State: Submission Status ---
   const [isLoading, setIsLoading] = useState(false);
@@ -147,9 +152,8 @@ export default function Login() {
       // Api call to login endpoint
       const response = await axios.post('/api/auth/login', formData);
       console.log('Login successful:', response.data);
-
-      // Store auth token and navigate to dashboard
-      localStorage.setItem('authToken', response.data.token);
+      // Store the token and update auth state
+      login(response.data.token);
       navigate('/dashboard');
     } catch (error: any) {
       console.error('Login failed:', error);
@@ -168,7 +172,8 @@ export default function Login() {
       />
 
       {/* --- Sign In Form --- */}
-      <SignInContainer direction="column" justifyContent="space-between">
+    <PageLayout>
+      {/* <SignInContainer direction="column" justifyContent="space-between"> */}
         <Card variant="outlined">
           <Typography
             component="h1"
@@ -266,7 +271,8 @@ export default function Login() {
             </Link>
           </Typography>
         </Card>
-      </SignInContainer>
+      {/* </SignInContainer> */}
+      </PageLayout>
     </ThemeProvider>
   );
 }

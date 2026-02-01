@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace backend.Services
 {
@@ -26,27 +27,48 @@ namespace backend.Services
     {
         private readonly HttpClient _http;
         private readonly IConfiguration _config;
+        private readonly IMemoryCache _cache;
+        private readonly ILogger<GoogleBooksService> _logger;
 
-        public GoogleBooksService(HttpClient http, IConfiguration config)
+        public GoogleBooksService(HttpClient http, IConfiguration config, IMemoryCache cache, ILogger<GoogleBooksService> logger)
         {
             _http = http;
             _config = config;
+            _cache = cache;
+            _logger = logger;
         }
 
         public async Task<List<GoogleBook>> SearchBooksAsync(string query, int maxResults = 10, CancellationToken ct = default)
         {
+            var cacheKey = $"search_{query}_{maxResults}";
+            if (_cache.TryGetValue(cacheKey, out List<GoogleBook>? cachedResults) && cachedResults != null)
+            {
+                _logger.LogInformation($"[Cache] Hit for query: {query}");
+                return cachedResults;
+            }
+
+            _logger.LogInformation($"[Search] Querying Google Books for: {query}");
+
             var key = _config["GoogleBooks:ApiKey"];
             var url = $"volumes?q={Uri.EscapeDataString(query)}&maxResults={maxResults}" + (string.IsNullOrEmpty(key) ? "" : $"&key={key}");
 
             using var res = await _http.GetAsync(url, ct);
-            if (!res.IsSuccessStatusCode) return new List<GoogleBook>();
+            if (!res.IsSuccessStatusCode)
+            {
+                var errorContent = await res.Content.ReadAsStringAsync(ct);
+                _logger.LogError($"[GoogleBooks API Error] Status: {res.StatusCode}, Content: {errorContent}");
+                return new List<GoogleBook>();
+            }
 
             using var stream = await res.Content.ReadAsStreamAsync(ct);
             using var doc = await JsonDocument.ParseAsync(stream, cancellationToken: ct);
             var root = doc.RootElement;
 
             if (!root.TryGetProperty("items", out var items) || items.ValueKind != JsonValueKind.Array)
+            {
+                _logger.LogWarning($"[Search] Found 0 results or invalid JSON structure for: {query}");
                 return new List<GoogleBook>();
+            }
 
             var results = new List<GoogleBook>();
             foreach (var item in items.EnumerateArray())
@@ -54,11 +76,16 @@ namespace backend.Services
                  var book = ParseVolume(item);
                  if (book != null) results.Add(book);
             }
+
+            _cache.Set(cacheKey, results, TimeSpan.FromHours(1));
+            _logger.LogInformation($"[Search] Cached {results.Count} results for: {query}");
+            
             return results;
         }
 
         public async Task<GoogleBook?> GetByIsbnAsync(string isbn, CancellationToken ct = default)
         {
+            // Similar caching logic could go here
             var key = _config["GoogleBooks:ApiKey"];
             var url = $"volumes?q=isbn:{isbn}" + (string.IsNullOrEmpty(key) ? "" : $"&key={key}");
 
@@ -84,14 +111,13 @@ namespace backend.Services
 
             using var stream = await res.Content.ReadAsStreamAsync(ct);
             using var doc = await JsonDocument.ParseAsync(stream, cancellationToken: ct);
-            var root = doc.RootElement; // The root is the volume object itself for this endpoint
+            var root = doc.RootElement; 
 
             return ParseVolume(root);
         }
 
         private GoogleBook? ParseVolume(JsonElement item)
         {
-             // ID is usually at root level of item, volumeInfo is property
             if (!item.TryGetProperty("volumeInfo", out var info)) return null;
             var volumeId = item.TryGetProperty("id", out var idProp) ? idProp.GetString() ?? "" : "";
 

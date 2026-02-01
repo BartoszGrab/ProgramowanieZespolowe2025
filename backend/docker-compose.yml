@@ -7,6 +7,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=booksocial;Username=postgres;Password=admin
       - BooksRecService__BaseUrl=http://books-rec:8000
+      - GoogleBooks__ApiKey=${GOOGLE_BOOKS_API_KEY}
     depends_on:
       db:
         condition: service_healthy

@@ -53,26 +53,26 @@ const BookItem = ({ book, onClick, onRemove }: { book: ShelfBook, onClick: () =>
 
         {/* Cover Image Area */}
         <div className="relative w-full h-48 bg-gray-50/50 flex items-center justify-center overflow-hidden rounded-t-3xl border-b border-white/40 pt-4">
-             {book.coverUrl ? (
-                <img 
-                    src={book.coverUrl} 
-                    alt={book.title} 
-                    className="h-full object-contain drop-shadow-md transform group-hover:scale-105 transition-transform duration-500" 
+            {book.coverUrl ? (
+                <img
+                    src={book.coverUrl}
+                    alt={book.title}
+                    className="h-full object-contain drop-shadow-md transform group-hover:scale-105 transition-transform duration-500"
                 />
             ) : (
                 <MenuBookIcon sx={{ fontSize: 60 }} className="text-primary-dark" />
             )}
-            
-             {/* Delete Button (visible on hover) */}
-             <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
-                <IconButton 
-                    size="small" 
+
+            {/* Delete Button (visible on hover) */}
+            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
+                <IconButton
+                    size="small"
                     onClick={onRemove}
                     sx={{ bgcolor: 'rgba(255,255,255,0.8)', '&:hover': { bgcolor: '#ffebee', color: '#d32f2f' } }}
                 >
                     <DeleteIcon fontSize="small" />
                 </IconButton>
-             </div>
+            </div>
         </div>
 
         {/* Content */}
@@ -80,34 +80,34 @@ const BookItem = ({ book, onClick, onRemove }: { book: ShelfBook, onClick: () =>
             <h3 className="text-lg font-bold text-gray-900 leading-tight line-clamp-2 mb-1">
                 {book.title}
             </h3>
-             <p className="text-sm text-primary-main font-bold mb-3">
+            <p className="text-sm text-primary-main font-bold mb-3">
                 {book.authors.join(', ')}
             </p>
 
             {/* Description */}
             <p className="text-xs text-gray-600 line-clamp-3 mb-4 flex-grow leading-relaxed">
-                 {book.description || 'No description available.'}
+                {book.description || 'No description available.'}
             </p>
 
             {/* Progress Bar */}
             {book.pageCount > 0 && (
                 <div className="mt-auto">
-                     <div className="flex justify-between items-end mb-1">
+                    <div className="flex justify-between items-end mb-1">
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Progress</span>
                         <span className="text-xs font-bold text-primary-dark">
                             {Math.round((book.currentPage / book.pageCount) * 100)}%
                         </span>
-                     </div>
-                     <LinearProgress 
-                        variant="determinate" 
-                        value={(book.currentPage / book.pageCount) * 100} 
-                        sx={{ 
-                            borderRadius: 2, 
-                            height: 6, 
-                            bgcolor: 'rgba(0,0,0,0.05)', 
-                            '& .MuiLinearProgress-bar': { bgcolor: 'primary.main', borderRadius: 2 } 
-                        }} 
-                     />
+                    </div>
+                    <LinearProgress
+                        variant="determinate"
+                        value={(book.currentPage / book.pageCount) * 100}
+                        sx={{
+                            borderRadius: 2,
+                            height: 6,
+                            bgcolor: 'rgba(0,0,0,0.05)',
+                            '& .MuiLinearProgress-bar': { bgcolor: 'primary.main', borderRadius: 2 }
+                        }}
+                    />
                 </div>
             )}
         </div>
@@ -232,17 +232,29 @@ export default function Shelves() {
 
     // --- Search Existing Book Logic ---
 
-    const handleSearchBooks = async (query: string) => {
-        if (!query) {
-            setSearchBookOptions([]);
-            return;
-        }
-        try {
-            const res = await axios.get(`/api/books?search=${query}`);
-            setSearchBookOptions(res.data);
-        } catch (err) {
-            console.error("Failed to search books", err);
-        }
+    // --- Search Existing Book Logic ---
+
+    // Debounced search function
+    const debouncedSearch = React.useMemo(() => {
+        const func = (query: string) => {
+            if (!query) {
+                setSearchBookOptions([]);
+                return;
+            }
+            axios.get(`/api/books?search=${query}`)
+                .then(res => setSearchBookOptions(res.data))
+                .catch(err => console.error("Failed to search books", err));
+        };
+
+        let timeout: ReturnType<typeof setTimeout>;
+        return (query: string) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func(query), 500);
+        };
+    }, []);
+
+    const handleSearchBooks = (query: string) => {
+        debouncedSearch(query);
     };
 
     const handleAddExistingBook = async () => {
@@ -381,27 +393,27 @@ export default function Shelves() {
     return (
         <ThemeProvider theme={mainTheme}>
             <CssBaseline enableColorScheme />
-            
+
             {/* Zastosowanie PageLayout dla spójnego wyglądu */}
             <PageLayout>
-                
+
                 {/* --- Header Section --- */}
                 <div className="w-full max-w-7xl mx-auto mb-8 pl-2">
                     <Button
                         startIcon={<ArrowBackIcon />}
                         onClick={handleBackToDashboard}
-                        sx={{ 
-                            mb: 3, 
+                        sx={{
+                            mb: 3,
                             color: 'primary.light', // Tutaj zmieniasz kolor (np. 'text.primary', 'black', '#432816')
-                            '&:hover': { 
+                            '&:hover': {
                                 color: 'white', // Kolor po najechaniu myszką
                                 backgroundColor: 'transparent' // Opcjonalnie usuwa tło przy hover
-                            } 
+                            }
                         }}
                     >
                         Back to Dashboard
                     </Button>
-                    
+
                     <div className="flex items-center gap-3">
                         <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-sm">
                             <MenuBookIcon sx={{ fontSize: 36 }} className="text-primary-light" />
@@ -428,7 +440,7 @@ export default function Shelves() {
                     )}
 
                     {error && (
-                         <Alert severity="error" className="mb-8 shadow-md rounded-xl backdrop-blur-md bg-red-100/90">
+                        <Alert severity="error" className="mb-8 shadow-md rounded-xl backdrop-blur-md bg-red-100/90">
                             {error}
                         </Alert>
                     )}
@@ -436,16 +448,16 @@ export default function Shelves() {
                     {!isLoading && !error && shelfData && (
                         /* CSS Grid layout zamiast MUI Grid */
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
-                            
+
                             {/* Add New Book Card */}
                             <AddBookItem onClick={handleOpenModal} />
 
                             {/* Books List */}
                             {shelfData.books.map((book) => (
-                                <BookItem 
-                                    key={book.id} 
-                                    book={book} 
-                                    onClick={() => handleBookClick(book)} 
+                                <BookItem
+                                    key={book.id}
+                                    book={book}
+                                    onClick={() => handleBookClick(book)}
                                     onRemove={(e) => handleRemoveClick(e, book)}
                                 />
                             ))}
@@ -454,10 +466,10 @@ export default function Shelves() {
                 </div>
 
                 {/* --- Dialog: Add a book --- */}
-                <Dialog 
-                    open={openModal} 
-                    onClose={handleCloseModal} 
-                    maxWidth="sm" 
+                <Dialog
+                    open={openModal}
+                    onClose={handleCloseModal}
+                    maxWidth="sm"
                     fullWidth
                     PaperProps={{
                         style: { borderRadius: 24, padding: 12 }
@@ -488,11 +500,11 @@ export default function Shelves() {
                                             id="search-books"
                                             options={searchBookOptions}
                                             getOptionLabel={(option) => `${option.title} (${option.isbn})`}
-                                            filterOptions={(x) => x} 
+                                            filterOptions={(x) => x}
                                             onInputChange={(_e, newUrl) => handleSearchBooks(newUrl)}
                                             onChange={(_e, newValue) => setSelectedExistingBook(newValue)}
                                             renderOption={(props, option) => {
-                                                const { key, ...rest } = props; 
+                                                const { key, ...rest } = props;
                                                 return (
                                                     <li key={key} {...rest}>
                                                         <Box>

@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMemoryCache();
 
 // Configure the database context with PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -97,7 +98,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<JwtService>();
 
 // Register HttpClient for books-rec microservice
-builder.Services.AddHttpClient<BooksRecService>(client =>
+builder.Services.AddHttpClient<IBooksRecService, BooksRecService>(client =>
 {
     var baseUrl = builder.Configuration["BooksRecService:BaseUrl"] 
         ?? "http://localhost:8000";

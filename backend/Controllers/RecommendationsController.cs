@@ -20,11 +20,11 @@ namespace backend.Controllers
         /// <summary>
         /// Service used to obtain recommendations from the external books-rec microservice.
         /// </summary>
-        private readonly BooksRecService _booksRecService;
-
+        private readonly IBooksRecService _booksRecService;
         /// <summary>
         /// Database context used to access and persist user recommendations and book metadata.
         /// </summary>
+        
         private readonly ApplicationDbContext _context;
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace backend.Controllers
         /// <param name="context">Application database context.</param>
         /// <param name="logger">Logger for the controller.</param>
         public RecommendationsController(
-            BooksRecService booksRecService, 
+            IBooksRecService booksRecService, 
             ApplicationDbContext context,
             ILogger<RecommendationsController> logger)
         {

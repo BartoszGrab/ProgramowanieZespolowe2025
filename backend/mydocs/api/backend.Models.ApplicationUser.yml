@@ -1,0 +1,2018 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Models.ApplicationUser
+  commentId: T:backend.Models.ApplicationUser
+  id: ApplicationUser
+  parent: backend.Models
+  children:
+  - backend.Models.ApplicationUser.Bio
+  - backend.Models.ApplicationUser.Comments
+  - backend.Models.ApplicationUser.CreatedAt
+  - backend.Models.ApplicationUser.DateOfBirth
+  - backend.Models.ApplicationUser.DisplayName
+  - backend.Models.ApplicationUser.FavoriteBook
+  - backend.Models.ApplicationUser.FavoriteBookId
+  - backend.Models.ApplicationUser.Followers
+  - backend.Models.ApplicationUser.FollowersCount
+  - backend.Models.ApplicationUser.Following
+  - backend.Models.ApplicationUser.FollowingCount
+  - backend.Models.ApplicationUser.IsActive
+  - backend.Models.ApplicationUser.IsGenerated
+  - backend.Models.ApplicationUser.LastLoginAt
+  - backend.Models.ApplicationUser.Likes
+  - backend.Models.ApplicationUser.Notifications
+  - backend.Models.ApplicationUser.Posts
+  - backend.Models.ApplicationUser.PostsCount
+  - backend.Models.ApplicationUser.ProfilePictureUrl
+  - backend.Models.ApplicationUser.RefreshTokens
+  - backend.Models.ApplicationUser.Reviews
+  - backend.Models.ApplicationUser.Shelves
+  langs:
+  - csharp
+  - vb
+  name: ApplicationUser
+  nameWithType: ApplicationUser
+  fullName: backend.Models.ApplicationUser
+  type: Class
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: ApplicationUser
+    path: ../Models/ApplicationUser.cs
+    startLine: 4
+  assemblies:
+  - backend
+  namespace: backend.Models
+  syntax:
+    content: 'public class ApplicationUser : IdentityUser'
+    content.vb: Public Class ApplicationUser Inherits IdentityUser
+  inheritance:
+  - System.Object
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  - Microsoft.AspNetCore.Identity.IdentityUser
+  inheritedMembers:
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.ToString
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.Id
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.UserName
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.NormalizedUserName
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.Email
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.NormalizedEmail
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.EmailConfirmed
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.PasswordHash
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.SecurityStamp
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.ConcurrencyStamp
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.PhoneNumber
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.PhoneNumberConfirmed
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.TwoFactorEnabled
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.LockoutEnd
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.LockoutEnabled
+  - Microsoft.AspNetCore.Identity.IdentityUser{System.String}.AccessFailedCount
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+- uid: backend.Models.ApplicationUser.DisplayName
+  commentId: P:backend.Models.ApplicationUser.DisplayName
+  id: DisplayName
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: DisplayName
+  nameWithType: ApplicationUser.DisplayName
+  fullName: backend.Models.ApplicationUser.DisplayName
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: DisplayName
+    path: ../Models/ApplicationUser.cs
+    startLine: 9
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: User's display name
+  example: []
+  syntax:
+    content: public string? DisplayName { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DisplayName As String
+  overload: backend.Models.ApplicationUser.DisplayName*
+- uid: backend.Models.ApplicationUser.ProfilePictureUrl
+  commentId: P:backend.Models.ApplicationUser.ProfilePictureUrl
+  id: ProfilePictureUrl
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: ProfilePictureUrl
+  nameWithType: ApplicationUser.ProfilePictureUrl
+  fullName: backend.Models.ApplicationUser.ProfilePictureUrl
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: ProfilePictureUrl
+    path: ../Models/ApplicationUser.cs
+    startLine: 14
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: URL to the user's profile picture
+  example: []
+  syntax:
+    content: public string? ProfilePictureUrl { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ProfilePictureUrl As String
+  overload: backend.Models.ApplicationUser.ProfilePictureUrl*
+- uid: backend.Models.ApplicationUser.CreatedAt
+  commentId: P:backend.Models.ApplicationUser.CreatedAt
+  id: CreatedAt
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: CreatedAt
+  nameWithType: ApplicationUser.CreatedAt
+  fullName: backend.Models.ApplicationUser.CreatedAt
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: CreatedAt
+    path: ../Models/ApplicationUser.cs
+    startLine: 19
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Date and time when the user account was created
+  example: []
+  syntax:
+    content: public DateTime CreatedAt { get; set; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property CreatedAt As Date
+  overload: backend.Models.ApplicationUser.CreatedAt*
+- uid: backend.Models.ApplicationUser.LastLoginAt
+  commentId: P:backend.Models.ApplicationUser.LastLoginAt
+  id: LastLoginAt
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: LastLoginAt
+  nameWithType: ApplicationUser.LastLoginAt
+  fullName: backend.Models.ApplicationUser.LastLoginAt
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: LastLoginAt
+    path: ../Models/ApplicationUser.cs
+    startLine: 24
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Date and time of the user's last login
+  example: []
+  syntax:
+    content: public DateTime? LastLoginAt { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.DateTime}
+    content.vb: Public Property LastLoginAt As Date?
+  overload: backend.Models.ApplicationUser.LastLoginAt*
+- uid: backend.Models.ApplicationUser.IsActive
+  commentId: P:backend.Models.ApplicationUser.IsActive
+  id: IsActive
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: IsActive
+  nameWithType: ApplicationUser.IsActive
+  fullName: backend.Models.ApplicationUser.IsActive
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: IsActive
+    path: ../Models/ApplicationUser.cs
+    startLine: 29
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Indicates whether the user account is active
+  example: []
+  syntax:
+    content: public bool IsActive { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IsActive As Boolean
+  overload: backend.Models.ApplicationUser.IsActive*
+- uid: backend.Models.ApplicationUser.Bio
+  commentId: P:backend.Models.ApplicationUser.Bio
+  id: Bio
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: Bio
+  nameWithType: ApplicationUser.Bio
+  fullName: backend.Models.ApplicationUser.Bio
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Bio
+    path: ../Models/ApplicationUser.cs
+    startLine: 34
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: User's bio or description
+  example: []
+  syntax:
+    content: public string? Bio { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Bio As String
+  overload: backend.Models.ApplicationUser.Bio*
+- uid: backend.Models.ApplicationUser.DateOfBirth
+  commentId: P:backend.Models.ApplicationUser.DateOfBirth
+  id: DateOfBirth
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: DateOfBirth
+  nameWithType: ApplicationUser.DateOfBirth
+  fullName: backend.Models.ApplicationUser.DateOfBirth
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: DateOfBirth
+    path: ../Models/ApplicationUser.cs
+    startLine: 39
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: User's date of birth
+  example: []
+  syntax:
+    content: public DateTime? DateOfBirth { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.DateTime}
+    content.vb: Public Property DateOfBirth As Date?
+  overload: backend.Models.ApplicationUser.DateOfBirth*
+- uid: backend.Models.ApplicationUser.FollowersCount
+  commentId: P:backend.Models.ApplicationUser.FollowersCount
+  id: FollowersCount
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: FollowersCount
+  nameWithType: ApplicationUser.FollowersCount
+  fullName: backend.Models.ApplicationUser.FollowersCount
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: FollowersCount
+    path: ../Models/ApplicationUser.cs
+    startLine: 44
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Number of followers the user has
+  example: []
+  syntax:
+    content: public int FollowersCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property FollowersCount As Integer
+  overload: backend.Models.ApplicationUser.FollowersCount*
+- uid: backend.Models.ApplicationUser.FollowingCount
+  commentId: P:backend.Models.ApplicationUser.FollowingCount
+  id: FollowingCount
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: FollowingCount
+  nameWithType: ApplicationUser.FollowingCount
+  fullName: backend.Models.ApplicationUser.FollowingCount
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: FollowingCount
+    path: ../Models/ApplicationUser.cs
+    startLine: 49
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Number of users the user is following
+  example: []
+  syntax:
+    content: public int FollowingCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property FollowingCount As Integer
+  overload: backend.Models.ApplicationUser.FollowingCount*
+- uid: backend.Models.ApplicationUser.PostsCount
+  commentId: P:backend.Models.ApplicationUser.PostsCount
+  id: PostsCount
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: PostsCount
+  nameWithType: ApplicationUser.PostsCount
+  fullName: backend.Models.ApplicationUser.PostsCount
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: PostsCount
+    path: ../Models/ApplicationUser.cs
+    startLine: 54
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Number of posts the user has made
+  example: []
+  syntax:
+    content: public int PostsCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property PostsCount As Integer
+  overload: backend.Models.ApplicationUser.PostsCount*
+- uid: backend.Models.ApplicationUser.RefreshTokens
+  commentId: P:backend.Models.ApplicationUser.RefreshTokens
+  id: RefreshTokens
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: RefreshTokens
+  nameWithType: ApplicationUser.RefreshTokens
+  fullName: backend.Models.ApplicationUser.RefreshTokens
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: RefreshTokens
+    path: ../Models/ApplicationUser.cs
+    startLine: 59
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: ''
+  example: []
+  syntax:
+    content: public ICollection<RefreshToken> RefreshTokens { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.RefreshToken}
+    content.vb: Public Property RefreshTokens As ICollection(Of RefreshToken)
+  overload: backend.Models.ApplicationUser.RefreshTokens*
+- uid: backend.Models.ApplicationUser.Posts
+  commentId: P:backend.Models.ApplicationUser.Posts
+  id: Posts
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: Posts
+  nameWithType: ApplicationUser.Posts
+  fullName: backend.Models.ApplicationUser.Posts
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Posts
+    path: ../Models/ApplicationUser.cs
+    startLine: 66
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Collection of posts created by the user
+  example: []
+  syntax:
+    content: public ICollection<Post> Posts { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.Post}
+    content.vb: Public Property Posts As ICollection(Of Post)
+  overload: backend.Models.ApplicationUser.Posts*
+- uid: backend.Models.ApplicationUser.Comments
+  commentId: P:backend.Models.ApplicationUser.Comments
+  id: Comments
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: Comments
+  nameWithType: ApplicationUser.Comments
+  fullName: backend.Models.ApplicationUser.Comments
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Comments
+    path: ../Models/ApplicationUser.cs
+    startLine: 71
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Collection of comments made by the user
+  example: []
+  syntax:
+    content: public ICollection<Comment> Comments { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.Comment}
+    content.vb: Public Property Comments As ICollection(Of Comment)
+  overload: backend.Models.ApplicationUser.Comments*
+- uid: backend.Models.ApplicationUser.Likes
+  commentId: P:backend.Models.ApplicationUser.Likes
+  id: Likes
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: Likes
+  nameWithType: ApplicationUser.Likes
+  fullName: backend.Models.ApplicationUser.Likes
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Likes
+    path: ../Models/ApplicationUser.cs
+    startLine: 76
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Collection of likes given by the user
+  example: []
+  syntax:
+    content: public ICollection<Like> Likes { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.Like}
+    content.vb: Public Property Likes As ICollection(Of [Like])
+  overload: backend.Models.ApplicationUser.Likes*
+- uid: backend.Models.ApplicationUser.Notifications
+  commentId: P:backend.Models.ApplicationUser.Notifications
+  id: Notifications
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: Notifications
+  nameWithType: ApplicationUser.Notifications
+  fullName: backend.Models.ApplicationUser.Notifications
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Notifications
+    path: ../Models/ApplicationUser.cs
+    startLine: 81
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Collection of notifications received by the user
+  example: []
+  syntax:
+    content: public ICollection<Notification> Notifications { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.Notification}
+    content.vb: Public Property Notifications As ICollection(Of Notification)
+  overload: backend.Models.ApplicationUser.Notifications*
+- uid: backend.Models.ApplicationUser.Following
+  commentId: P:backend.Models.ApplicationUser.Following
+  id: Following
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: Following
+  nameWithType: ApplicationUser.Following
+  fullName: backend.Models.ApplicationUser.Following
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Following
+    path: ../Models/ApplicationUser.cs
+    startLine: 86
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Collection of users that this user is following
+  example: []
+  syntax:
+    content: public ICollection<UserFollow> Following { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.UserFollow}
+    content.vb: Public Property Following As ICollection(Of UserFollow)
+  overload: backend.Models.ApplicationUser.Following*
+- uid: backend.Models.ApplicationUser.Followers
+  commentId: P:backend.Models.ApplicationUser.Followers
+  id: Followers
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: Followers
+  nameWithType: ApplicationUser.Followers
+  fullName: backend.Models.ApplicationUser.Followers
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Followers
+    path: ../Models/ApplicationUser.cs
+    startLine: 91
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Collection of users who are following this user
+  example: []
+  syntax:
+    content: public ICollection<UserFollow> Followers { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.UserFollow}
+    content.vb: Public Property Followers As ICollection(Of UserFollow)
+  overload: backend.Models.ApplicationUser.Followers*
+- uid: backend.Models.ApplicationUser.FavoriteBookId
+  commentId: P:backend.Models.ApplicationUser.FavoriteBookId
+  id: FavoriteBookId
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: FavoriteBookId
+  nameWithType: ApplicationUser.FavoriteBookId
+  fullName: backend.Models.ApplicationUser.FavoriteBookId
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: FavoriteBookId
+    path: ../Models/ApplicationUser.cs
+    startLine: 96
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: ID of the user's favorite book
+  example: []
+  syntax:
+    content: public Guid? FavoriteBookId { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Guid}
+    content.vb: Public Property FavoriteBookId As Guid?
+  overload: backend.Models.ApplicationUser.FavoriteBookId*
+- uid: backend.Models.ApplicationUser.FavoriteBook
+  commentId: P:backend.Models.ApplicationUser.FavoriteBook
+  id: FavoriteBook
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: FavoriteBook
+  nameWithType: ApplicationUser.FavoriteBook
+  fullName: backend.Models.ApplicationUser.FavoriteBook
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: FavoriteBook
+    path: ../Models/ApplicationUser.cs
+    startLine: 101
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Navigation property for the favorite book
+  example: []
+  syntax:
+    content: public Book? FavoriteBook { get; set; }
+    parameters: []
+    return:
+      type: backend.Models.Book
+    content.vb: Public Property FavoriteBook As Book
+  overload: backend.Models.ApplicationUser.FavoriteBook*
+- uid: backend.Models.ApplicationUser.IsGenerated
+  commentId: P:backend.Models.ApplicationUser.IsGenerated
+  id: IsGenerated
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: IsGenerated
+  nameWithType: ApplicationUser.IsGenerated
+  fullName: backend.Models.ApplicationUser.IsGenerated
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: IsGenerated
+    path: ../Models/ApplicationUser.cs
+    startLine: 106
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Indicates if the user was generated by a script
+  example: []
+  syntax:
+    content: public bool IsGenerated { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IsGenerated As Boolean
+  overload: backend.Models.ApplicationUser.IsGenerated*
+- uid: backend.Models.ApplicationUser.Shelves
+  commentId: P:backend.Models.ApplicationUser.Shelves
+  id: Shelves
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: Shelves
+  nameWithType: ApplicationUser.Shelves
+  fullName: backend.Models.ApplicationUser.Shelves
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Shelves
+    path: ../Models/ApplicationUser.cs
+    startLine: 113
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Collection of shelves created by the user
+  example: []
+  syntax:
+    content: public ICollection<Shelf> Shelves { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.Shelf}
+    content.vb: Public Property Shelves As ICollection(Of Shelf)
+  overload: backend.Models.ApplicationUser.Shelves*
+- uid: backend.Models.ApplicationUser.Reviews
+  commentId: P:backend.Models.ApplicationUser.Reviews
+  id: Reviews
+  parent: backend.Models.ApplicationUser
+  langs:
+  - csharp
+  - vb
+  name: Reviews
+  nameWithType: ApplicationUser.Reviews
+  fullName: backend.Models.ApplicationUser.Reviews
+  type: Property
+  source:
+    remote:
+      path: backend/Models/ApplicationUser.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Reviews
+    path: ../Models/ApplicationUser.cs
+    startLine: 118
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Collection of reviews written by the user
+  example: []
+  syntax:
+    content: public ICollection<Review> Reviews { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.Review}
+    content.vb: Public Property Reviews As ICollection(Of Review)
+  overload: backend.Models.ApplicationUser.Reviews*
+references:
+- uid: backend.Models
+  commentId: N:backend.Models
+  href: backend.html
+  name: backend.Models
+  nameWithType: backend.Models
+  fullName: backend.Models
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  commentId: T:Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  parent: Microsoft.AspNetCore.Identity
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1
+  name: IdentityUser<string>
+  nameWithType: IdentityUser<string>
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>
+  nameWithType.vb: IdentityUser(Of String)
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String)
+  name.vb: IdentityUser(Of String)
+  spec.csharp:
+  - uid: Microsoft.AspNetCore.Identity.IdentityUser`1
+    name: IdentityUser
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.AspNetCore.Identity.IdentityUser`1
+    name: IdentityUser
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: Microsoft.AspNetCore.Identity.IdentityUser
+  commentId: T:Microsoft.AspNetCore.Identity.IdentityUser
+  parent: Microsoft.AspNetCore.Identity
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser
+  name: IdentityUser
+  nameWithType: IdentityUser
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.ToString
+  commentId: M:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.ToString
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.ToString
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.tostring
+  name: ToString()
+  nameWithType: IdentityUser<string>.ToString()
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.ToString()
+  nameWithType.vb: IdentityUser(Of String).ToString()
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).ToString()
+  spec.csharp:
+  - uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.tostring
+  - name: (
+  - name: )
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.Id
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.Id
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.Id
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.id
+  name: Id
+  nameWithType: IdentityUser<string>.Id
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.Id
+  nameWithType.vb: IdentityUser(Of String).Id
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).Id
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.UserName
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.UserName
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.UserName
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.username
+  name: UserName
+  nameWithType: IdentityUser<string>.UserName
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.UserName
+  nameWithType.vb: IdentityUser(Of String).UserName
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).UserName
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.NormalizedUserName
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.NormalizedUserName
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.NormalizedUserName
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.normalizedusername
+  name: NormalizedUserName
+  nameWithType: IdentityUser<string>.NormalizedUserName
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.NormalizedUserName
+  nameWithType.vb: IdentityUser(Of String).NormalizedUserName
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).NormalizedUserName
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.Email
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.Email
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.Email
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.email
+  name: Email
+  nameWithType: IdentityUser<string>.Email
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.Email
+  nameWithType.vb: IdentityUser(Of String).Email
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).Email
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.NormalizedEmail
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.NormalizedEmail
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.NormalizedEmail
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.normalizedemail
+  name: NormalizedEmail
+  nameWithType: IdentityUser<string>.NormalizedEmail
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.NormalizedEmail
+  nameWithType.vb: IdentityUser(Of String).NormalizedEmail
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).NormalizedEmail
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.EmailConfirmed
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.EmailConfirmed
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.EmailConfirmed
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.emailconfirmed
+  name: EmailConfirmed
+  nameWithType: IdentityUser<string>.EmailConfirmed
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.EmailConfirmed
+  nameWithType.vb: IdentityUser(Of String).EmailConfirmed
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).EmailConfirmed
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.PasswordHash
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.PasswordHash
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.PasswordHash
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.passwordhash
+  name: PasswordHash
+  nameWithType: IdentityUser<string>.PasswordHash
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.PasswordHash
+  nameWithType.vb: IdentityUser(Of String).PasswordHash
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).PasswordHash
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.SecurityStamp
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.SecurityStamp
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.SecurityStamp
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.securitystamp
+  name: SecurityStamp
+  nameWithType: IdentityUser<string>.SecurityStamp
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.SecurityStamp
+  nameWithType.vb: IdentityUser(Of String).SecurityStamp
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).SecurityStamp
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.ConcurrencyStamp
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.ConcurrencyStamp
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.ConcurrencyStamp
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.concurrencystamp
+  name: ConcurrencyStamp
+  nameWithType: IdentityUser<string>.ConcurrencyStamp
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.ConcurrencyStamp
+  nameWithType.vb: IdentityUser(Of String).ConcurrencyStamp
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).ConcurrencyStamp
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.PhoneNumber
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.PhoneNumber
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.PhoneNumber
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.phonenumber
+  name: PhoneNumber
+  nameWithType: IdentityUser<string>.PhoneNumber
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.PhoneNumber
+  nameWithType.vb: IdentityUser(Of String).PhoneNumber
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).PhoneNumber
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.PhoneNumberConfirmed
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.PhoneNumberConfirmed
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.PhoneNumberConfirmed
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.phonenumberconfirmed
+  name: PhoneNumberConfirmed
+  nameWithType: IdentityUser<string>.PhoneNumberConfirmed
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.PhoneNumberConfirmed
+  nameWithType.vb: IdentityUser(Of String).PhoneNumberConfirmed
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).PhoneNumberConfirmed
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.TwoFactorEnabled
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.TwoFactorEnabled
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.TwoFactorEnabled
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.twofactorenabled
+  name: TwoFactorEnabled
+  nameWithType: IdentityUser<string>.TwoFactorEnabled
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.TwoFactorEnabled
+  nameWithType.vb: IdentityUser(Of String).TwoFactorEnabled
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).TwoFactorEnabled
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.LockoutEnd
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.LockoutEnd
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.LockoutEnd
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.lockoutend
+  name: LockoutEnd
+  nameWithType: IdentityUser<string>.LockoutEnd
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.LockoutEnd
+  nameWithType.vb: IdentityUser(Of String).LockoutEnd
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).LockoutEnd
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.LockoutEnabled
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.LockoutEnabled
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.LockoutEnabled
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.lockoutenabled
+  name: LockoutEnabled
+  nameWithType: IdentityUser<string>.LockoutEnabled
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.LockoutEnabled
+  nameWithType.vb: IdentityUser(Of String).LockoutEnabled
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).LockoutEnabled
+- uid: Microsoft.AspNetCore.Identity.IdentityUser{System.String}.AccessFailedCount
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser{System.String}.AccessFailedCount
+  parent: Microsoft.AspNetCore.Identity.IdentityUser{System.String}
+  definition: Microsoft.AspNetCore.Identity.IdentityUser`1.AccessFailedCount
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.accessfailedcount
+  name: AccessFailedCount
+  nameWithType: IdentityUser<string>.AccessFailedCount
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<string>.AccessFailedCount
+  nameWithType.vb: IdentityUser(Of String).AccessFailedCount
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of String).AccessFailedCount
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1
+  commentId: T:Microsoft.AspNetCore.Identity.IdentityUser`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1
+  name: IdentityUser<TKey>
+  nameWithType: IdentityUser<TKey>
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>
+  nameWithType.vb: IdentityUser(Of TKey)
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey)
+  name.vb: IdentityUser(Of TKey)
+  spec.csharp:
+  - uid: Microsoft.AspNetCore.Identity.IdentityUser`1
+    name: IdentityUser
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1
+  - name: <
+  - name: TKey
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.AspNetCore.Identity.IdentityUser`1
+    name: IdentityUser
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TKey
+  - name: )
+- uid: Microsoft.AspNetCore.Identity
+  commentId: N:Microsoft.AspNetCore.Identity
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.AspNetCore.Identity
+  nameWithType: Microsoft.AspNetCore.Identity
+  fullName: Microsoft.AspNetCore.Identity
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.AspNetCore
+    name: AspNetCore
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore
+  - name: .
+  - uid: Microsoft.AspNetCore.Identity
+    name: Identity
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.AspNetCore
+    name: AspNetCore
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore
+  - name: .
+  - uid: Microsoft.AspNetCore.Identity
+    name: Identity
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.ToString
+  commentId: M:Microsoft.AspNetCore.Identity.IdentityUser`1.ToString
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.tostring
+  name: ToString()
+  nameWithType: IdentityUser<TKey>.ToString()
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.ToString()
+  nameWithType.vb: IdentityUser(Of TKey).ToString()
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).ToString()
+  spec.csharp:
+  - uid: Microsoft.AspNetCore.Identity.IdentityUser`1.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Microsoft.AspNetCore.Identity.IdentityUser`1.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.tostring
+  - name: (
+  - name: )
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.Id
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.Id
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.id
+  name: Id
+  nameWithType: IdentityUser<TKey>.Id
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.Id
+  nameWithType.vb: IdentityUser(Of TKey).Id
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).Id
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.UserName
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.UserName
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.username
+  name: UserName
+  nameWithType: IdentityUser<TKey>.UserName
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.UserName
+  nameWithType.vb: IdentityUser(Of TKey).UserName
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).UserName
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.NormalizedUserName
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.NormalizedUserName
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.normalizedusername
+  name: NormalizedUserName
+  nameWithType: IdentityUser<TKey>.NormalizedUserName
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.NormalizedUserName
+  nameWithType.vb: IdentityUser(Of TKey).NormalizedUserName
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).NormalizedUserName
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.Email
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.Email
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.email
+  name: Email
+  nameWithType: IdentityUser<TKey>.Email
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.Email
+  nameWithType.vb: IdentityUser(Of TKey).Email
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).Email
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.NormalizedEmail
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.NormalizedEmail
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.normalizedemail
+  name: NormalizedEmail
+  nameWithType: IdentityUser<TKey>.NormalizedEmail
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.NormalizedEmail
+  nameWithType.vb: IdentityUser(Of TKey).NormalizedEmail
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).NormalizedEmail
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.EmailConfirmed
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.EmailConfirmed
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.emailconfirmed
+  name: EmailConfirmed
+  nameWithType: IdentityUser<TKey>.EmailConfirmed
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.EmailConfirmed
+  nameWithType.vb: IdentityUser(Of TKey).EmailConfirmed
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).EmailConfirmed
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.PasswordHash
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.PasswordHash
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.passwordhash
+  name: PasswordHash
+  nameWithType: IdentityUser<TKey>.PasswordHash
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.PasswordHash
+  nameWithType.vb: IdentityUser(Of TKey).PasswordHash
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).PasswordHash
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.SecurityStamp
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.SecurityStamp
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.securitystamp
+  name: SecurityStamp
+  nameWithType: IdentityUser<TKey>.SecurityStamp
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.SecurityStamp
+  nameWithType.vb: IdentityUser(Of TKey).SecurityStamp
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).SecurityStamp
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.ConcurrencyStamp
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.ConcurrencyStamp
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.concurrencystamp
+  name: ConcurrencyStamp
+  nameWithType: IdentityUser<TKey>.ConcurrencyStamp
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.ConcurrencyStamp
+  nameWithType.vb: IdentityUser(Of TKey).ConcurrencyStamp
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).ConcurrencyStamp
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.PhoneNumber
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.PhoneNumber
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.phonenumber
+  name: PhoneNumber
+  nameWithType: IdentityUser<TKey>.PhoneNumber
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.PhoneNumber
+  nameWithType.vb: IdentityUser(Of TKey).PhoneNumber
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).PhoneNumber
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.PhoneNumberConfirmed
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.PhoneNumberConfirmed
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.phonenumberconfirmed
+  name: PhoneNumberConfirmed
+  nameWithType: IdentityUser<TKey>.PhoneNumberConfirmed
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.PhoneNumberConfirmed
+  nameWithType.vb: IdentityUser(Of TKey).PhoneNumberConfirmed
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).PhoneNumberConfirmed
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.TwoFactorEnabled
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.TwoFactorEnabled
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.twofactorenabled
+  name: TwoFactorEnabled
+  nameWithType: IdentityUser<TKey>.TwoFactorEnabled
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.TwoFactorEnabled
+  nameWithType.vb: IdentityUser(Of TKey).TwoFactorEnabled
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).TwoFactorEnabled
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.LockoutEnd
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.LockoutEnd
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.lockoutend
+  name: LockoutEnd
+  nameWithType: IdentityUser<TKey>.LockoutEnd
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.LockoutEnd
+  nameWithType.vb: IdentityUser(Of TKey).LockoutEnd
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).LockoutEnd
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.LockoutEnabled
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.LockoutEnabled
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.lockoutenabled
+  name: LockoutEnabled
+  nameWithType: IdentityUser<TKey>.LockoutEnabled
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.LockoutEnabled
+  nameWithType.vb: IdentityUser(Of TKey).LockoutEnabled
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).LockoutEnabled
+- uid: Microsoft.AspNetCore.Identity.IdentityUser`1.AccessFailedCount
+  commentId: P:Microsoft.AspNetCore.Identity.IdentityUser`1.AccessFailedCount
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.identity.identityuser-1.accessfailedcount
+  name: AccessFailedCount
+  nameWithType: IdentityUser<TKey>.AccessFailedCount
+  fullName: Microsoft.AspNetCore.Identity.IdentityUser<TKey>.AccessFailedCount
+  nameWithType.vb: IdentityUser(Of TKey).AccessFailedCount
+  fullName.vb: Microsoft.AspNetCore.Identity.IdentityUser(Of TKey).AccessFailedCount
+- uid: backend.Models.ApplicationUser.DisplayName*
+  commentId: Overload:backend.Models.ApplicationUser.DisplayName
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_DisplayName
+  name: DisplayName
+  nameWithType: ApplicationUser.DisplayName
+  fullName: backend.Models.ApplicationUser.DisplayName
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: backend.Models.ApplicationUser.ProfilePictureUrl*
+  commentId: Overload:backend.Models.ApplicationUser.ProfilePictureUrl
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_ProfilePictureUrl
+  name: ProfilePictureUrl
+  nameWithType: ApplicationUser.ProfilePictureUrl
+  fullName: backend.Models.ApplicationUser.ProfilePictureUrl
+- uid: backend.Models.ApplicationUser.CreatedAt*
+  commentId: Overload:backend.Models.ApplicationUser.CreatedAt
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_CreatedAt
+  name: CreatedAt
+  nameWithType: ApplicationUser.CreatedAt
+  fullName: backend.Models.ApplicationUser.CreatedAt
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: backend.Models.ApplicationUser.LastLoginAt*
+  commentId: Overload:backend.Models.ApplicationUser.LastLoginAt
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_LastLoginAt
+  name: LastLoginAt
+  nameWithType: ApplicationUser.LastLoginAt
+  fullName: backend.Models.ApplicationUser.LastLoginAt
+- uid: System.Nullable{System.DateTime}
+  commentId: T:System.Nullable{System.DateTime}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime?
+  nameWithType: DateTime?
+  fullName: System.DateTime?
+  nameWithType.vb: Date?
+  fullName.vb: Date?
+  name.vb: Date?
+  spec.csharp:
+  - uid: System.DateTime
+    name: DateTime
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetime
+  - name: '?'
+  spec.vb:
+  - uid: System.DateTime
+    name: Date
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetime
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: backend.Models.ApplicationUser.IsActive*
+  commentId: Overload:backend.Models.ApplicationUser.IsActive
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_IsActive
+  name: IsActive
+  nameWithType: ApplicationUser.IsActive
+  fullName: backend.Models.ApplicationUser.IsActive
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: backend.Models.ApplicationUser.Bio*
+  commentId: Overload:backend.Models.ApplicationUser.Bio
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_Bio
+  name: Bio
+  nameWithType: ApplicationUser.Bio
+  fullName: backend.Models.ApplicationUser.Bio
+- uid: backend.Models.ApplicationUser.DateOfBirth*
+  commentId: Overload:backend.Models.ApplicationUser.DateOfBirth
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_DateOfBirth
+  name: DateOfBirth
+  nameWithType: ApplicationUser.DateOfBirth
+  fullName: backend.Models.ApplicationUser.DateOfBirth
+- uid: backend.Models.ApplicationUser.FollowersCount*
+  commentId: Overload:backend.Models.ApplicationUser.FollowersCount
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_FollowersCount
+  name: FollowersCount
+  nameWithType: ApplicationUser.FollowersCount
+  fullName: backend.Models.ApplicationUser.FollowersCount
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: backend.Models.ApplicationUser.FollowingCount*
+  commentId: Overload:backend.Models.ApplicationUser.FollowingCount
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_FollowingCount
+  name: FollowingCount
+  nameWithType: ApplicationUser.FollowingCount
+  fullName: backend.Models.ApplicationUser.FollowingCount
+- uid: backend.Models.ApplicationUser.PostsCount*
+  commentId: Overload:backend.Models.ApplicationUser.PostsCount
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_PostsCount
+  name: PostsCount
+  nameWithType: ApplicationUser.PostsCount
+  fullName: backend.Models.ApplicationUser.PostsCount
+- uid: backend.Models.ApplicationUser.RefreshTokens*
+  commentId: Overload:backend.Models.ApplicationUser.RefreshTokens
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_RefreshTokens
+  name: RefreshTokens
+  nameWithType: ApplicationUser.RefreshTokens
+  fullName: backend.Models.ApplicationUser.RefreshTokens
+- uid: System.Collections.Generic.ICollection{backend.Models.RefreshToken}
+  commentId: T:System.Collections.Generic.ICollection{backend.Models.RefreshToken}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<RefreshToken>
+  nameWithType: ICollection<RefreshToken>
+  fullName: System.Collections.Generic.ICollection<backend.Models.RefreshToken>
+  nameWithType.vb: ICollection(Of RefreshToken)
+  fullName.vb: System.Collections.Generic.ICollection(Of backend.Models.RefreshToken)
+  name.vb: ICollection(Of RefreshToken)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: backend.Models.RefreshToken
+    name: RefreshToken
+    href: backend.Models.RefreshToken.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Models.RefreshToken
+    name: RefreshToken
+    href: backend.Models.RefreshToken.html
+  - name: )
+- uid: System.Collections.Generic.ICollection`1
+  commentId: T:System.Collections.Generic.ICollection`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<T>
+  nameWithType: ICollection<T>
+  fullName: System.Collections.Generic.ICollection<T>
+  nameWithType.vb: ICollection(Of T)
+  fullName.vb: System.Collections.Generic.ICollection(Of T)
+  name.vb: ICollection(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: backend.Models.ApplicationUser.Posts*
+  commentId: Overload:backend.Models.ApplicationUser.Posts
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_Posts
+  name: Posts
+  nameWithType: ApplicationUser.Posts
+  fullName: backend.Models.ApplicationUser.Posts
+- uid: System.Collections.Generic.ICollection{backend.Models.Post}
+  commentId: T:System.Collections.Generic.ICollection{backend.Models.Post}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<Post>
+  nameWithType: ICollection<Post>
+  fullName: System.Collections.Generic.ICollection<backend.Models.Post>
+  nameWithType.vb: ICollection(Of Post)
+  fullName.vb: System.Collections.Generic.ICollection(Of backend.Models.Post)
+  name.vb: ICollection(Of Post)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: backend.Models.Post
+    name: Post
+    href: backend.Models.Post.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Models.Post
+    name: Post
+    href: backend.Models.Post.html
+  - name: )
+- uid: backend.Models.ApplicationUser.Comments*
+  commentId: Overload:backend.Models.ApplicationUser.Comments
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_Comments
+  name: Comments
+  nameWithType: ApplicationUser.Comments
+  fullName: backend.Models.ApplicationUser.Comments
+- uid: System.Collections.Generic.ICollection{backend.Models.Comment}
+  commentId: T:System.Collections.Generic.ICollection{backend.Models.Comment}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<Comment>
+  nameWithType: ICollection<Comment>
+  fullName: System.Collections.Generic.ICollection<backend.Models.Comment>
+  nameWithType.vb: ICollection(Of Comment)
+  fullName.vb: System.Collections.Generic.ICollection(Of backend.Models.Comment)
+  name.vb: ICollection(Of Comment)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: backend.Models.Comment
+    name: Comment
+    href: backend.Models.Comment.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Models.Comment
+    name: Comment
+    href: backend.Models.Comment.html
+  - name: )
+- uid: backend.Models.ApplicationUser.Likes*
+  commentId: Overload:backend.Models.ApplicationUser.Likes
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_Likes
+  name: Likes
+  nameWithType: ApplicationUser.Likes
+  fullName: backend.Models.ApplicationUser.Likes
+- uid: System.Collections.Generic.ICollection{backend.Models.Like}
+  commentId: T:System.Collections.Generic.ICollection{backend.Models.Like}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<Like>
+  nameWithType: ICollection<Like>
+  fullName: System.Collections.Generic.ICollection<backend.Models.Like>
+  nameWithType.vb: ICollection(Of Like)
+  fullName.vb: System.Collections.Generic.ICollection(Of backend.Models.Like)
+  name.vb: ICollection(Of Like)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: backend.Models.Like
+    name: Like
+    href: backend.Models.Like.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Models.Like
+    name: Like
+    href: backend.Models.Like.html
+  - name: )
+- uid: backend.Models.ApplicationUser.Notifications*
+  commentId: Overload:backend.Models.ApplicationUser.Notifications
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_Notifications
+  name: Notifications
+  nameWithType: ApplicationUser.Notifications
+  fullName: backend.Models.ApplicationUser.Notifications
+- uid: System.Collections.Generic.ICollection{backend.Models.Notification}
+  commentId: T:System.Collections.Generic.ICollection{backend.Models.Notification}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<Notification>
+  nameWithType: ICollection<Notification>
+  fullName: System.Collections.Generic.ICollection<backend.Models.Notification>
+  nameWithType.vb: ICollection(Of Notification)
+  fullName.vb: System.Collections.Generic.ICollection(Of backend.Models.Notification)
+  name.vb: ICollection(Of Notification)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: backend.Models.Notification
+    name: Notification
+    href: backend.Models.Notification.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Models.Notification
+    name: Notification
+    href: backend.Models.Notification.html
+  - name: )
+- uid: backend.Models.ApplicationUser.Following*
+  commentId: Overload:backend.Models.ApplicationUser.Following
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_Following
+  name: Following
+  nameWithType: ApplicationUser.Following
+  fullName: backend.Models.ApplicationUser.Following
+- uid: System.Collections.Generic.ICollection{backend.Models.UserFollow}
+  commentId: T:System.Collections.Generic.ICollection{backend.Models.UserFollow}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<UserFollow>
+  nameWithType: ICollection<UserFollow>
+  fullName: System.Collections.Generic.ICollection<backend.Models.UserFollow>
+  nameWithType.vb: ICollection(Of UserFollow)
+  fullName.vb: System.Collections.Generic.ICollection(Of backend.Models.UserFollow)
+  name.vb: ICollection(Of UserFollow)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: backend.Models.UserFollow
+    name: UserFollow
+    href: backend.Models.UserFollow.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Models.UserFollow
+    name: UserFollow
+    href: backend.Models.UserFollow.html
+  - name: )
+- uid: backend.Models.ApplicationUser.Followers*
+  commentId: Overload:backend.Models.ApplicationUser.Followers
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_Followers
+  name: Followers
+  nameWithType: ApplicationUser.Followers
+  fullName: backend.Models.ApplicationUser.Followers
+- uid: backend.Models.ApplicationUser.FavoriteBookId*
+  commentId: Overload:backend.Models.ApplicationUser.FavoriteBookId
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_FavoriteBookId
+  name: FavoriteBookId
+  nameWithType: ApplicationUser.FavoriteBookId
+  fullName: backend.Models.ApplicationUser.FavoriteBookId
+- uid: System.Nullable{System.Guid}
+  commentId: T:System.Nullable{System.Guid}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid?
+  nameWithType: Guid?
+  fullName: System.Guid?
+  spec.csharp:
+  - uid: System.Guid
+    name: Guid
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.guid
+  - name: '?'
+  spec.vb:
+  - uid: System.Guid
+    name: Guid
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.guid
+  - name: '?'
+- uid: backend.Models.ApplicationUser.FavoriteBook*
+  commentId: Overload:backend.Models.ApplicationUser.FavoriteBook
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_FavoriteBook
+  name: FavoriteBook
+  nameWithType: ApplicationUser.FavoriteBook
+  fullName: backend.Models.ApplicationUser.FavoriteBook
+- uid: backend.Models.Book
+  commentId: T:backend.Models.Book
+  parent: backend.Models
+  href: backend.Models.Book.html
+  name: Book
+  nameWithType: Book
+  fullName: backend.Models.Book
+- uid: backend.Models.ApplicationUser.IsGenerated*
+  commentId: Overload:backend.Models.ApplicationUser.IsGenerated
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_IsGenerated
+  name: IsGenerated
+  nameWithType: ApplicationUser.IsGenerated
+  fullName: backend.Models.ApplicationUser.IsGenerated
+- uid: backend.Models.ApplicationUser.Shelves*
+  commentId: Overload:backend.Models.ApplicationUser.Shelves
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_Shelves
+  name: Shelves
+  nameWithType: ApplicationUser.Shelves
+  fullName: backend.Models.ApplicationUser.Shelves
+- uid: System.Collections.Generic.ICollection{backend.Models.Shelf}
+  commentId: T:System.Collections.Generic.ICollection{backend.Models.Shelf}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<Shelf>
+  nameWithType: ICollection<Shelf>
+  fullName: System.Collections.Generic.ICollection<backend.Models.Shelf>
+  nameWithType.vb: ICollection(Of Shelf)
+  fullName.vb: System.Collections.Generic.ICollection(Of backend.Models.Shelf)
+  name.vb: ICollection(Of Shelf)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: backend.Models.Shelf
+    name: Shelf
+    href: backend.Models.Shelf.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Models.Shelf
+    name: Shelf
+    href: backend.Models.Shelf.html
+  - name: )
+- uid: backend.Models.ApplicationUser.Reviews*
+  commentId: Overload:backend.Models.ApplicationUser.Reviews
+  href: backend.Models.ApplicationUser.html#backend_Models_ApplicationUser_Reviews
+  name: Reviews
+  nameWithType: ApplicationUser.Reviews
+  fullName: backend.Models.ApplicationUser.Reviews
+- uid: System.Collections.Generic.ICollection{backend.Models.Review}
+  commentId: T:System.Collections.Generic.ICollection{backend.Models.Review}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<Review>
+  nameWithType: ICollection<Review>
+  fullName: System.Collections.Generic.ICollection<backend.Models.Review>
+  nameWithType.vb: ICollection(Of Review)
+  fullName.vb: System.Collections.Generic.ICollection(Of backend.Models.Review)
+  name.vb: ICollection(Of Review)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: backend.Models.Review
+    name: Review
+    href: backend.Models.Review.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Models.Review
+    name: Review
+    href: backend.Models.Review.html
+  - name: )

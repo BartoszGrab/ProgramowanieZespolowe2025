@@ -1,0 +1,72 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Controllers
+  commentId: N:backend.Controllers
+  id: backend.Controllers
+  children:
+  - backend.Controllers.AuthController
+  - backend.Controllers.AuthorsController
+  - backend.Controllers.BooksController
+  - backend.Controllers.GoogleBooksController
+  - backend.Controllers.RecommendationsController
+  - backend.Controllers.ReviewsController
+  - backend.Controllers.ShelvesController
+  - backend.Controllers.UsersController
+  langs:
+  - csharp
+  - vb
+  name: backend.Controllers
+  nameWithType: backend.Controllers
+  fullName: backend.Controllers
+  type: Namespace
+  assemblies:
+  - backend
+references:
+- uid: backend.Controllers.AuthController
+  commentId: T:backend.Controllers.AuthController
+  href: backend.Controllers.AuthController.html
+  name: AuthController
+  nameWithType: AuthController
+  fullName: backend.Controllers.AuthController
+- uid: backend.Controllers.AuthorsController
+  commentId: T:backend.Controllers.AuthorsController
+  href: backend.Controllers.AuthorsController.html
+  name: AuthorsController
+  nameWithType: AuthorsController
+  fullName: backend.Controllers.AuthorsController
+- uid: backend.Controllers.BooksController
+  commentId: T:backend.Controllers.BooksController
+  href: backend.Controllers.BooksController.html
+  name: BooksController
+  nameWithType: BooksController
+  fullName: backend.Controllers.BooksController
+- uid: backend.Controllers.GoogleBooksController
+  commentId: T:backend.Controllers.GoogleBooksController
+  href: backend.Controllers.GoogleBooksController.html
+  name: GoogleBooksController
+  nameWithType: GoogleBooksController
+  fullName: backend.Controllers.GoogleBooksController
+- uid: backend.Controllers.RecommendationsController
+  commentId: T:backend.Controllers.RecommendationsController
+  href: backend.Controllers.RecommendationsController.html
+  name: RecommendationsController
+  nameWithType: RecommendationsController
+  fullName: backend.Controllers.RecommendationsController
+- uid: backend.Controllers.ReviewsController
+  commentId: T:backend.Controllers.ReviewsController
+  href: backend.Controllers.ReviewsController.html
+  name: ReviewsController
+  nameWithType: ReviewsController
+  fullName: backend.Controllers.ReviewsController
+- uid: backend.Controllers.ShelvesController
+  commentId: T:backend.Controllers.ShelvesController
+  href: backend.Controllers.ShelvesController.html
+  name: ShelvesController
+  nameWithType: ShelvesController
+  fullName: backend.Controllers.ShelvesController
+- uid: backend.Controllers.UsersController
+  commentId: T:backend.Controllers.UsersController
+  href: backend.Controllers.UsersController.html
+  name: UsersController
+  nameWithType: UsersController
+  fullName: backend.Controllers.UsersController

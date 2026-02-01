@@ -1,0 +1,956 @@
+{
+  "source_base_path": "/home/okrutnik/ProgramowanieZespolowe2025/backend/mydocs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Controllers.AuthController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Controllers.AuthController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Controllers.AuthController",
+      "Summary": "<p sourcefile=\"api/backend.Controllers.AuthController.yml\" sourcestartlinenumber=\"1\">API controller responsible for authentication-related operations such as login, registration and logout.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Controllers.AuthorsController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Controllers.AuthorsController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Controllers.AuthorsController",
+      "Summary": "<p sourcefile=\"api/backend.Controllers.AuthorsController.yml\" sourcestartlinenumber=\"1\">API controller responsible for managing authors.\nProvides endpoints for listing and creating authors.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Controllers.BooksController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Controllers.BooksController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Controllers.BooksController",
+      "Summary": "<p sourcefile=\"api/backend.Controllers.BooksController.yml\" sourcestartlinenumber=\"1\">API controller responsible for managing books and searching external sources (Google Books).\nProvides endpoints to list, retrieve and create books.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Controllers.GoogleBooksController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Controllers.GoogleBooksController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Controllers.GoogleBooksController",
+      "Summary": "<p sourcefile=\"api/backend.Controllers.GoogleBooksController.yml\" sourcestartlinenumber=\"1\">Controller for querying Google Books API and returning external book information.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Controllers.RecommendationsController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Controllers.RecommendationsController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Controllers.RecommendationsController",
+      "Summary": "<p sourcefile=\"api/backend.Controllers.RecommendationsController.yml\" sourcestartlinenumber=\"1\">Controller responsible for generating and retrieving book recommendations.\nUses an external recommendations microservice and caches per-user results in the database.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Controllers.ReviewsController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Controllers.ReviewsController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Controllers.ReviewsController",
+      "Summary": "<p sourcefile=\"api/backend.Controllers.ReviewsController.yml\" sourcestartlinenumber=\"1\">Controller for managing book reviews. By default this controller requires authentication.\nProvides endpoints to add or update a review and to retrieve reviews for a book or for the current user.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Controllers.ShelvesController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Controllers.ShelvesController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Controllers.ShelvesController",
+      "Summary": "<p sourcefile=\"api/backend.Controllers.ShelvesController.yml\" sourcestartlinenumber=\"1\">Controller for managing user shelves and shelf contents (books).\nRequires authentication and exposes endpoints to list, view, create shelves and to add/remove/update books on shelves.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Controllers.UsersController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Controllers.UsersController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Controllers.UsersController",
+      "Summary": "<p sourcefile=\"api/backend.Controllers.UsersController.yml\" sourcestartlinenumber=\"1\">Controller for user-related operations: profile retrieval and updates, community browsing and social actions (follow/unfollow).\nMost endpoints require authentication.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Controllers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Controllers.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Controllers",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.AddBookToShelfDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.AddBookToShelfDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.AddBookToShelfDto",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.BookDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.BookDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.BookDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.BookDto.yml\" sourcestartlinenumber=\"1\">Data transfer object used to return book information to clients.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.BookInputDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.BookInputDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.BookInputDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.BookInputDto.yml\" sourcestartlinenumber=\"1\">A book from user's reading history for recommendation request.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.BooksRecHealthDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.BooksRecHealthDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.BooksRecHealthDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.BooksRecHealthDto.yml\" sourcestartlinenumber=\"1\">Health check response from books-rec service.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.CreateBookDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.CreateBookDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.CreateBookDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.CreateBookDto.yml\" sourcestartlinenumber=\"1\">DTO used to create a new local book entry.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.CreateReviewDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.CreateReviewDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.CreateReviewDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.CreateReviewDto.yml\" sourcestartlinenumber=\"1\">DTO used to create or update a review.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.CreateShelfDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.CreateShelfDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.CreateShelfDto",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.LoginDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.LoginDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.LoginDto",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.RecommendationCategoryDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.RecommendationCategoryDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.RecommendationCategoryDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.RecommendationCategoryDto.yml\" sourcestartlinenumber=\"1\">A Netflix-style recommendation category (shelf).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.RecommendationRequestDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.RecommendationRequestDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.RecommendationRequestDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.RecommendationRequestDto.yml\" sourcestartlinenumber=\"1\">Request for book recommendations.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.RecommendationResponseDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.RecommendationResponseDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.RecommendationResponseDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.RecommendationResponseDto.yml\" sourcestartlinenumber=\"1\">Full recommendation response with multiple categories.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.RecommendedBookDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.RecommendedBookDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.RecommendedBookDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.RecommendedBookDto.yml\" sourcestartlinenumber=\"1\">A recommended book from the books-rec service.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.RegisterDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.RegisterDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.RegisterDto",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.ReviewDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.ReviewDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.ReviewDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.ReviewDto.yml\" sourcestartlinenumber=\"1\">DTO representing a persisted review returned to clients.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.ShelfBookDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.ShelfBookDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.ShelfBookDto",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.ShelfDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.ShelfDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.ShelfDto",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.UpdateAvatarDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.UpdateAvatarDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.UpdateAvatarDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.UpdateAvatarDto.yml\" sourcestartlinenumber=\"1\">DTO for updating a user's avatar (profile picture URL).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.UpdateShelfBookProgressDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.UpdateShelfBookProgressDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.UpdateShelfBookProgressDto",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.UpdateUserProfileDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.UpdateUserProfileDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.UpdateUserProfileDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.UpdateUserProfileDto.yml\" sourcestartlinenumber=\"1\">DTO used to update profile fields such as bio and favorite book.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.UserCommunityDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.UserCommunityDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.UserCommunityDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.UserCommunityDto.yml\" sourcestartlinenumber=\"1\">DTO used to present users in community lists and search results.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.UserDetailDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.UserDetailDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.UserDetailDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.UserDetailDto.yml\" sourcestartlinenumber=\"1\">Detailed public information about a user, used on profile pages.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.UserProfileDto.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.UserProfileDto.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs.UserProfileDto",
+      "Summary": "<p sourcefile=\"api/backend.DTOs.UserProfileDto.yml\" sourcestartlinenumber=\"1\">Public profile information for the current authenticated user.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.DTOs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.DTOs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.DTOs",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Data.ApplicationDbContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Data.ApplicationDbContext.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Data.ApplicationDbContext",
+      "Summary": "<p sourcefile=\"api/backend.Data.ApplicationDbContext.yml\" sourcestartlinenumber=\"1\">Entity Framework Core database context for the application.\nExtends <xref href=\"Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext%601\" data-throw-if-not-resolved=\"false\"></xref> with application-specific DbSets.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Data.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Data.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Data",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Migrations.AddReviews.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Migrations.AddReviews.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Migrations.AddReviews",
+      "Summary": "<p sourcefile=\"api/backend.Migrations.AddReviews.yml\" sourcestartlinenumber=\"1\">A base class inherited by each EF Core migration.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Migrations.AddUserCommunityFields.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Migrations.AddUserCommunityFields.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Migrations.AddUserCommunityFields",
+      "Summary": "<p sourcefile=\"api/backend.Migrations.AddUserCommunityFields.yml\" sourcestartlinenumber=\"1\">A base class inherited by each EF Core migration.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Migrations.AddUserRecommendations.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Migrations.AddUserRecommendations.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Migrations.AddUserRecommendations",
+      "Summary": "<p sourcefile=\"api/backend.Migrations.AddUserRecommendations.yml\" sourcestartlinenumber=\"1\">A base class inherited by each EF Core migration.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Migrations.InitialCreate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Migrations.InitialCreate.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Migrations.InitialCreate",
+      "Summary": "<p sourcefile=\"api/backend.Migrations.InitialCreate.yml\" sourcestartlinenumber=\"1\">A base class inherited by each EF Core migration.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Migrations.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Migrations.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Migrations",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.ApplicationUser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.ApplicationUser.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.ApplicationUser",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.Author.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.Author.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.Author",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.Book.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.Book.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.Book",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.BookAuthor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.BookAuthor.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.BookAuthor",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.BookGenre.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.BookGenre.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.BookGenre",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.Comment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.Comment.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.Comment",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.Genre.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.Genre.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.Genre",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.Like.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.Like.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.Like",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.Notification.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.Notification.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.Notification",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.Post.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.Post.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.Post",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.RefreshToken.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.RefreshToken.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.RefreshToken",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.Review.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.Review.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.Review",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.Shelf.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.Shelf.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.Shelf",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.ShelfBook.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.ShelfBook.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.ShelfBook",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.UserFollow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.UserFollow.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.UserFollow",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.UserRecommendation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.UserRecommendation.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models.UserRecommendation",
+      "Summary": "<p sourcefile=\"api/backend.Models.UserRecommendation.yml\" sourcestartlinenumber=\"1\">Stores book recommendations generated for a user.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Models.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Models.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Models",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Services.BooksRecService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Services.BooksRecService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Services.BooksRecService",
+      "Summary": "<p sourcefile=\"api/backend.Services.BooksRecService.yml\" sourcestartlinenumber=\"1\">HTTP client service for communicating with the books-rec microservice.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Services.GoogleBook.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Services.GoogleBook.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Services.GoogleBook",
+      "Summary": "<p sourcefile=\"api/backend.Services.GoogleBook.yml\" sourcestartlinenumber=\"1\">Lightweight representation of a book as returned by the Google Books API.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Services.GoogleBooksService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Services.GoogleBooksService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Services.GoogleBooksService",
+      "Summary": "<p sourcefile=\"api/backend.Services.GoogleBooksService.yml\" sourcestartlinenumber=\"1\">Implementation of <xref href=\"backend.Services.IGoogleBooksService\" data-throw-if-not-resolved=\"false\"></xref> that calls the Google Books REST API.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Services.IGoogleBooksService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Services.IGoogleBooksService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Services.IGoogleBooksService",
+      "Summary": "<p sourcefile=\"api/backend.Services.IGoogleBooksService.yml\" sourcestartlinenumber=\"1\">Abstraction for querying Google Books for book metadata.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Services.JwtService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Services.JwtService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Services.JwtService",
+      "Summary": "<p sourcefile=\"api/backend.Services.JwtService.yml\" sourcestartlinenumber=\"1\">Service that generates JSON Web Tokens (JWT) for authenticated users.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/backend.Services.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/backend.Services.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "backend.Services",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".json": {
+          "relative_path": "api/toc.json"
+        },
+        ".html": {
+          "relative_path": "api/toc.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/introduction.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/introduction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "docs/toc.yml",
+      "output": {
+        ".json": {
+          "relative_path": "docs/toc.json"
+        },
+        ".html": {
+          "relative_path": "docs/toc.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".json": {
+          "relative_path": "toc.json"
+        },
+        ".html": {
+          "relative_path": "toc.html"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

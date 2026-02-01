@@ -1,0 +1,156 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Models
+  commentId: N:backend.Models
+  id: backend.Models
+  children:
+  - backend.Models.ApplicationUser
+  - backend.Models.Author
+  - backend.Models.Book
+  - backend.Models.BookAuthor
+  - backend.Models.BookGenre
+  - backend.Models.Comment
+  - backend.Models.Genre
+  - backend.Models.Like
+  - backend.Models.Notification
+  - backend.Models.Post
+  - backend.Models.RefreshToken
+  - backend.Models.Review
+  - backend.Models.Shelf
+  - backend.Models.ShelfBook
+  - backend.Models.UserFollow
+  - backend.Models.UserRecommendation
+  langs:
+  - csharp
+  - vb
+  name: backend.Models
+  nameWithType: backend.Models
+  fullName: backend.Models
+  type: Namespace
+  assemblies:
+  - backend
+references:
+- uid: backend.Models.ApplicationUser
+  commentId: T:backend.Models.ApplicationUser
+  parent: backend.Models
+  href: backend.Models.ApplicationUser.html
+  name: ApplicationUser
+  nameWithType: ApplicationUser
+  fullName: backend.Models.ApplicationUser
+- uid: backend.Models.Author
+  commentId: T:backend.Models.Author
+  parent: backend.Models
+  href: backend.Models.Author.html
+  name: Author
+  nameWithType: Author
+  fullName: backend.Models.Author
+- uid: backend.Models.Book
+  commentId: T:backend.Models.Book
+  parent: backend.Models
+  href: backend.Models.Book.html
+  name: Book
+  nameWithType: Book
+  fullName: backend.Models.Book
+- uid: backend.Models.BookAuthor
+  commentId: T:backend.Models.BookAuthor
+  href: backend.Models.BookAuthor.html
+  name: BookAuthor
+  nameWithType: BookAuthor
+  fullName: backend.Models.BookAuthor
+- uid: backend.Models.BookGenre
+  commentId: T:backend.Models.BookGenre
+  href: backend.Models.BookGenre.html
+  name: BookGenre
+  nameWithType: BookGenre
+  fullName: backend.Models.BookGenre
+- uid: backend.Models.Comment
+  commentId: T:backend.Models.Comment
+  href: backend.Models.Comment.html
+  name: Comment
+  nameWithType: Comment
+  fullName: backend.Models.Comment
+- uid: backend.Models.Genre
+  commentId: T:backend.Models.Genre
+  parent: backend.Models
+  href: backend.Models.Genre.html
+  name: Genre
+  nameWithType: Genre
+  fullName: backend.Models.Genre
+- uid: backend.Models.Like
+  commentId: T:backend.Models.Like
+  href: backend.Models.Like.html
+  name: Like
+  nameWithType: Like
+  fullName: backend.Models.Like
+- uid: backend.Models.Notification
+  commentId: T:backend.Models.Notification
+  href: backend.Models.Notification.html
+  name: Notification
+  nameWithType: Notification
+  fullName: backend.Models.Notification
+- uid: backend.Models.Post
+  commentId: T:backend.Models.Post
+  parent: backend.Models
+  href: backend.Models.Post.html
+  name: Post
+  nameWithType: Post
+  fullName: backend.Models.Post
+- uid: backend.Models.RefreshToken
+  commentId: T:backend.Models.RefreshToken
+  href: backend.Models.RefreshToken.html
+  name: RefreshToken
+  nameWithType: RefreshToken
+  fullName: backend.Models.RefreshToken
+- uid: backend.Models.Review
+  commentId: T:backend.Models.Review
+  href: backend.Models.Review.html
+  name: Review
+  nameWithType: Review
+  fullName: backend.Models.Review
+- uid: backend.Models.Shelf
+  commentId: T:backend.Models.Shelf
+  parent: backend.Models
+  href: backend.Models.Shelf.html
+  name: Shelf
+  nameWithType: Shelf
+  fullName: backend.Models.Shelf
+- uid: backend.Models.ShelfBook
+  commentId: T:backend.Models.ShelfBook
+  href: backend.Models.ShelfBook.html
+  name: ShelfBook
+  nameWithType: ShelfBook
+  fullName: backend.Models.ShelfBook
+- uid: backend.Models.UserFollow
+  commentId: T:backend.Models.UserFollow
+  href: backend.Models.UserFollow.html
+  name: UserFollow
+  nameWithType: UserFollow
+  fullName: backend.Models.UserFollow
+- uid: backend.Models.UserRecommendation
+  commentId: T:backend.Models.UserRecommendation
+  href: backend.Models.UserRecommendation.html
+  name: UserRecommendation
+  nameWithType: UserRecommendation
+  fullName: backend.Models.UserRecommendation
+- uid: backend.Models
+  commentId: N:backend.Models
+  href: backend.html
+  name: backend.Models
+  nameWithType: backend.Models
+  fullName: backend.Models
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html

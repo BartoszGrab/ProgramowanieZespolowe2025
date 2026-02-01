@@ -1,0 +1,650 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Models.UserRecommendation
+  commentId: T:backend.Models.UserRecommendation
+  id: UserRecommendation
+  parent: backend.Models
+  children:
+  - backend.Models.UserRecommendation.CategoryTitle
+  - backend.Models.UserRecommendation.CategoryType
+  - backend.Models.UserRecommendation.GeneratedAt
+  - backend.Models.UserRecommendation.Id
+  - backend.Models.UserRecommendation.RecommendationsJson
+  - backend.Models.UserRecommendation.User
+  - backend.Models.UserRecommendation.UserId
+  langs:
+  - csharp
+  - vb
+  name: UserRecommendation
+  nameWithType: UserRecommendation
+  fullName: backend.Models.UserRecommendation
+  type: Class
+  source:
+    remote:
+      path: backend/Models/UserRecommendation.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: UserRecommendation
+    path: ../Models/UserRecommendation.cs
+    startLine: 7
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Stores book recommendations generated for a user.
+  example: []
+  syntax:
+    content: public class UserRecommendation
+    content.vb: Public Class UserRecommendation
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: backend.Models.UserRecommendation.Id
+  commentId: P:backend.Models.UserRecommendation.Id
+  id: Id
+  parent: backend.Models.UserRecommendation
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: UserRecommendation.Id
+  fullName: backend.Models.UserRecommendation.Id
+  type: Property
+  source:
+    remote:
+      path: backend/Models/UserRecommendation.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Id
+    path: ../Models/UserRecommendation.cs
+    startLine: 9
+  assemblies:
+  - backend
+  namespace: backend.Models
+  syntax:
+    content: public Guid Id { get; set; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property Id As Guid
+  overload: backend.Models.UserRecommendation.Id*
+- uid: backend.Models.UserRecommendation.UserId
+  commentId: P:backend.Models.UserRecommendation.UserId
+  id: UserId
+  parent: backend.Models.UserRecommendation
+  langs:
+  - csharp
+  - vb
+  name: UserId
+  nameWithType: UserRecommendation.UserId
+  fullName: backend.Models.UserRecommendation.UserId
+  type: Property
+  source:
+    remote:
+      path: backend/Models/UserRecommendation.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: UserId
+    path: ../Models/UserRecommendation.cs
+    startLine: 15
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: >-
+    Foreign key to the user who received the recommendations.
+
+    Nullable for anonymous recommendations.
+  example: []
+  syntax:
+    content: public string? UserId { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property UserId As String
+  overload: backend.Models.UserRecommendation.UserId*
+- uid: backend.Models.UserRecommendation.CategoryTitle
+  commentId: P:backend.Models.UserRecommendation.CategoryTitle
+  id: CategoryTitle
+  parent: backend.Models.UserRecommendation
+  langs:
+  - csharp
+  - vb
+  name: CategoryTitle
+  nameWithType: UserRecommendation.CategoryTitle
+  fullName: backend.Models.UserRecommendation.CategoryTitle
+  type: Property
+  source:
+    remote:
+      path: backend/Models/UserRecommendation.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: CategoryTitle
+    path: ../Models/UserRecommendation.cs
+    startLine: 20
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: 'The category title (e.g., "Ponieważ czytałeś: Wiedźmin")'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(200)]
+
+      public string CategoryTitle { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(200)>
+
+      Public Property CategoryTitle As String
+  overload: backend.Models.UserRecommendation.CategoryTitle*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 200
+- uid: backend.Models.UserRecommendation.CategoryType
+  commentId: P:backend.Models.UserRecommendation.CategoryType
+  id: CategoryType
+  parent: backend.Models.UserRecommendation
+  langs:
+  - csharp
+  - vb
+  name: CategoryType
+  nameWithType: UserRecommendation.CategoryType
+  fullName: backend.Models.UserRecommendation.CategoryType
+  type: Property
+  source:
+    remote:
+      path: backend/Models/UserRecommendation.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: CategoryType
+    path: ../Models/UserRecommendation.cs
+    startLine: 27
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: 'The category type: content_similarity, author_based, serendipity'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(50)]
+
+      public string CategoryType { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(50)>
+
+      Public Property CategoryType As String
+  overload: backend.Models.UserRecommendation.CategoryType*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 50
+- uid: backend.Models.UserRecommendation.RecommendationsJson
+  commentId: P:backend.Models.UserRecommendation.RecommendationsJson
+  id: RecommendationsJson
+  parent: backend.Models.UserRecommendation
+  langs:
+  - csharp
+  - vb
+  name: RecommendationsJson
+  nameWithType: UserRecommendation.RecommendationsJson
+  fullName: backend.Models.UserRecommendation.RecommendationsJson
+  type: Property
+  source:
+    remote:
+      path: backend/Models/UserRecommendation.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: RecommendationsJson
+    path: ../Models/UserRecommendation.cs
+    startLine: 34
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: JSON string containing the list of recommended books.
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      public string RecommendationsJson { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      Public Property RecommendationsJson As String
+  overload: backend.Models.UserRecommendation.RecommendationsJson*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+- uid: backend.Models.UserRecommendation.GeneratedAt
+  commentId: P:backend.Models.UserRecommendation.GeneratedAt
+  id: GeneratedAt
+  parent: backend.Models.UserRecommendation
+  langs:
+  - csharp
+  - vb
+  name: GeneratedAt
+  nameWithType: UserRecommendation.GeneratedAt
+  fullName: backend.Models.UserRecommendation.GeneratedAt
+  type: Property
+  source:
+    remote:
+      path: backend/Models/UserRecommendation.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: GeneratedAt
+    path: ../Models/UserRecommendation.cs
+    startLine: 40
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: When the recommendations were generated.
+  example: []
+  syntax:
+    content: public DateTime GeneratedAt { get; set; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property GeneratedAt As Date
+  overload: backend.Models.UserRecommendation.GeneratedAt*
+- uid: backend.Models.UserRecommendation.User
+  commentId: P:backend.Models.UserRecommendation.User
+  id: User
+  parent: backend.Models.UserRecommendation
+  langs:
+  - csharp
+  - vb
+  name: User
+  nameWithType: UserRecommendation.User
+  fullName: backend.Models.UserRecommendation.User
+  type: Property
+  source:
+    remote:
+      path: backend/Models/UserRecommendation.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: User
+    path: ../Models/UserRecommendation.cs
+    startLine: 43
+  assemblies:
+  - backend
+  namespace: backend.Models
+  syntax:
+    content: public ApplicationUser? User { get; set; }
+    parameters: []
+    return:
+      type: backend.Models.ApplicationUser
+    content.vb: Public Property User As ApplicationUser
+  overload: backend.Models.UserRecommendation.User*
+references:
+- uid: backend.Models
+  commentId: N:backend.Models
+  href: backend.html
+  name: backend.Models
+  nameWithType: backend.Models
+  fullName: backend.Models
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: backend.Models.UserRecommendation.Id*
+  commentId: Overload:backend.Models.UserRecommendation.Id
+  href: backend.Models.UserRecommendation.html#backend_Models_UserRecommendation_Id
+  name: Id
+  nameWithType: UserRecommendation.Id
+  fullName: backend.Models.UserRecommendation.Id
+- uid: System.Guid
+  commentId: T:System.Guid
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: backend.Models.UserRecommendation.UserId*
+  commentId: Overload:backend.Models.UserRecommendation.UserId
+  href: backend.Models.UserRecommendation.html#backend_Models_UserRecommendation_UserId
+  name: UserId
+  nameWithType: UserRecommendation.UserId
+  fullName: backend.Models.UserRecommendation.UserId
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: backend.Models.UserRecommendation.CategoryTitle*
+  commentId: Overload:backend.Models.UserRecommendation.CategoryTitle
+  href: backend.Models.UserRecommendation.html#backend_Models_UserRecommendation_CategoryTitle
+  name: CategoryTitle
+  nameWithType: UserRecommendation.CategoryTitle
+  fullName: backend.Models.UserRecommendation.CategoryTitle
+- uid: backend.Models.UserRecommendation.CategoryType*
+  commentId: Overload:backend.Models.UserRecommendation.CategoryType
+  href: backend.Models.UserRecommendation.html#backend_Models_UserRecommendation_CategoryType
+  name: CategoryType
+  nameWithType: UserRecommendation.CategoryType
+  fullName: backend.Models.UserRecommendation.CategoryType
+- uid: backend.Models.UserRecommendation.RecommendationsJson*
+  commentId: Overload:backend.Models.UserRecommendation.RecommendationsJson
+  href: backend.Models.UserRecommendation.html#backend_Models_UserRecommendation_RecommendationsJson
+  name: RecommendationsJson
+  nameWithType: UserRecommendation.RecommendationsJson
+  fullName: backend.Models.UserRecommendation.RecommendationsJson
+- uid: backend.Models.UserRecommendation.GeneratedAt*
+  commentId: Overload:backend.Models.UserRecommendation.GeneratedAt
+  href: backend.Models.UserRecommendation.html#backend_Models_UserRecommendation_GeneratedAt
+  name: GeneratedAt
+  nameWithType: UserRecommendation.GeneratedAt
+  fullName: backend.Models.UserRecommendation.GeneratedAt
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: backend.Models.UserRecommendation.User*
+  commentId: Overload:backend.Models.UserRecommendation.User
+  href: backend.Models.UserRecommendation.html#backend_Models_UserRecommendation_User
+  name: User
+  nameWithType: UserRecommendation.User
+  fullName: backend.Models.UserRecommendation.User
+- uid: backend.Models.ApplicationUser
+  commentId: T:backend.Models.ApplicationUser
+  parent: backend.Models
+  href: backend.Models.ApplicationUser.html
+  name: ApplicationUser
+  nameWithType: ApplicationUser
+  fullName: backend.Models.ApplicationUser

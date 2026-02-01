@@ -1,0 +1,758 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.DTOs.UserProfileDto
+  commentId: T:backend.DTOs.UserProfileDto
+  id: UserProfileDto
+  parent: backend.DTOs
+  children:
+  - backend.DTOs.UserProfileDto.Bio
+  - backend.DTOs.UserProfileDto.CreatedAt
+  - backend.DTOs.UserProfileDto.DisplayName
+  - backend.DTOs.UserProfileDto.Email
+  - backend.DTOs.UserProfileDto.FavoriteBook
+  - backend.DTOs.UserProfileDto.FollowersCount
+  - backend.DTOs.UserProfileDto.FollowingCount
+  - backend.DTOs.UserProfileDto.Id
+  - backend.DTOs.UserProfileDto.ProfilePictureUrl
+  - backend.DTOs.UserProfileDto.ShelvesCount
+  - backend.DTOs.UserProfileDto.UniqueBooksCount
+  langs:
+  - csharp
+  - vb
+  name: UserProfileDto
+  nameWithType: UserProfileDto
+  fullName: backend.DTOs.UserProfileDto
+  type: Class
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: UserProfileDto
+    path: ../DTOs/UserDtos.cs
+    startLine: 7
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: Public profile information for the current authenticated user.
+  example: []
+  syntax:
+    content: public class UserProfileDto
+    content.vb: Public Class UserProfileDto
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: backend.DTOs.UserProfileDto.Id
+  commentId: P:backend.DTOs.UserProfileDto.Id
+  id: Id
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: UserProfileDto.Id
+  fullName: backend.DTOs.UserProfileDto.Id
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Id
+    path: ../DTOs/UserDtos.cs
+    startLine: 10
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: User identifier.
+  example: []
+  syntax:
+    content: public string Id { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Id As String
+  overload: backend.DTOs.UserProfileDto.Id*
+- uid: backend.DTOs.UserProfileDto.DisplayName
+  commentId: P:backend.DTOs.UserProfileDto.DisplayName
+  id: DisplayName
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: DisplayName
+  nameWithType: UserProfileDto.DisplayName
+  fullName: backend.DTOs.UserProfileDto.DisplayName
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: DisplayName
+    path: ../DTOs/UserDtos.cs
+    startLine: 13
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: Display name shown in the UI.
+  example: []
+  syntax:
+    content: public string DisplayName { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DisplayName As String
+  overload: backend.DTOs.UserProfileDto.DisplayName*
+- uid: backend.DTOs.UserProfileDto.Email
+  commentId: P:backend.DTOs.UserProfileDto.Email
+  id: Email
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: Email
+  nameWithType: UserProfileDto.Email
+  fullName: backend.DTOs.UserProfileDto.Email
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Email
+    path: ../DTOs/UserDtos.cs
+    startLine: 16
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: Primary email address.
+  example: []
+  syntax:
+    content: public string Email { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Email As String
+  overload: backend.DTOs.UserProfileDto.Email*
+- uid: backend.DTOs.UserProfileDto.Bio
+  commentId: P:backend.DTOs.UserProfileDto.Bio
+  id: Bio
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: Bio
+  nameWithType: UserProfileDto.Bio
+  fullName: backend.DTOs.UserProfileDto.Bio
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Bio
+    path: ../DTOs/UserDtos.cs
+    startLine: 19
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: Optional user biography.
+  example: []
+  syntax:
+    content: public string? Bio { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Bio As String
+  overload: backend.DTOs.UserProfileDto.Bio*
+- uid: backend.DTOs.UserProfileDto.ProfilePictureUrl
+  commentId: P:backend.DTOs.UserProfileDto.ProfilePictureUrl
+  id: ProfilePictureUrl
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: ProfilePictureUrl
+  nameWithType: UserProfileDto.ProfilePictureUrl
+  fullName: backend.DTOs.UserProfileDto.ProfilePictureUrl
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: ProfilePictureUrl
+    path: ../DTOs/UserDtos.cs
+    startLine: 22
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: URL of the user's profile picture.
+  example: []
+  syntax:
+    content: public string? ProfilePictureUrl { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ProfilePictureUrl As String
+  overload: backend.DTOs.UserProfileDto.ProfilePictureUrl*
+- uid: backend.DTOs.UserProfileDto.ShelvesCount
+  commentId: P:backend.DTOs.UserProfileDto.ShelvesCount
+  id: ShelvesCount
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: ShelvesCount
+  nameWithType: UserProfileDto.ShelvesCount
+  fullName: backend.DTOs.UserProfileDto.ShelvesCount
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: ShelvesCount
+    path: ../DTOs/UserDtos.cs
+    startLine: 25
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: Number of shelves owned by the user.
+  example: []
+  syntax:
+    content: public int ShelvesCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property ShelvesCount As Integer
+  overload: backend.DTOs.UserProfileDto.ShelvesCount*
+- uid: backend.DTOs.UserProfileDto.UniqueBooksCount
+  commentId: P:backend.DTOs.UserProfileDto.UniqueBooksCount
+  id: UniqueBooksCount
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: UniqueBooksCount
+  nameWithType: UserProfileDto.UniqueBooksCount
+  fullName: backend.DTOs.UserProfileDto.UniqueBooksCount
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: UniqueBooksCount
+    path: ../DTOs/UserDtos.cs
+    startLine: 28
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: Number of unique books across all user shelves.
+  example: []
+  syntax:
+    content: public int UniqueBooksCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property UniqueBooksCount As Integer
+  overload: backend.DTOs.UserProfileDto.UniqueBooksCount*
+- uid: backend.DTOs.UserProfileDto.FollowersCount
+  commentId: P:backend.DTOs.UserProfileDto.FollowersCount
+  id: FollowersCount
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: FollowersCount
+  nameWithType: UserProfileDto.FollowersCount
+  fullName: backend.DTOs.UserProfileDto.FollowersCount
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: FollowersCount
+    path: ../DTOs/UserDtos.cs
+    startLine: 31
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: Number of followers the user has.
+  example: []
+  syntax:
+    content: public int FollowersCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property FollowersCount As Integer
+  overload: backend.DTOs.UserProfileDto.FollowersCount*
+- uid: backend.DTOs.UserProfileDto.FollowingCount
+  commentId: P:backend.DTOs.UserProfileDto.FollowingCount
+  id: FollowingCount
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: FollowingCount
+  nameWithType: UserProfileDto.FollowingCount
+  fullName: backend.DTOs.UserProfileDto.FollowingCount
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: FollowingCount
+    path: ../DTOs/UserDtos.cs
+    startLine: 34
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: Number of users this user is following.
+  example: []
+  syntax:
+    content: public int FollowingCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property FollowingCount As Integer
+  overload: backend.DTOs.UserProfileDto.FollowingCount*
+- uid: backend.DTOs.UserProfileDto.CreatedAt
+  commentId: P:backend.DTOs.UserProfileDto.CreatedAt
+  id: CreatedAt
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: CreatedAt
+  nameWithType: UserProfileDto.CreatedAt
+  fullName: backend.DTOs.UserProfileDto.CreatedAt
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: CreatedAt
+    path: ../DTOs/UserDtos.cs
+    startLine: 37
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: UTC timestamp when the user account was created.
+  example: []
+  syntax:
+    content: public DateTime CreatedAt { get; set; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property CreatedAt As Date
+  overload: backend.DTOs.UserProfileDto.CreatedAt*
+- uid: backend.DTOs.UserProfileDto.FavoriteBook
+  commentId: P:backend.DTOs.UserProfileDto.FavoriteBook
+  id: FavoriteBook
+  parent: backend.DTOs.UserProfileDto
+  langs:
+  - csharp
+  - vb
+  name: FavoriteBook
+  nameWithType: UserProfileDto.FavoriteBook
+  fullName: backend.DTOs.UserProfileDto.FavoriteBook
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/UserDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: FavoriteBook
+    path: ../DTOs/UserDtos.cs
+    startLine: 40
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: The user's favorite book, when set.
+  example: []
+  syntax:
+    content: public BookDto? FavoriteBook { get; set; }
+    parameters: []
+    return:
+      type: backend.DTOs.BookDto
+    content.vb: Public Property FavoriteBook As BookDto
+  overload: backend.DTOs.UserProfileDto.FavoriteBook*
+references:
+- uid: backend.DTOs
+  commentId: N:backend.DTOs
+  href: backend.html
+  name: backend.DTOs
+  nameWithType: backend.DTOs
+  fullName: backend.DTOs
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.DTOs
+    name: DTOs
+    href: backend.DTOs.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.DTOs
+    name: DTOs
+    href: backend.DTOs.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: backend.DTOs.UserProfileDto.Id*
+  commentId: Overload:backend.DTOs.UserProfileDto.Id
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_Id
+  name: Id
+  nameWithType: UserProfileDto.Id
+  fullName: backend.DTOs.UserProfileDto.Id
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: backend.DTOs.UserProfileDto.DisplayName*
+  commentId: Overload:backend.DTOs.UserProfileDto.DisplayName
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_DisplayName
+  name: DisplayName
+  nameWithType: UserProfileDto.DisplayName
+  fullName: backend.DTOs.UserProfileDto.DisplayName
+- uid: backend.DTOs.UserProfileDto.Email*
+  commentId: Overload:backend.DTOs.UserProfileDto.Email
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_Email
+  name: Email
+  nameWithType: UserProfileDto.Email
+  fullName: backend.DTOs.UserProfileDto.Email
+- uid: backend.DTOs.UserProfileDto.Bio*
+  commentId: Overload:backend.DTOs.UserProfileDto.Bio
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_Bio
+  name: Bio
+  nameWithType: UserProfileDto.Bio
+  fullName: backend.DTOs.UserProfileDto.Bio
+- uid: backend.DTOs.UserProfileDto.ProfilePictureUrl*
+  commentId: Overload:backend.DTOs.UserProfileDto.ProfilePictureUrl
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_ProfilePictureUrl
+  name: ProfilePictureUrl
+  nameWithType: UserProfileDto.ProfilePictureUrl
+  fullName: backend.DTOs.UserProfileDto.ProfilePictureUrl
+- uid: backend.DTOs.UserProfileDto.ShelvesCount*
+  commentId: Overload:backend.DTOs.UserProfileDto.ShelvesCount
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_ShelvesCount
+  name: ShelvesCount
+  nameWithType: UserProfileDto.ShelvesCount
+  fullName: backend.DTOs.UserProfileDto.ShelvesCount
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: backend.DTOs.UserProfileDto.UniqueBooksCount*
+  commentId: Overload:backend.DTOs.UserProfileDto.UniqueBooksCount
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_UniqueBooksCount
+  name: UniqueBooksCount
+  nameWithType: UserProfileDto.UniqueBooksCount
+  fullName: backend.DTOs.UserProfileDto.UniqueBooksCount
+- uid: backend.DTOs.UserProfileDto.FollowersCount*
+  commentId: Overload:backend.DTOs.UserProfileDto.FollowersCount
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_FollowersCount
+  name: FollowersCount
+  nameWithType: UserProfileDto.FollowersCount
+  fullName: backend.DTOs.UserProfileDto.FollowersCount
+- uid: backend.DTOs.UserProfileDto.FollowingCount*
+  commentId: Overload:backend.DTOs.UserProfileDto.FollowingCount
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_FollowingCount
+  name: FollowingCount
+  nameWithType: UserProfileDto.FollowingCount
+  fullName: backend.DTOs.UserProfileDto.FollowingCount
+- uid: backend.DTOs.UserProfileDto.CreatedAt*
+  commentId: Overload:backend.DTOs.UserProfileDto.CreatedAt
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_CreatedAt
+  name: CreatedAt
+  nameWithType: UserProfileDto.CreatedAt
+  fullName: backend.DTOs.UserProfileDto.CreatedAt
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: backend.DTOs.UserProfileDto.FavoriteBook*
+  commentId: Overload:backend.DTOs.UserProfileDto.FavoriteBook
+  href: backend.DTOs.UserProfileDto.html#backend_DTOs_UserProfileDto_FavoriteBook
+  name: FavoriteBook
+  nameWithType: UserProfileDto.FavoriteBook
+  fullName: backend.DTOs.UserProfileDto.FavoriteBook
+- uid: backend.DTOs.BookDto
+  commentId: T:backend.DTOs.BookDto
+  parent: backend.DTOs
+  href: backend.DTOs.BookDto.html
+  name: BookDto
+  nameWithType: BookDto
+  fullName: backend.DTOs.BookDto

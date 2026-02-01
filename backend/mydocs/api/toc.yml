@@ -1,0 +1,195 @@
+### YamlMime:TableOfContent
+items:
+- uid: backend.Controllers
+  name: backend.Controllers
+  type: Namespace
+  items:
+  - uid: backend.Controllers.AuthController
+    name: AuthController
+    type: Class
+  - uid: backend.Controllers.AuthorsController
+    name: AuthorsController
+    type: Class
+  - uid: backend.Controllers.BooksController
+    name: BooksController
+    type: Class
+  - uid: backend.Controllers.GoogleBooksController
+    name: GoogleBooksController
+    type: Class
+  - uid: backend.Controllers.RecommendationsController
+    name: RecommendationsController
+    type: Class
+  - uid: backend.Controllers.ReviewsController
+    name: ReviewsController
+    type: Class
+  - uid: backend.Controllers.ShelvesController
+    name: ShelvesController
+    type: Class
+  - uid: backend.Controllers.UsersController
+    name: UsersController
+    type: Class
+- uid: backend.DTOs
+  name: backend.DTOs
+  type: Namespace
+  items:
+  - uid: backend.DTOs.AddBookToShelfDto
+    name: AddBookToShelfDto
+    type: Class
+  - uid: backend.DTOs.BookDto
+    name: BookDto
+    type: Class
+  - uid: backend.DTOs.BookInputDto
+    name: BookInputDto
+    type: Class
+  - uid: backend.DTOs.BooksRecHealthDto
+    name: BooksRecHealthDto
+    type: Class
+  - uid: backend.DTOs.CreateBookDto
+    name: CreateBookDto
+    type: Class
+  - uid: backend.DTOs.CreateReviewDto
+    name: CreateReviewDto
+    type: Class
+  - uid: backend.DTOs.CreateShelfDto
+    name: CreateShelfDto
+    type: Class
+  - uid: backend.DTOs.LoginDto
+    name: LoginDto
+    type: Class
+  - uid: backend.DTOs.RecommendationCategoryDto
+    name: RecommendationCategoryDto
+    type: Class
+  - uid: backend.DTOs.RecommendationRequestDto
+    name: RecommendationRequestDto
+    type: Class
+  - uid: backend.DTOs.RecommendationResponseDto
+    name: RecommendationResponseDto
+    type: Class
+  - uid: backend.DTOs.RecommendedBookDto
+    name: RecommendedBookDto
+    type: Class
+  - uid: backend.DTOs.RegisterDto
+    name: RegisterDto
+    type: Class
+  - uid: backend.DTOs.ReviewDto
+    name: ReviewDto
+    type: Class
+  - uid: backend.DTOs.ShelfBookDto
+    name: ShelfBookDto
+    type: Class
+  - uid: backend.DTOs.ShelfDto
+    name: ShelfDto
+    type: Class
+  - uid: backend.DTOs.UpdateAvatarDto
+    name: UpdateAvatarDto
+    type: Class
+  - uid: backend.DTOs.UpdateShelfBookProgressDto
+    name: UpdateShelfBookProgressDto
+    type: Class
+  - uid: backend.DTOs.UpdateUserProfileDto
+    name: UpdateUserProfileDto
+    type: Class
+  - uid: backend.DTOs.UserCommunityDto
+    name: UserCommunityDto
+    type: Class
+  - uid: backend.DTOs.UserDetailDto
+    name: UserDetailDto
+    type: Class
+  - uid: backend.DTOs.UserProfileDto
+    name: UserProfileDto
+    type: Class
+- uid: backend.Data
+  name: backend.Data
+  type: Namespace
+  items:
+  - uid: backend.Data.ApplicationDbContext
+    name: ApplicationDbContext
+    type: Class
+- uid: backend.Migrations
+  name: backend.Migrations
+  type: Namespace
+  items:
+  - uid: backend.Migrations.AddReviews
+    name: AddReviews
+    type: Class
+  - uid: backend.Migrations.AddUserCommunityFields
+    name: AddUserCommunityFields
+    type: Class
+  - uid: backend.Migrations.AddUserRecommendations
+    name: AddUserRecommendations
+    type: Class
+  - uid: backend.Migrations.InitialCreate
+    name: InitialCreate
+    type: Class
+- uid: backend.Models
+  name: backend.Models
+  type: Namespace
+  items:
+  - uid: backend.Models.ApplicationUser
+    name: ApplicationUser
+    type: Class
+  - uid: backend.Models.Author
+    name: Author
+    type: Class
+  - uid: backend.Models.Book
+    name: Book
+    type: Class
+  - uid: backend.Models.BookAuthor
+    name: BookAuthor
+    type: Class
+  - uid: backend.Models.BookGenre
+    name: BookGenre
+    type: Class
+  - uid: backend.Models.Comment
+    name: Comment
+    type: Class
+  - uid: backend.Models.Genre
+    name: Genre
+    type: Class
+  - uid: backend.Models.Like
+    name: Like
+    type: Class
+  - uid: backend.Models.Notification
+    name: Notification
+    type: Class
+  - uid: backend.Models.Post
+    name: Post
+    type: Class
+  - uid: backend.Models.RefreshToken
+    name: RefreshToken
+    type: Class
+  - uid: backend.Models.Review
+    name: Review
+    type: Class
+  - uid: backend.Models.Shelf
+    name: Shelf
+    type: Class
+  - uid: backend.Models.ShelfBook
+    name: ShelfBook
+    type: Class
+  - uid: backend.Models.UserFollow
+    name: UserFollow
+    type: Class
+  - uid: backend.Models.UserRecommendation
+    name: UserRecommendation
+    type: Class
+- uid: backend.Services
+  name: backend.Services
+  type: Namespace
+  items:
+  - uid: backend.Services.BooksRecService
+    name: BooksRecService
+    type: Class
+  - uid: backend.Services.GoogleBook
+    name: GoogleBook
+    type: Class
+  - uid: backend.Services.GoogleBooksService
+    name: GoogleBooksService
+    type: Class
+  - uid: backend.Services.IGoogleBooksService
+    name: IGoogleBooksService
+    type: Interface
+  - uid: backend.Services.JwtService
+    name: JwtService
+    type: Class
+memberLayout: SamePage

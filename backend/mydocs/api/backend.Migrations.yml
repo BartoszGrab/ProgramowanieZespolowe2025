@@ -1,0 +1,44 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Migrations
+  commentId: N:backend.Migrations
+  id: backend.Migrations
+  children:
+  - backend.Migrations.AddReviews
+  - backend.Migrations.AddUserCommunityFields
+  - backend.Migrations.AddUserRecommendations
+  - backend.Migrations.InitialCreate
+  langs:
+  - csharp
+  - vb
+  name: backend.Migrations
+  nameWithType: backend.Migrations
+  fullName: backend.Migrations
+  type: Namespace
+  assemblies:
+  - backend
+references:
+- uid: backend.Migrations.InitialCreate
+  commentId: T:backend.Migrations.InitialCreate
+  href: backend.Migrations.InitialCreate.html
+  name: InitialCreate
+  nameWithType: InitialCreate
+  fullName: backend.Migrations.InitialCreate
+- uid: backend.Migrations.AddUserRecommendations
+  commentId: T:backend.Migrations.AddUserRecommendations
+  href: backend.Migrations.AddUserRecommendations.html
+  name: AddUserRecommendations
+  nameWithType: AddUserRecommendations
+  fullName: backend.Migrations.AddUserRecommendations
+- uid: backend.Migrations.AddReviews
+  commentId: T:backend.Migrations.AddReviews
+  href: backend.Migrations.AddReviews.html
+  name: AddReviews
+  nameWithType: AddReviews
+  fullName: backend.Migrations.AddReviews
+- uid: backend.Migrations.AddUserCommunityFields
+  commentId: T:backend.Migrations.AddUserCommunityFields
+  href: backend.Migrations.AddUserCommunityFields.html
+  name: AddUserCommunityFields
+  nameWithType: AddUserCommunityFields
+  fullName: backend.Migrations.AddUserCommunityFields

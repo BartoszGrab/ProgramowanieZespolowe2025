@@ -1,0 +1,76 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Services
+  commentId: N:backend.Services
+  id: backend.Services
+  children:
+  - backend.Services.BooksRecService
+  - backend.Services.GoogleBook
+  - backend.Services.GoogleBooksService
+  - backend.Services.IGoogleBooksService
+  - backend.Services.JwtService
+  langs:
+  - csharp
+  - vb
+  name: backend.Services
+  nameWithType: backend.Services
+  fullName: backend.Services
+  type: Namespace
+  assemblies:
+  - backend
+references:
+- uid: backend.Services.BooksRecService
+  commentId: T:backend.Services.BooksRecService
+  parent: backend.Services
+  href: backend.Services.BooksRecService.html
+  name: BooksRecService
+  nameWithType: BooksRecService
+  fullName: backend.Services.BooksRecService
+- uid: backend.Services.GoogleBook
+  commentId: T:backend.Services.GoogleBook
+  href: backend.Services.GoogleBook.html
+  name: GoogleBook
+  nameWithType: GoogleBook
+  fullName: backend.Services.GoogleBook
+- uid: backend.Services.IGoogleBooksService
+  commentId: T:backend.Services.IGoogleBooksService
+  parent: backend.Services
+  href: backend.Services.IGoogleBooksService.html
+  name: IGoogleBooksService
+  nameWithType: IGoogleBooksService
+  fullName: backend.Services.IGoogleBooksService
+- uid: backend.Services.GoogleBooksService
+  commentId: T:backend.Services.GoogleBooksService
+  href: backend.Services.GoogleBooksService.html
+  name: GoogleBooksService
+  nameWithType: GoogleBooksService
+  fullName: backend.Services.GoogleBooksService
+- uid: backend.Services.JwtService
+  commentId: T:backend.Services.JwtService
+  parent: backend.Services
+  href: backend.Services.JwtService.html
+  name: JwtService
+  nameWithType: JwtService
+  fullName: backend.Services.JwtService
+- uid: backend.Services
+  commentId: N:backend.Services
+  href: backend.html
+  name: backend.Services
+  nameWithType: backend.Services
+  fullName: backend.Services
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Services
+    name: Services
+    href: backend.Services.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Services
+    name: Services
+    href: backend.Services.html

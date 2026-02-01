@@ -1,0 +1,624 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Models.RefreshToken
+  commentId: T:backend.Models.RefreshToken
+  id: RefreshToken
+  parent: backend.Models
+  children:
+  - backend.Models.RefreshToken.CreatedAt
+  - backend.Models.RefreshToken.ExpiryDate
+  - backend.Models.RefreshToken.Id
+  - backend.Models.RefreshToken.IsRevoked
+  - backend.Models.RefreshToken.Token
+  - backend.Models.RefreshToken.User
+  - backend.Models.RefreshToken.UserId
+  langs:
+  - csharp
+  - vb
+  name: RefreshToken
+  nameWithType: RefreshToken
+  fullName: backend.Models.RefreshToken
+  type: Class
+  source:
+    remote:
+      path: backend/Models/RefreshToken.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: RefreshToken
+    path: ../Models/RefreshToken.cs
+    startLine: 4
+  assemblies:
+  - backend
+  namespace: backend.Models
+  syntax:
+    content: public class RefreshToken
+    content.vb: Public Class RefreshToken
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: backend.Models.RefreshToken.Id
+  commentId: P:backend.Models.RefreshToken.Id
+  id: Id
+  parent: backend.Models.RefreshToken
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: RefreshToken.Id
+  fullName: backend.Models.RefreshToken.Id
+  type: Property
+  source:
+    remote:
+      path: backend/Models/RefreshToken.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Id
+    path: ../Models/RefreshToken.cs
+    startLine: 9
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Unique identifier for the refresh token
+  example: []
+  syntax:
+    content: public Guid Id { get; set; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property Id As Guid
+  overload: backend.Models.RefreshToken.Id*
+- uid: backend.Models.RefreshToken.Token
+  commentId: P:backend.Models.RefreshToken.Token
+  id: Token
+  parent: backend.Models.RefreshToken
+  langs:
+  - csharp
+  - vb
+  name: Token
+  nameWithType: RefreshToken.Token
+  fullName: backend.Models.RefreshToken.Token
+  type: Property
+  source:
+    remote:
+      path: backend/Models/RefreshToken.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Token
+    path: ../Models/RefreshToken.cs
+    startLine: 14
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: The refresh token value
+  example: []
+  syntax:
+    content: public string Token { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Token As String
+  overload: backend.Models.RefreshToken.Token*
+- uid: backend.Models.RefreshToken.ExpiryDate
+  commentId: P:backend.Models.RefreshToken.ExpiryDate
+  id: ExpiryDate
+  parent: backend.Models.RefreshToken
+  langs:
+  - csharp
+  - vb
+  name: ExpiryDate
+  nameWithType: RefreshToken.ExpiryDate
+  fullName: backend.Models.RefreshToken.ExpiryDate
+  type: Property
+  source:
+    remote:
+      path: backend/Models/RefreshToken.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: ExpiryDate
+    path: ../Models/RefreshToken.cs
+    startLine: 19
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Date and time when the token expires
+  example: []
+  syntax:
+    content: public DateTime ExpiryDate { get; set; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property ExpiryDate As Date
+  overload: backend.Models.RefreshToken.ExpiryDate*
+- uid: backend.Models.RefreshToken.IsRevoked
+  commentId: P:backend.Models.RefreshToken.IsRevoked
+  id: IsRevoked
+  parent: backend.Models.RefreshToken
+  langs:
+  - csharp
+  - vb
+  name: IsRevoked
+  nameWithType: RefreshToken.IsRevoked
+  fullName: backend.Models.RefreshToken.IsRevoked
+  type: Property
+  source:
+    remote:
+      path: backend/Models/RefreshToken.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: IsRevoked
+    path: ../Models/RefreshToken.cs
+    startLine: 24
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Indicates whether the token has been revoked
+  example: []
+  syntax:
+    content: public bool IsRevoked { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IsRevoked As Boolean
+  overload: backend.Models.RefreshToken.IsRevoked*
+- uid: backend.Models.RefreshToken.CreatedAt
+  commentId: P:backend.Models.RefreshToken.CreatedAt
+  id: CreatedAt
+  parent: backend.Models.RefreshToken
+  langs:
+  - csharp
+  - vb
+  name: CreatedAt
+  nameWithType: RefreshToken.CreatedAt
+  fullName: backend.Models.RefreshToken.CreatedAt
+  type: Property
+  source:
+    remote:
+      path: backend/Models/RefreshToken.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: CreatedAt
+    path: ../Models/RefreshToken.cs
+    startLine: 29
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Date and time when the token was created
+  example: []
+  syntax:
+    content: public DateTime CreatedAt { get; set; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property CreatedAt As Date
+  overload: backend.Models.RefreshToken.CreatedAt*
+- uid: backend.Models.RefreshToken.UserId
+  commentId: P:backend.Models.RefreshToken.UserId
+  id: UserId
+  parent: backend.Models.RefreshToken
+  langs:
+  - csharp
+  - vb
+  name: UserId
+  nameWithType: RefreshToken.UserId
+  fullName: backend.Models.RefreshToken.UserId
+  type: Property
+  source:
+    remote:
+      path: backend/Models/RefreshToken.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: UserId
+    path: ../Models/RefreshToken.cs
+    startLine: 34
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Foreign key for the user who owns the token
+  example: []
+  syntax:
+    content: >-
+      [ForeignKey("ApplicationUser")]
+
+      public string UserId { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <ForeignKey("ApplicationUser")>
+
+      Public Property UserId As String
+  overload: backend.Models.RefreshToken.UserId*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.Schema.ForeignKeyAttribute
+    ctor: System.ComponentModel.DataAnnotations.Schema.ForeignKeyAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: ApplicationUser
+- uid: backend.Models.RefreshToken.User
+  commentId: P:backend.Models.RefreshToken.User
+  id: User
+  parent: backend.Models.RefreshToken
+  langs:
+  - csharp
+  - vb
+  name: User
+  nameWithType: RefreshToken.User
+  fullName: backend.Models.RefreshToken.User
+  type: Property
+  source:
+    remote:
+      path: backend/Models/RefreshToken.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: User
+    path: ../Models/RefreshToken.cs
+    startLine: 40
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Navigation property to the user who owns the token
+  example: []
+  syntax:
+    content: public ApplicationUser User { get; set; }
+    parameters: []
+    return:
+      type: backend.Models.ApplicationUser
+    content.vb: Public Property User As ApplicationUser
+  overload: backend.Models.RefreshToken.User*
+references:
+- uid: backend.Models
+  commentId: N:backend.Models
+  href: backend.html
+  name: backend.Models
+  nameWithType: backend.Models
+  fullName: backend.Models
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: backend.Models.RefreshToken.Id*
+  commentId: Overload:backend.Models.RefreshToken.Id
+  href: backend.Models.RefreshToken.html#backend_Models_RefreshToken_Id
+  name: Id
+  nameWithType: RefreshToken.Id
+  fullName: backend.Models.RefreshToken.Id
+- uid: System.Guid
+  commentId: T:System.Guid
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: backend.Models.RefreshToken.Token*
+  commentId: Overload:backend.Models.RefreshToken.Token
+  href: backend.Models.RefreshToken.html#backend_Models_RefreshToken_Token
+  name: Token
+  nameWithType: RefreshToken.Token
+  fullName: backend.Models.RefreshToken.Token
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: backend.Models.RefreshToken.ExpiryDate*
+  commentId: Overload:backend.Models.RefreshToken.ExpiryDate
+  href: backend.Models.RefreshToken.html#backend_Models_RefreshToken_ExpiryDate
+  name: ExpiryDate
+  nameWithType: RefreshToken.ExpiryDate
+  fullName: backend.Models.RefreshToken.ExpiryDate
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: backend.Models.RefreshToken.IsRevoked*
+  commentId: Overload:backend.Models.RefreshToken.IsRevoked
+  href: backend.Models.RefreshToken.html#backend_Models_RefreshToken_IsRevoked
+  name: IsRevoked
+  nameWithType: RefreshToken.IsRevoked
+  fullName: backend.Models.RefreshToken.IsRevoked
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: backend.Models.RefreshToken.CreatedAt*
+  commentId: Overload:backend.Models.RefreshToken.CreatedAt
+  href: backend.Models.RefreshToken.html#backend_Models_RefreshToken_CreatedAt
+  name: CreatedAt
+  nameWithType: RefreshToken.CreatedAt
+  fullName: backend.Models.RefreshToken.CreatedAt
+- uid: backend.Models.RefreshToken.UserId*
+  commentId: Overload:backend.Models.RefreshToken.UserId
+  href: backend.Models.RefreshToken.html#backend_Models_RefreshToken_UserId
+  name: UserId
+  nameWithType: RefreshToken.UserId
+  fullName: backend.Models.RefreshToken.UserId
+- uid: backend.Models.RefreshToken.User*
+  commentId: Overload:backend.Models.RefreshToken.User
+  href: backend.Models.RefreshToken.html#backend_Models_RefreshToken_User
+  name: User
+  nameWithType: RefreshToken.User
+  fullName: backend.Models.RefreshToken.User
+- uid: backend.Models.ApplicationUser
+  commentId: T:backend.Models.ApplicationUser
+  parent: backend.Models
+  href: backend.Models.ApplicationUser.html
+  name: ApplicationUser
+  nameWithType: ApplicationUser
+  fullName: backend.Models.ApplicationUser

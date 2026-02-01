@@ -1,0 +1,955 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Services.GoogleBooksService
+  commentId: T:backend.Services.GoogleBooksService
+  id: GoogleBooksService
+  parent: backend.Services
+  children:
+  - backend.Services.GoogleBooksService.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Configuration.IConfiguration)
+  - backend.Services.GoogleBooksService.GetByGoogleIdAsync(System.String,System.Threading.CancellationToken)
+  - backend.Services.GoogleBooksService.GetByIsbnAsync(System.String,System.Threading.CancellationToken)
+  - backend.Services.GoogleBooksService.SearchBooksAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: GoogleBooksService
+  nameWithType: GoogleBooksService
+  fullName: backend.Services.GoogleBooksService
+  type: Class
+  source:
+    remote:
+      path: backend/Services/GoogleBooksService.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: GoogleBooksService
+    path: ../Services/GoogleBooksService.cs
+    startLine: 64
+  assemblies:
+  - backend
+  namespace: backend.Services
+  summary: Implementation of <xref href="backend.Services.IGoogleBooksService" data-throw-if-not-resolved="false"></xref> that calls the Google Books REST API.
+  example: []
+  syntax:
+    content: 'public class GoogleBooksService : IGoogleBooksService'
+    content.vb: Public Class GoogleBooksService Implements IGoogleBooksService
+  inheritance:
+  - System.Object
+  implements:
+  - backend.Services.IGoogleBooksService
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: backend.Services.GoogleBooksService.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Configuration.IConfiguration)
+  commentId: M:backend.Services.GoogleBooksService.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Configuration.IConfiguration)
+  id: '#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Configuration.IConfiguration)'
+  parent: backend.Services.GoogleBooksService
+  langs:
+  - csharp
+  - vb
+  name: GoogleBooksService(HttpClient, IConfiguration)
+  nameWithType: GoogleBooksService.GoogleBooksService(HttpClient, IConfiguration)
+  fullName: backend.Services.GoogleBooksService.GoogleBooksService(System.Net.Http.HttpClient, Microsoft.Extensions.Configuration.IConfiguration)
+  type: Constructor
+  source:
+    remote:
+      path: backend/Services/GoogleBooksService.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: .ctor
+    path: ../Services/GoogleBooksService.cs
+    startLine: 74
+  assemblies:
+  - backend
+  namespace: backend.Services
+  summary: Initializes a new <xref href="backend.Services.GoogleBooksService" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public GoogleBooksService(HttpClient http, IConfiguration config)
+    parameters:
+    - id: http
+      type: System.Net.Http.HttpClient
+      description: An <xref href="System.Net.Http.HttpClient" data-throw-if-not-resolved="false"></xref> configured for the Google Books API base address.
+    - id: config
+      type: Microsoft.Extensions.Configuration.IConfiguration
+      description: Configuration providing the optional API key.
+    content.vb: Public Sub New(http As HttpClient, config As IConfiguration)
+  overload: backend.Services.GoogleBooksService.#ctor*
+  nameWithType.vb: GoogleBooksService.New(HttpClient, IConfiguration)
+  fullName.vb: backend.Services.GoogleBooksService.New(System.Net.Http.HttpClient, Microsoft.Extensions.Configuration.IConfiguration)
+  name.vb: New(HttpClient, IConfiguration)
+- uid: backend.Services.GoogleBooksService.SearchBooksAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  commentId: M:backend.Services.GoogleBooksService.SearchBooksAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  id: SearchBooksAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  parent: backend.Services.GoogleBooksService
+  langs:
+  - csharp
+  - vb
+  name: SearchBooksAsync(string, int, CancellationToken)
+  nameWithType: GoogleBooksService.SearchBooksAsync(string, int, CancellationToken)
+  fullName: backend.Services.GoogleBooksService.SearchBooksAsync(string, int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: backend/Services/GoogleBooksService.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: SearchBooksAsync
+    path: ../Services/GoogleBooksService.cs
+    startLine: 87
+  assemblies:
+  - backend
+  namespace: backend.Services
+  summary: Searches Google Books for a text query and returns up to <code class="paramref">maxResults</code> matches.
+  example: []
+  syntax:
+    content: public Task<List<GoogleBook>> SearchBooksAsync(string query, int maxResults = 10, CancellationToken ct = default)
+    parameters:
+    - id: query
+      type: System.String
+      description: Search term(s).
+    - id: maxResults
+      type: System.Int32
+      description: Maximum number of results to return (default 10).
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Optional cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{System.Collections.Generic.List{backend.Services.GoogleBook}}
+      description: List of <xref href="backend.Services.GoogleBook" data-throw-if-not-resolved="false"></xref> results (empty list when none or on non-successful HTTP responses).
+    content.vb: Public Function SearchBooksAsync(query As String, maxResults As Integer = 10, ct As CancellationToken = Nothing) As Task(Of List(Of GoogleBook))
+  overload: backend.Services.GoogleBooksService.SearchBooksAsync*
+  implements:
+  - backend.Services.IGoogleBooksService.SearchBooksAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  nameWithType.vb: GoogleBooksService.SearchBooksAsync(String, Integer, CancellationToken)
+  fullName.vb: backend.Services.GoogleBooksService.SearchBooksAsync(String, Integer, System.Threading.CancellationToken)
+  name.vb: SearchBooksAsync(String, Integer, CancellationToken)
+- uid: backend.Services.GoogleBooksService.GetByIsbnAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:backend.Services.GoogleBooksService.GetByIsbnAsync(System.String,System.Threading.CancellationToken)
+  id: GetByIsbnAsync(System.String,System.Threading.CancellationToken)
+  parent: backend.Services.GoogleBooksService
+  langs:
+  - csharp
+  - vb
+  name: GetByIsbnAsync(string, CancellationToken)
+  nameWithType: GoogleBooksService.GetByIsbnAsync(string, CancellationToken)
+  fullName: backend.Services.GoogleBooksService.GetByIsbnAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: backend/Services/GoogleBooksService.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: GetByIsbnAsync
+    path: ../Services/GoogleBooksService.cs
+    startLine: 117
+  assemblies:
+  - backend
+  namespace: backend.Services
+  summary: Looks up a single Google Books volume by its ISBN.
+  example: []
+  syntax:
+    content: public Task<GoogleBook?> GetByIsbnAsync(string isbn, CancellationToken ct = default)
+    parameters:
+    - id: isbn
+      type: System.String
+      description: ISBN to lookup (e.g. ISBN-10 or ISBN-13).
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Optional cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{backend.Services.GoogleBook}
+      description: The matched <xref href="backend.Services.GoogleBook" data-throw-if-not-resolved="false"></xref> or <code>null</code> when not found or on non-successful HTTP responses.
+    content.vb: Public Function GetByIsbnAsync(isbn As String, ct As CancellationToken = Nothing) As Task(Of GoogleBook)
+  overload: backend.Services.GoogleBooksService.GetByIsbnAsync*
+  implements:
+  - backend.Services.IGoogleBooksService.GetByIsbnAsync(System.String,System.Threading.CancellationToken)
+  nameWithType.vb: GoogleBooksService.GetByIsbnAsync(String, CancellationToken)
+  fullName.vb: backend.Services.GoogleBooksService.GetByIsbnAsync(String, System.Threading.CancellationToken)
+  name.vb: GetByIsbnAsync(String, CancellationToken)
+- uid: backend.Services.GoogleBooksService.GetByGoogleIdAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:backend.Services.GoogleBooksService.GetByGoogleIdAsync(System.String,System.Threading.CancellationToken)
+  id: GetByGoogleIdAsync(System.String,System.Threading.CancellationToken)
+  parent: backend.Services.GoogleBooksService
+  langs:
+  - csharp
+  - vb
+  name: GetByGoogleIdAsync(string, CancellationToken)
+  nameWithType: GoogleBooksService.GetByGoogleIdAsync(string, CancellationToken)
+  fullName: backend.Services.GoogleBooksService.GetByGoogleIdAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: backend/Services/GoogleBooksService.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: GetByGoogleIdAsync
+    path: ../Services/GoogleBooksService.cs
+    startLine: 140
+  assemblies:
+  - backend
+  namespace: backend.Services
+  summary: Retrieves a Google Books volume by its Google volume identifier.
+  example: []
+  syntax:
+    content: public Task<GoogleBook?> GetByGoogleIdAsync(string googleId, CancellationToken ct = default)
+    parameters:
+    - id: googleId
+      type: System.String
+      description: Google Books volume ID.
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Optional cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{backend.Services.GoogleBook}
+      description: The <xref href="backend.Services.GoogleBook" data-throw-if-not-resolved="false"></xref> when found; otherwise <code>null</code>.
+    content.vb: Public Function GetByGoogleIdAsync(googleId As String, ct As CancellationToken = Nothing) As Task(Of GoogleBook)
+  overload: backend.Services.GoogleBooksService.GetByGoogleIdAsync*
+  implements:
+  - backend.Services.IGoogleBooksService.GetByGoogleIdAsync(System.String,System.Threading.CancellationToken)
+  nameWithType.vb: GoogleBooksService.GetByGoogleIdAsync(String, CancellationToken)
+  fullName.vb: backend.Services.GoogleBooksService.GetByGoogleIdAsync(String, System.Threading.CancellationToken)
+  name.vb: GetByGoogleIdAsync(String, CancellationToken)
+references:
+- uid: backend.Services.IGoogleBooksService
+  commentId: T:backend.Services.IGoogleBooksService
+  parent: backend.Services
+  href: backend.Services.IGoogleBooksService.html
+  name: IGoogleBooksService
+  nameWithType: IGoogleBooksService
+  fullName: backend.Services.IGoogleBooksService
+- uid: backend.Services
+  commentId: N:backend.Services
+  href: backend.html
+  name: backend.Services
+  nameWithType: backend.Services
+  fullName: backend.Services
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Services
+    name: Services
+    href: backend.Services.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Services
+    name: Services
+    href: backend.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: backend.Services.GoogleBooksService
+  commentId: T:backend.Services.GoogleBooksService
+  href: backend.Services.GoogleBooksService.html
+  name: GoogleBooksService
+  nameWithType: GoogleBooksService
+  fullName: backend.Services.GoogleBooksService
+- uid: System.Net.Http.HttpClient
+  commentId: T:System.Net.Http.HttpClient
+  parent: System.Net.Http
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.net.http.httpclient
+  name: HttpClient
+  nameWithType: HttpClient
+  fullName: System.Net.Http.HttpClient
+- uid: backend.Services.GoogleBooksService.#ctor*
+  commentId: Overload:backend.Services.GoogleBooksService.#ctor
+  href: backend.Services.GoogleBooksService.html#backend_Services_GoogleBooksService__ctor_System_Net_Http_HttpClient_Microsoft_Extensions_Configuration_IConfiguration_
+  name: GoogleBooksService
+  nameWithType: GoogleBooksService.GoogleBooksService
+  fullName: backend.Services.GoogleBooksService.GoogleBooksService
+  nameWithType.vb: GoogleBooksService.New
+  fullName.vb: backend.Services.GoogleBooksService.New
+  name.vb: New
+- uid: Microsoft.Extensions.Configuration.IConfiguration
+  commentId: T:Microsoft.Extensions.Configuration.IConfiguration
+  parent: Microsoft.Extensions.Configuration
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.configuration.iconfiguration
+  name: IConfiguration
+  nameWithType: IConfiguration
+  fullName: Microsoft.Extensions.Configuration.IConfiguration
+- uid: System.Net.Http
+  commentId: N:System.Net.Http
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Net.Http
+  nameWithType: System.Net.Http
+  fullName: System.Net.Http
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Net
+    name: Net
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net
+  - name: .
+  - uid: System.Net.Http
+    name: Http
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net.http
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Net
+    name: Net
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net
+  - name: .
+  - uid: System.Net.Http
+    name: Http
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net.http
+- uid: Microsoft.Extensions.Configuration
+  commentId: N:Microsoft.Extensions.Configuration
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Configuration
+  nameWithType: Microsoft.Extensions.Configuration
+  fullName: Microsoft.Extensions.Configuration
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Configuration
+    name: Configuration
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.configuration
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Configuration
+    name: Configuration
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.configuration
+- uid: backend.Services.GoogleBook
+  commentId: T:backend.Services.GoogleBook
+  href: backend.Services.GoogleBook.html
+  name: GoogleBook
+  nameWithType: GoogleBook
+  fullName: backend.Services.GoogleBook
+- uid: backend.Services.GoogleBooksService.SearchBooksAsync*
+  commentId: Overload:backend.Services.GoogleBooksService.SearchBooksAsync
+  href: backend.Services.GoogleBooksService.html#backend_Services_GoogleBooksService_SearchBooksAsync_System_String_System_Int32_System_Threading_CancellationToken_
+  name: SearchBooksAsync
+  nameWithType: GoogleBooksService.SearchBooksAsync
+  fullName: backend.Services.GoogleBooksService.SearchBooksAsync
+- uid: backend.Services.IGoogleBooksService.SearchBooksAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  commentId: M:backend.Services.IGoogleBooksService.SearchBooksAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  parent: backend.Services.IGoogleBooksService
+  isExternal: true
+  href: backend.Services.IGoogleBooksService.html#backend_Services_IGoogleBooksService_SearchBooksAsync_System_String_System_Int32_System_Threading_CancellationToken_
+  name: SearchBooksAsync(string, int, CancellationToken)
+  nameWithType: IGoogleBooksService.SearchBooksAsync(string, int, CancellationToken)
+  fullName: backend.Services.IGoogleBooksService.SearchBooksAsync(string, int, System.Threading.CancellationToken)
+  nameWithType.vb: IGoogleBooksService.SearchBooksAsync(String, Integer, CancellationToken)
+  fullName.vb: backend.Services.IGoogleBooksService.SearchBooksAsync(String, Integer, System.Threading.CancellationToken)
+  name.vb: SearchBooksAsync(String, Integer, CancellationToken)
+  spec.csharp:
+  - uid: backend.Services.IGoogleBooksService.SearchBooksAsync(System.String,System.Int32,System.Threading.CancellationToken)
+    name: SearchBooksAsync
+    href: backend.Services.IGoogleBooksService.html#backend_Services_IGoogleBooksService_SearchBooksAsync_System_String_System_Int32_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: backend.Services.IGoogleBooksService.SearchBooksAsync(System.String,System.Int32,System.Threading.CancellationToken)
+    name: SearchBooksAsync
+    href: backend.Services.IGoogleBooksService.html#backend_Services_IGoogleBooksService_SearchBooksAsync_System_String_System_Int32_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{System.Collections.Generic.List{backend.Services.GoogleBook}}
+  commentId: T:System.Threading.Tasks.Task{System.Collections.Generic.List{backend.Services.GoogleBook}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<List<GoogleBook>>
+  nameWithType: Task<List<GoogleBook>>
+  fullName: System.Threading.Tasks.Task<System.Collections.Generic.List<backend.Services.GoogleBook>>
+  nameWithType.vb: Task(Of List(Of GoogleBook))
+  fullName.vb: System.Threading.Tasks.Task(Of System.Collections.Generic.List(Of backend.Services.GoogleBook))
+  name.vb: Task(Of List(Of GoogleBook))
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: backend.Services.GoogleBook
+    name: GoogleBook
+    href: backend.Services.GoogleBook.html
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Services.GoogleBook
+    name: GoogleBook
+    href: backend.Services.GoogleBook.html
+  - name: )
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: backend.Services.GoogleBooksService.GetByIsbnAsync*
+  commentId: Overload:backend.Services.GoogleBooksService.GetByIsbnAsync
+  href: backend.Services.GoogleBooksService.html#backend_Services_GoogleBooksService_GetByIsbnAsync_System_String_System_Threading_CancellationToken_
+  name: GetByIsbnAsync
+  nameWithType: GoogleBooksService.GetByIsbnAsync
+  fullName: backend.Services.GoogleBooksService.GetByIsbnAsync
+- uid: backend.Services.IGoogleBooksService.GetByIsbnAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:backend.Services.IGoogleBooksService.GetByIsbnAsync(System.String,System.Threading.CancellationToken)
+  parent: backend.Services.IGoogleBooksService
+  isExternal: true
+  href: backend.Services.IGoogleBooksService.html#backend_Services_IGoogleBooksService_GetByIsbnAsync_System_String_System_Threading_CancellationToken_
+  name: GetByIsbnAsync(string, CancellationToken)
+  nameWithType: IGoogleBooksService.GetByIsbnAsync(string, CancellationToken)
+  fullName: backend.Services.IGoogleBooksService.GetByIsbnAsync(string, System.Threading.CancellationToken)
+  nameWithType.vb: IGoogleBooksService.GetByIsbnAsync(String, CancellationToken)
+  fullName.vb: backend.Services.IGoogleBooksService.GetByIsbnAsync(String, System.Threading.CancellationToken)
+  name.vb: GetByIsbnAsync(String, CancellationToken)
+  spec.csharp:
+  - uid: backend.Services.IGoogleBooksService.GetByIsbnAsync(System.String,System.Threading.CancellationToken)
+    name: GetByIsbnAsync
+    href: backend.Services.IGoogleBooksService.html#backend_Services_IGoogleBooksService_GetByIsbnAsync_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: backend.Services.IGoogleBooksService.GetByIsbnAsync(System.String,System.Threading.CancellationToken)
+    name: GetByIsbnAsync
+    href: backend.Services.IGoogleBooksService.html#backend_Services_IGoogleBooksService_GetByIsbnAsync_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Threading.Tasks.Task{backend.Services.GoogleBook}
+  commentId: T:System.Threading.Tasks.Task{backend.Services.GoogleBook}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GoogleBook>
+  nameWithType: Task<GoogleBook>
+  fullName: System.Threading.Tasks.Task<backend.Services.GoogleBook>
+  nameWithType.vb: Task(Of GoogleBook)
+  fullName.vb: System.Threading.Tasks.Task(Of backend.Services.GoogleBook)
+  name.vb: Task(Of GoogleBook)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: backend.Services.GoogleBook
+    name: GoogleBook
+    href: backend.Services.GoogleBook.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Services.GoogleBook
+    name: GoogleBook
+    href: backend.Services.GoogleBook.html
+  - name: )
+- uid: backend.Services.GoogleBooksService.GetByGoogleIdAsync*
+  commentId: Overload:backend.Services.GoogleBooksService.GetByGoogleIdAsync
+  href: backend.Services.GoogleBooksService.html#backend_Services_GoogleBooksService_GetByGoogleIdAsync_System_String_System_Threading_CancellationToken_
+  name: GetByGoogleIdAsync
+  nameWithType: GoogleBooksService.GetByGoogleIdAsync
+  fullName: backend.Services.GoogleBooksService.GetByGoogleIdAsync
+- uid: backend.Services.IGoogleBooksService.GetByGoogleIdAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:backend.Services.IGoogleBooksService.GetByGoogleIdAsync(System.String,System.Threading.CancellationToken)
+  parent: backend.Services.IGoogleBooksService
+  isExternal: true
+  href: backend.Services.IGoogleBooksService.html#backend_Services_IGoogleBooksService_GetByGoogleIdAsync_System_String_System_Threading_CancellationToken_
+  name: GetByGoogleIdAsync(string, CancellationToken)
+  nameWithType: IGoogleBooksService.GetByGoogleIdAsync(string, CancellationToken)
+  fullName: backend.Services.IGoogleBooksService.GetByGoogleIdAsync(string, System.Threading.CancellationToken)
+  nameWithType.vb: IGoogleBooksService.GetByGoogleIdAsync(String, CancellationToken)
+  fullName.vb: backend.Services.IGoogleBooksService.GetByGoogleIdAsync(String, System.Threading.CancellationToken)
+  name.vb: GetByGoogleIdAsync(String, CancellationToken)
+  spec.csharp:
+  - uid: backend.Services.IGoogleBooksService.GetByGoogleIdAsync(System.String,System.Threading.CancellationToken)
+    name: GetByGoogleIdAsync
+    href: backend.Services.IGoogleBooksService.html#backend_Services_IGoogleBooksService_GetByGoogleIdAsync_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: backend.Services.IGoogleBooksService.GetByGoogleIdAsync(System.String,System.Threading.CancellationToken)
+    name: GetByGoogleIdAsync
+    href: backend.Services.IGoogleBooksService.html#backend_Services_IGoogleBooksService_GetByGoogleIdAsync_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )

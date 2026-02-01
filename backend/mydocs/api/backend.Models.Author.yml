@@ -1,0 +1,732 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Models.Author
+  commentId: T:backend.Models.Author
+  id: Author
+  parent: backend.Models
+  children:
+  - backend.Models.Author.Bio
+  - backend.Models.Author.BookAuthors
+  - backend.Models.Author.DateOfBirth
+  - backend.Models.Author.FirstName
+  - backend.Models.Author.Id
+  - backend.Models.Author.LastName
+  langs:
+  - csharp
+  - vb
+  name: Author
+  nameWithType: Author
+  fullName: backend.Models.Author
+  type: Class
+  source:
+    remote:
+      path: backend/Models/Author.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Author
+    path: ../Models/Author.cs
+    startLine: 4
+  assemblies:
+  - backend
+  namespace: backend.Models
+  syntax:
+    content: public class Author
+    content.vb: Public Class Author
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: backend.Models.Author.Id
+  commentId: P:backend.Models.Author.Id
+  id: Id
+  parent: backend.Models.Author
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: Author.Id
+  fullName: backend.Models.Author.Id
+  type: Property
+  source:
+    remote:
+      path: backend/Models/Author.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Id
+    path: ../Models/Author.cs
+    startLine: 9
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Author's Id
+  example: []
+  syntax:
+    content: public Guid Id { get; set; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property Id As Guid
+  overload: backend.Models.Author.Id*
+- uid: backend.Models.Author.FirstName
+  commentId: P:backend.Models.Author.FirstName
+  id: FirstName
+  parent: backend.Models.Author
+  langs:
+  - csharp
+  - vb
+  name: FirstName
+  nameWithType: Author.FirstName
+  fullName: backend.Models.Author.FirstName
+  type: Property
+  source:
+    remote:
+      path: backend/Models/Author.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: FirstName
+    path: ../Models/Author.cs
+    startLine: 14
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Author's first name
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(100)]
+
+      public string FirstName { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(100)>
+
+      Public Property FirstName As String
+  overload: backend.Models.Author.FirstName*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 100
+- uid: backend.Models.Author.LastName
+  commentId: P:backend.Models.Author.LastName
+  id: LastName
+  parent: backend.Models.Author
+  langs:
+  - csharp
+  - vb
+  name: LastName
+  nameWithType: Author.LastName
+  fullName: backend.Models.Author.LastName
+  type: Property
+  source:
+    remote:
+      path: backend/Models/Author.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: LastName
+    path: ../Models/Author.cs
+    startLine: 21
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Authors last name
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(100)]
+
+      public string LastName { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(100)>
+
+      Public Property LastName As String
+  overload: backend.Models.Author.LastName*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 100
+- uid: backend.Models.Author.Bio
+  commentId: P:backend.Models.Author.Bio
+  id: Bio
+  parent: backend.Models.Author
+  langs:
+  - csharp
+  - vb
+  name: Bio
+  nameWithType: Author.Bio
+  fullName: backend.Models.Author.Bio
+  type: Property
+  source:
+    remote:
+      path: backend/Models/Author.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Bio
+    path: ../Models/Author.cs
+    startLine: 28
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Author's bio
+  example: []
+  syntax:
+    content: public string? Bio { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Bio As String
+  overload: backend.Models.Author.Bio*
+- uid: backend.Models.Author.DateOfBirth
+  commentId: P:backend.Models.Author.DateOfBirth
+  id: DateOfBirth
+  parent: backend.Models.Author
+  langs:
+  - csharp
+  - vb
+  name: DateOfBirth
+  nameWithType: Author.DateOfBirth
+  fullName: backend.Models.Author.DateOfBirth
+  type: Property
+  source:
+    remote:
+      path: backend/Models/Author.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: DateOfBirth
+    path: ../Models/Author.cs
+    startLine: 33
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Author's date of birth
+  example: []
+  syntax:
+    content: public DateTime? DateOfBirth { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.DateTime}
+    content.vb: Public Property DateOfBirth As Date?
+  overload: backend.Models.Author.DateOfBirth*
+- uid: backend.Models.Author.BookAuthors
+  commentId: P:backend.Models.Author.BookAuthors
+  id: BookAuthors
+  parent: backend.Models.Author
+  langs:
+  - csharp
+  - vb
+  name: BookAuthors
+  nameWithType: Author.BookAuthors
+  fullName: backend.Models.Author.BookAuthors
+  type: Property
+  source:
+    remote:
+      path: backend/Models/Author.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: BookAuthors
+    path: ../Models/Author.cs
+    startLine: 38
+  assemblies:
+  - backend
+  namespace: backend.Models
+  summary: Collection of book-author relationships representing books written by this author
+  example: []
+  syntax:
+    content: public ICollection<BookAuthor> BookAuthors { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{backend.Models.BookAuthor}
+    content.vb: Public Property BookAuthors As ICollection(Of BookAuthor)
+  overload: backend.Models.Author.BookAuthors*
+references:
+- uid: backend.Models
+  commentId: N:backend.Models
+  href: backend.html
+  name: backend.Models
+  nameWithType: backend.Models
+  fullName: backend.Models
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Models
+    name: Models
+    href: backend.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: backend.Models.Author.Id*
+  commentId: Overload:backend.Models.Author.Id
+  href: backend.Models.Author.html#backend_Models_Author_Id
+  name: Id
+  nameWithType: Author.Id
+  fullName: backend.Models.Author.Id
+- uid: System.Guid
+  commentId: T:System.Guid
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: backend.Models.Author.FirstName*
+  commentId: Overload:backend.Models.Author.FirstName
+  href: backend.Models.Author.html#backend_Models_Author_FirstName
+  name: FirstName
+  nameWithType: Author.FirstName
+  fullName: backend.Models.Author.FirstName
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: backend.Models.Author.LastName*
+  commentId: Overload:backend.Models.Author.LastName
+  href: backend.Models.Author.html#backend_Models_Author_LastName
+  name: LastName
+  nameWithType: Author.LastName
+  fullName: backend.Models.Author.LastName
+- uid: backend.Models.Author.Bio*
+  commentId: Overload:backend.Models.Author.Bio
+  href: backend.Models.Author.html#backend_Models_Author_Bio
+  name: Bio
+  nameWithType: Author.Bio
+  fullName: backend.Models.Author.Bio
+- uid: backend.Models.Author.DateOfBirth*
+  commentId: Overload:backend.Models.Author.DateOfBirth
+  href: backend.Models.Author.html#backend_Models_Author_DateOfBirth
+  name: DateOfBirth
+  nameWithType: Author.DateOfBirth
+  fullName: backend.Models.Author.DateOfBirth
+- uid: System.Nullable{System.DateTime}
+  commentId: T:System.Nullable{System.DateTime}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime?
+  nameWithType: DateTime?
+  fullName: System.DateTime?
+  nameWithType.vb: Date?
+  fullName.vb: Date?
+  name.vb: Date?
+  spec.csharp:
+  - uid: System.DateTime
+    name: DateTime
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetime
+  - name: '?'
+  spec.vb:
+  - uid: System.DateTime
+    name: Date
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetime
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: backend.Models.Author.BookAuthors*
+  commentId: Overload:backend.Models.Author.BookAuthors
+  href: backend.Models.Author.html#backend_Models_Author_BookAuthors
+  name: BookAuthors
+  nameWithType: Author.BookAuthors
+  fullName: backend.Models.Author.BookAuthors
+- uid: System.Collections.Generic.ICollection{backend.Models.BookAuthor}
+  commentId: T:System.Collections.Generic.ICollection{backend.Models.BookAuthor}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<BookAuthor>
+  nameWithType: ICollection<BookAuthor>
+  fullName: System.Collections.Generic.ICollection<backend.Models.BookAuthor>
+  nameWithType.vb: ICollection(Of BookAuthor)
+  fullName.vb: System.Collections.Generic.ICollection(Of backend.Models.BookAuthor)
+  name.vb: ICollection(Of BookAuthor)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: backend.Models.BookAuthor
+    name: BookAuthor
+    href: backend.Models.BookAuthor.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.Models.BookAuthor
+    name: BookAuthor
+    href: backend.Models.BookAuthor.html
+  - name: )
+- uid: System.Collections.Generic.ICollection`1
+  commentId: T:System.Collections.Generic.ICollection`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<T>
+  nameWithType: ICollection<T>
+  fullName: System.Collections.Generic.ICollection<T>
+  nameWithType.vb: ICollection(Of T)
+  fullName.vb: System.Collections.Generic.ICollection(Of T)
+  name.vb: ICollection(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

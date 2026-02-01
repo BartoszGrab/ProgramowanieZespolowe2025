@@ -1,0 +1,606 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.DTOs.RegisterDto
+  commentId: T:backend.DTOs.RegisterDto
+  id: RegisterDto
+  parent: backend.DTOs
+  children:
+  - backend.DTOs.RegisterDto.ConfirmPassword
+  - backend.DTOs.RegisterDto.DisplayName
+  - backend.DTOs.RegisterDto.Email
+  - backend.DTOs.RegisterDto.Password
+  langs:
+  - csharp
+  - vb
+  name: RegisterDto
+  nameWithType: RegisterDto
+  fullName: backend.DTOs.RegisterDto
+  type: Class
+  source:
+    remote:
+      path: backend/DTOs/RegisterDto.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: RegisterDto
+    path: ../DTOs/RegisterDto.cs
+    startLine: 4
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  syntax:
+    content: public class RegisterDto
+    content.vb: Public Class RegisterDto
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: backend.DTOs.RegisterDto.Email
+  commentId: P:backend.DTOs.RegisterDto.Email
+  id: Email
+  parent: backend.DTOs.RegisterDto
+  langs:
+  - csharp
+  - vb
+  name: Email
+  nameWithType: RegisterDto.Email
+  fullName: backend.DTOs.RegisterDto.Email
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/RegisterDto.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Email
+    path: ../DTOs/RegisterDto.cs
+    startLine: 10
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: User's email address
+  example: []
+  syntax:
+    content: >-
+      [Required(ErrorMessage = "Email is required")]
+
+      [EmailAddress(ErrorMessage = "Invalid email format")]
+
+      [RegularExpression("^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\\.[a-zA-Z]{2,}$", ErrorMessage = "Email must be in valid format (e.g., user@example.com)")]
+
+      public string Email { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required(ErrorMessage:="Email is required")>
+
+      <EmailAddress(ErrorMessage:="Invalid email format")>
+
+      <RegularExpression("^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$", ErrorMessage:="Email must be in valid format (e.g., user@example.com)")>
+
+      Public Property Email As String
+  overload: backend.DTOs.RegisterDto.Email*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Email is required
+  - type: System.ComponentModel.DataAnnotations.EmailAddressAttribute
+    ctor: System.ComponentModel.DataAnnotations.EmailAddressAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Invalid email format
+  - type: System.ComponentModel.DataAnnotations.RegularExpressionAttribute
+    ctor: System.ComponentModel.DataAnnotations.RegularExpressionAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: ^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Email must be in valid format (e.g., user@example.com)
+- uid: backend.DTOs.RegisterDto.Password
+  commentId: P:backend.DTOs.RegisterDto.Password
+  id: Password
+  parent: backend.DTOs.RegisterDto
+  langs:
+  - csharp
+  - vb
+  name: Password
+  nameWithType: RegisterDto.Password
+  fullName: backend.DTOs.RegisterDto.Password
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/RegisterDto.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Password
+    path: ../DTOs/RegisterDto.cs
+    startLine: 19
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: User's password
+  example: []
+  syntax:
+    content: >-
+      [Required(ErrorMessage = "Password is required")]
+
+      [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
+
+      public string Password { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required(ErrorMessage:="Password is required")>
+
+      <MinLength(8, ErrorMessage:="Password must be at least 8 characters long")>
+
+      Public Property Password As String
+  overload: backend.DTOs.RegisterDto.Password*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Password is required
+  - type: System.ComponentModel.DataAnnotations.MinLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MinLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 8
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Password must be at least 8 characters long
+- uid: backend.DTOs.RegisterDto.ConfirmPassword
+  commentId: P:backend.DTOs.RegisterDto.ConfirmPassword
+  id: ConfirmPassword
+  parent: backend.DTOs.RegisterDto
+  langs:
+  - csharp
+  - vb
+  name: ConfirmPassword
+  nameWithType: RegisterDto.ConfirmPassword
+  fullName: backend.DTOs.RegisterDto.ConfirmPassword
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/RegisterDto.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: ConfirmPassword
+    path: ../DTOs/RegisterDto.cs
+    startLine: 26
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: User's password confirmation
+  example: []
+  syntax:
+    content: >-
+      [Required(ErrorMessage = "Confirm password is required")]
+
+      [Compare("Password", ErrorMessage = "Passwords do not match")]
+
+      public string ConfirmPassword { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required(ErrorMessage:="Confirm password is required")>
+
+      <Compare("Password", ErrorMessage:="Passwords do not match")>
+
+      Public Property ConfirmPassword As String
+  overload: backend.DTOs.RegisterDto.ConfirmPassword*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Confirm password is required
+  - type: System.ComponentModel.DataAnnotations.CompareAttribute
+    ctor: System.ComponentModel.DataAnnotations.CompareAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: Password
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Passwords do not match
+- uid: backend.DTOs.RegisterDto.DisplayName
+  commentId: P:backend.DTOs.RegisterDto.DisplayName
+  id: DisplayName
+  parent: backend.DTOs.RegisterDto
+  langs:
+  - csharp
+  - vb
+  name: DisplayName
+  nameWithType: RegisterDto.DisplayName
+  fullName: backend.DTOs.RegisterDto.DisplayName
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/RegisterDto.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: DisplayName
+    path: ../DTOs/RegisterDto.cs
+    startLine: 33
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: User's display name
+  example: []
+  syntax:
+    content: >-
+      [Required(ErrorMessage = "Display name is required")]
+
+      [MinLength(3, ErrorMessage = "Display name must be at least 3 characters long")]
+
+      [MaxLength(30, ErrorMessage = "Display name cannot exceed 30 characters")]
+
+      [RegularExpression("^[\\p{L}\\p{N}](?:[\\p{L}\\p{N} ._-]*[\\p{L}\\p{N}])?$", ErrorMessage = "Display name can contain letters, numbers, spaces, dots, underscores or hyphens, and cannot start or end with a space.")]
+
+      public string DisplayName { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required(ErrorMessage:="Display name is required")>
+
+      <MinLength(3, ErrorMessage:="Display name must be at least 3 characters long")>
+
+      <MaxLength(30, ErrorMessage:="Display name cannot exceed 30 characters")>
+
+      <RegularExpression("^[\p{L}\p{N}](?:[\p{L}\p{N} ._-]*[\p{L}\p{N}])?$", ErrorMessage:="Display name can contain letters, numbers, spaces, dots, underscores or hyphens, and cannot start or end with a space.")>
+
+      Public Property DisplayName As String
+  overload: backend.DTOs.RegisterDto.DisplayName*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Display name is required
+  - type: System.ComponentModel.DataAnnotations.MinLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MinLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 3
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Display name must be at least 3 characters long
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 30
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Display name cannot exceed 30 characters
+  - type: System.ComponentModel.DataAnnotations.RegularExpressionAttribute
+    ctor: System.ComponentModel.DataAnnotations.RegularExpressionAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: ^[\p{L}\p{N}](?:[\p{L}\p{N} ._-]*[\p{L}\p{N}])?$
+    namedArguments:
+    - name: ErrorMessage
+      type: System.String
+      value: Display name can contain letters, numbers, spaces, dots, underscores or hyphens, and cannot start or end with a space.
+references:
+- uid: backend.DTOs
+  commentId: N:backend.DTOs
+  href: backend.html
+  name: backend.DTOs
+  nameWithType: backend.DTOs
+  fullName: backend.DTOs
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.DTOs
+    name: DTOs
+    href: backend.DTOs.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.DTOs
+    name: DTOs
+    href: backend.DTOs.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: backend.DTOs.RegisterDto.Email*
+  commentId: Overload:backend.DTOs.RegisterDto.Email
+  href: backend.DTOs.RegisterDto.html#backend_DTOs_RegisterDto_Email
+  name: Email
+  nameWithType: RegisterDto.Email
+  fullName: backend.DTOs.RegisterDto.Email
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: backend.DTOs.RegisterDto.Password*
+  commentId: Overload:backend.DTOs.RegisterDto.Password
+  href: backend.DTOs.RegisterDto.html#backend_DTOs_RegisterDto_Password
+  name: Password
+  nameWithType: RegisterDto.Password
+  fullName: backend.DTOs.RegisterDto.Password
+- uid: backend.DTOs.RegisterDto.ConfirmPassword*
+  commentId: Overload:backend.DTOs.RegisterDto.ConfirmPassword
+  href: backend.DTOs.RegisterDto.html#backend_DTOs_RegisterDto_ConfirmPassword
+  name: ConfirmPassword
+  nameWithType: RegisterDto.ConfirmPassword
+  fullName: backend.DTOs.RegisterDto.ConfirmPassword
+- uid: backend.DTOs.RegisterDto.DisplayName*
+  commentId: Overload:backend.DTOs.RegisterDto.DisplayName
+  href: backend.DTOs.RegisterDto.html#backend_DTOs_RegisterDto_DisplayName
+  name: DisplayName
+  nameWithType: RegisterDto.DisplayName
+  fullName: backend.DTOs.RegisterDto.DisplayName

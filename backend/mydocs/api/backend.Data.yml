@@ -1,0 +1,46 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.Data
+  commentId: N:backend.Data
+  id: backend.Data
+  children:
+  - backend.Data.ApplicationDbContext
+  langs:
+  - csharp
+  - vb
+  name: backend.Data
+  nameWithType: backend.Data
+  fullName: backend.Data
+  type: Namespace
+  assemblies:
+  - backend
+references:
+- uid: backend.Data.ApplicationDbContext
+  commentId: T:backend.Data.ApplicationDbContext
+  parent: backend.Data
+  href: backend.Data.ApplicationDbContext.html
+  name: ApplicationDbContext
+  nameWithType: ApplicationDbContext
+  fullName: backend.Data.ApplicationDbContext
+- uid: backend.Data
+  commentId: N:backend.Data
+  href: backend.html
+  name: backend.Data
+  nameWithType: backend.Data
+  fullName: backend.Data
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Data
+    name: Data
+    href: backend.Data.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.Data
+    name: Data
+    href: backend.Data.html

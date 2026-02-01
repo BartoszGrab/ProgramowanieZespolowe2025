@@ -1,0 +1,553 @@
+### YamlMime:ManagedReference
+items:
+- uid: backend.DTOs.RecommendationCategoryDto
+  commentId: T:backend.DTOs.RecommendationCategoryDto
+  id: RecommendationCategoryDto
+  parent: backend.DTOs
+  children:
+  - backend.DTOs.RecommendationCategoryDto.CategoryTitle
+  - backend.DTOs.RecommendationCategoryDto.Items
+  - backend.DTOs.RecommendationCategoryDto.Type
+  langs:
+  - csharp
+  - vb
+  name: RecommendationCategoryDto
+  nameWithType: RecommendationCategoryDto
+  fullName: backend.DTOs.RecommendationCategoryDto
+  type: Class
+  source:
+    remote:
+      path: backend/DTOs/RecommendationDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: RecommendationCategoryDto
+    path: ../DTOs/RecommendationDtos.cs
+    startLine: 76
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  summary: A Netflix-style recommendation category (shelf).
+  example: []
+  syntax:
+    content: public class RecommendationCategoryDto
+    content.vb: Public Class RecommendationCategoryDto
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: backend.DTOs.RecommendationCategoryDto.CategoryTitle
+  commentId: P:backend.DTOs.RecommendationCategoryDto.CategoryTitle
+  id: CategoryTitle
+  parent: backend.DTOs.RecommendationCategoryDto
+  langs:
+  - csharp
+  - vb
+  name: CategoryTitle
+  nameWithType: RecommendationCategoryDto.CategoryTitle
+  fullName: backend.DTOs.RecommendationCategoryDto.CategoryTitle
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/RecommendationDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: CategoryTitle
+    path: ../DTOs/RecommendationDtos.cs
+    startLine: 78
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  syntax:
+    content: >-
+      [JsonPropertyName("category_title")]
+
+      public string CategoryTitle { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("category_title")>
+
+      Public Property CategoryTitle As String
+  overload: backend.DTOs.RecommendationCategoryDto.CategoryTitle*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: category_title
+- uid: backend.DTOs.RecommendationCategoryDto.Type
+  commentId: P:backend.DTOs.RecommendationCategoryDto.Type
+  id: Type
+  parent: backend.DTOs.RecommendationCategoryDto
+  langs:
+  - csharp
+  - vb
+  name: Type
+  nameWithType: RecommendationCategoryDto.Type
+  fullName: backend.DTOs.RecommendationCategoryDto.Type
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/RecommendationDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Type
+    path: ../DTOs/RecommendationDtos.cs
+    startLine: 81
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  syntax:
+    content: >-
+      [JsonPropertyName("type")]
+
+      public string Type { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("type")>
+
+      Public Property Type As String
+  overload: backend.DTOs.RecommendationCategoryDto.Type*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: type
+- uid: backend.DTOs.RecommendationCategoryDto.Items
+  commentId: P:backend.DTOs.RecommendationCategoryDto.Items
+  id: Items
+  parent: backend.DTOs.RecommendationCategoryDto
+  langs:
+  - csharp
+  - vb
+  name: Items
+  nameWithType: RecommendationCategoryDto.Items
+  fullName: backend.DTOs.RecommendationCategoryDto.Items
+  type: Property
+  source:
+    remote:
+      path: backend/DTOs/RecommendationDtos.cs
+      branch: kuba/main
+      repo: git@github.com:BartoszGrab/ProgramowanieZespolowe2025.git
+    id: Items
+    path: ../DTOs/RecommendationDtos.cs
+    startLine: 84
+  assemblies:
+  - backend
+  namespace: backend.DTOs
+  syntax:
+    content: >-
+      [JsonPropertyName("items")]
+
+      public List<RecommendedBookDto> Items { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{backend.DTOs.RecommendedBookDto}
+    content.vb: >-
+      <JsonPropertyName("items")>
+
+      Public Property Items As List(Of RecommendedBookDto)
+  overload: backend.DTOs.RecommendationCategoryDto.Items*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: items
+references:
+- uid: backend.DTOs
+  commentId: N:backend.DTOs
+  href: backend.html
+  name: backend.DTOs
+  nameWithType: backend.DTOs
+  fullName: backend.DTOs
+  spec.csharp:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.DTOs
+    name: DTOs
+    href: backend.DTOs.html
+  spec.vb:
+  - uid: backend
+    name: backend
+    href: backend.html
+  - name: .
+  - uid: backend.DTOs
+    name: DTOs
+    href: backend.DTOs.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: backend.DTOs.RecommendationCategoryDto.CategoryTitle*
+  commentId: Overload:backend.DTOs.RecommendationCategoryDto.CategoryTitle
+  href: backend.DTOs.RecommendationCategoryDto.html#backend_DTOs_RecommendationCategoryDto_CategoryTitle
+  name: CategoryTitle
+  nameWithType: RecommendationCategoryDto.CategoryTitle
+  fullName: backend.DTOs.RecommendationCategoryDto.CategoryTitle
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: backend.DTOs.RecommendationCategoryDto.Type*
+  commentId: Overload:backend.DTOs.RecommendationCategoryDto.Type
+  href: backend.DTOs.RecommendationCategoryDto.html#backend_DTOs_RecommendationCategoryDto_Type
+  name: Type
+  nameWithType: RecommendationCategoryDto.Type
+  fullName: backend.DTOs.RecommendationCategoryDto.Type
+- uid: backend.DTOs.RecommendationCategoryDto.Items*
+  commentId: Overload:backend.DTOs.RecommendationCategoryDto.Items
+  href: backend.DTOs.RecommendationCategoryDto.html#backend_DTOs_RecommendationCategoryDto_Items
+  name: Items
+  nameWithType: RecommendationCategoryDto.Items
+  fullName: backend.DTOs.RecommendationCategoryDto.Items
+- uid: System.Collections.Generic.List{backend.DTOs.RecommendedBookDto}
+  commentId: T:System.Collections.Generic.List{backend.DTOs.RecommendedBookDto}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<RecommendedBookDto>
+  nameWithType: List<RecommendedBookDto>
+  fullName: System.Collections.Generic.List<backend.DTOs.RecommendedBookDto>
+  nameWithType.vb: List(Of RecommendedBookDto)
+  fullName.vb: System.Collections.Generic.List(Of backend.DTOs.RecommendedBookDto)
+  name.vb: List(Of RecommendedBookDto)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: backend.DTOs.RecommendedBookDto
+    name: RecommendedBookDto
+    href: backend.DTOs.RecommendedBookDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: backend.DTOs.RecommendedBookDto
+    name: RecommendedBookDto
+    href: backend.DTOs.RecommendedBookDto.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

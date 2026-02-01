@@ -13,12 +13,12 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class RecommendationsController : ControllerBase
     {
-        private readonly BooksRecService _booksRecService;
+        private readonly IBooksRecService _booksRecService;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<RecommendationsController> _logger;
 
         public RecommendationsController(
-            BooksRecService booksRecService, 
+            IBooksRecService booksRecService, 
             ApplicationDbContext context,
             ILogger<RecommendationsController> logger)
         {

@@ -9,14 +9,35 @@ using System.Text.Json;
 
 namespace backend.Controllers
 {
+    /// <summary>
+    /// Controller responsible for generating and retrieving book recommendations.
+    /// Uses an external recommendations microservice and caches per-user results in the database.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class RecommendationsController : ControllerBase
     {
+        /// <summary>
+        /// Service used to obtain recommendations from the external books-rec microservice.
+        /// </summary>
         private readonly IBooksRecService _booksRecService;
+        /// <summary>
+        /// Database context used to access and persist user recommendations and book metadata.
+        /// </summary>
+        
         private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Logger instance for structured logging within the controller.
+        /// </summary>
         private readonly ILogger<RecommendationsController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RecommendationsController"/> class.
+        /// </summary>
+        /// <param name="booksRecService">Service for fetching recommendations.</param>
+        /// <param name="context">Application database context.</param>
+        /// <param name="logger">Logger for the controller.</param>
         public RecommendationsController(
             IBooksRecService booksRecService, 
             ApplicationDbContext context,
@@ -93,6 +114,7 @@ namespace backend.Controllers
         /// <summary>
         /// Get saved recommendations from the database.
         /// </summary>
+        /// <returns>200 OK with saved recommendations; 404 NotFound when none exist.</returns>
         [HttpGet("saved")]
         public async Task<ActionResult<RecommendationResponseDto>> GetSavedRecommendations()
         {
@@ -123,6 +145,10 @@ namespace backend.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Attempts to populate missing cover URLs for recommended books by matching titles against the local database.
+        /// </summary>
+        /// <param name="response">Recommendation response to enrich; method is a no-op when null or empty.</param>
         private async Task EnrichWithCovers(RecommendationResponseDto response)
         {
             if (response?.Recommendations == null) return;
@@ -164,6 +190,7 @@ namespace backend.Controllers
         /// <summary>
         /// Check health of the books-rec microservice.
         /// </summary>
+        /// <returns>200 OK with health information from the books-rec service.</returns>
         [HttpGet("health")]
         public async Task<ActionResult<BooksRecHealthDto>> CheckHealth()
         {

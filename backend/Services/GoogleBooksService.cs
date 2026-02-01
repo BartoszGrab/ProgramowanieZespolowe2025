@@ -3,6 +3,19 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace backend.Services
 {
+    /// <summary>
+    /// Lightweight representation of a book as returned by the Google Books API.
+    /// </summary>
+    /// <param name="Id">Volume identifier assigned by Google Books.</param>
+    /// <param name="Isbn">Primary ISBN (preferably ISBN-13) when available.</param>
+    /// <param name="Title">Book title.</param>
+    /// <param name="Authors">List of author names.</param>
+    /// <param name="Publisher">Publisher name.</param>
+    /// <param name="PublishedDate">Raw published date string from Google Books.</param>
+    /// <param name="Description">Book description or summary.</param>
+    /// <param name="PageCount">Number of pages when available.</param>
+    /// <param name="Categories">List of category names (genres).</param>
+    /// <param name="Thumbnail">URL for a small thumbnail image.</param>
     public record GoogleBook(
         string Id, // Volume ID
         string? Isbn,
@@ -16,13 +29,40 @@ namespace backend.Services
         string? Thumbnail
     );
 
+    /// <summary>
+    /// Abstraction for querying Google Books for book metadata.
+    /// </summary>
     public interface IGoogleBooksService
     {
+        /// <summary>
+        /// Looks up a single Google Book entry by ISBN.
+        /// </summary>
+        /// <param name="isbn">ISBN to search for.</param>
+        /// <param name="ct">Optional cancellation token.</param>
+        /// <returns>A <see cref="GoogleBook"/> when found; otherwise <c>null</c>.</returns>
         Task<GoogleBook?> GetByIsbnAsync(string isbn, CancellationToken ct = default);
+
+        /// <summary>
+        /// Retrieves a Google Book by its Google volume ID.
+        /// </summary>
+        /// <param name="googleId">Google Books volume identifier.</param>
+        /// <param name="ct">Optional cancellation token.</param>
+        /// <returns>A <see cref="GoogleBook"/> when found; otherwise <c>null</c>.</returns>
         Task<GoogleBook?> GetByGoogleIdAsync(string googleId, CancellationToken ct = default);
+
+        /// <summary>
+        /// Searches Google Books for a query string and returns a list of matches.
+        /// </summary>
+        /// <param name="query">Search query term(s).</param>
+        /// <param name="maxResults">Maximum number of results to return.</param>
+        /// <param name="ct">Optional cancellation token.</param>
+        /// <returns>List of matching <see cref="GoogleBook"/> items (may be empty).</returns>
         Task<List<GoogleBook>> SearchBooksAsync(string query, int maxResults = 10, CancellationToken ct = default);
     }
 
+    /// <summary>
+    /// Implementation of <see cref="IGoogleBooksService"/> that calls the Google Books REST API.
+    /// </summary>
     public class GoogleBooksService : IGoogleBooksService
     {
         private readonly HttpClient _http;
@@ -30,6 +70,11 @@ namespace backend.Services
         private readonly IMemoryCache _cache;
         private readonly ILogger<GoogleBooksService> _logger;
 
+        /// <summary>
+        /// Initializes a new <see cref="GoogleBooksService"/>.
+        /// </summary>
+        /// <param name="http">An <see cref="HttpClient"/> configured for the Google Books API base address.</param>
+        /// <param name="config">Configuration providing the optional API key.</param>
         public GoogleBooksService(HttpClient http, IConfiguration config, IMemoryCache cache, ILogger<GoogleBooksService> logger)
         {
             _http = http;
@@ -38,6 +83,13 @@ namespace backend.Services
             _logger = logger;
         }
 
+        /// <summary>
+        /// Searches Google Books for a text query and returns up to <paramref name="maxResults"/> matches.
+        /// </summary>
+        /// <param name="query">Search term(s).</param>
+        /// <param name="maxResults">Maximum number of results to return (default 10).</param>
+        /// <param name="ct">Optional cancellation token.</param>
+        /// <returns>List of <see cref="GoogleBook"/> results (empty list when none or on non-successful HTTP responses).</returns>
         public async Task<List<GoogleBook>> SearchBooksAsync(string query, int maxResults = 10, CancellationToken ct = default)
         {
             var cacheKey = $"search_{query}_{maxResults}";
@@ -83,6 +135,12 @@ namespace backend.Services
             return results;
         }
 
+        /// <summary>
+        /// Looks up a single Google Books volume by its ISBN.
+        /// </summary>
+        /// <param name="isbn">ISBN to lookup (e.g. ISBN-10 or ISBN-13).</param>
+        /// <param name="ct">Optional cancellation token.</param>
+        /// <returns>The matched <see cref="GoogleBook"/> or <c>null</c> when not found or on non-successful HTTP responses.</returns>
         public async Task<GoogleBook?> GetByIsbnAsync(string isbn, CancellationToken ct = default)
         {
             // Similar caching logic could go here
@@ -101,6 +159,12 @@ namespace backend.Services
             return ParseVolume(item);
         }
 
+        /// <summary>
+        /// Retrieves a Google Books volume by its Google volume identifier.
+        /// </summary>
+        /// <param name="googleId">Google Books volume ID.</param>
+        /// <param name="ct">Optional cancellation token.</param>
+        /// <returns>The <see cref="GoogleBook"/> when found; otherwise <c>null</c>.</returns>
         public async Task<GoogleBook?> GetByGoogleIdAsync(string googleId, CancellationToken ct = default)
         {
             var key = _config["GoogleBooks:ApiKey"];
@@ -116,6 +180,11 @@ namespace backend.Services
             return ParseVolume(root);
         }
 
+        /// <summary>
+        /// Parses a JSON element representing a Google Books volume into a <see cref="GoogleBook"/> record.
+        /// </summary>
+        /// <param name="item">JSON element containing volume and volumeInfo fields.</param>
+        /// <returns>A <see cref="GoogleBook"/> or <c>null</c> when mandatory information is missing.</returns>
         private GoogleBook? ParseVolume(JsonElement item)
         {
             if (!item.TryGetProperty("volumeInfo", out var info)) return null;

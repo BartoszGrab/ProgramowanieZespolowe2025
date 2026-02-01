@@ -7,20 +7,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
+    /// <summary>
+    /// API controller responsible for managing books and searching external sources (Google Books).
+    /// Provides endpoints to list, retrieve and create books.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class BooksController : ControllerBase
     {
+        /// <summary>
+        /// Database context used to access and persist book data.
+        /// </summary>
         private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Service used to query the Google Books API for external book information.
+        /// </summary>
         private readonly backend.Services.IGoogleBooksService _googleBooksService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BooksController"/> class.
+        /// </summary>
+        /// <param name="context">Application database context.</param>
+        /// <param name="googleBooksService">Service used to query Google Books.</param>
         public BooksController(ApplicationDbContext context, backend.Services.IGoogleBooksService googleBooksService)
         {
             _context = context;
             _googleBooksService = googleBooksService;
         }
 
-        // GET: api/books
+        /// <summary>
+        /// Retrieves a list of books. Optionally performs a search against local data and Google Books.
+        /// </summary>
+        /// <param name="search">Optional search term to filter by title or ISBN; if provided, also queries Google Books for additional results.</param>
+        /// <returns>200 OK with a list of <see cref="BookDto"/> items.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks([FromQuery] string? search)
         {
@@ -92,7 +112,11 @@ namespace backend.Controllers
             return Ok(localBooks);
         }
 
-        // GET: api/books/{id}
+        /// <summary>
+        /// Retrieves detailed information about a single book by its identifier.
+        /// </summary>
+        /// <param name="id">Identifier of the book to retrieve.</param>
+        /// <returns>200 OK with <see cref="BookDto"/> when found; 404 NotFound when the book does not exist.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDto>> GetBook(Guid id)
         {
@@ -119,7 +143,13 @@ namespace backend.Controllers
             return Ok(bookDto);
         }
 
-        // POST: api/books (Requires authentication)
+        /// <summary>
+        /// Creates a new book record. Requires an authenticated user.
+        /// </summary>
+        /// <param name="dto">Data transfer object containing book creation details, including author and genre IDs.</param>
+        /// <returns>
+        /// Returns 201 Created with location header pointing to the new book on success; 400 Bad Request when a book with the same ISBN exists.
+        /// </returns>
         [Authorize] 
         [HttpPost]
         public async Task<ActionResult> CreateBook([FromBody] CreateBookDto dto)

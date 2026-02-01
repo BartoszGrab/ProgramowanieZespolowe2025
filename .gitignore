@@ -42,3 +42,6 @@ Desktop.ini
 .idea/
 **/appsettings.Development.json
 **/secrets.json
+
+backend/mydocs/_site/
+backend/mydocs/api/
